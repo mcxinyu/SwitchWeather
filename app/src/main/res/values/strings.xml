@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">SwitchWeather</string>
+
+    <string name="temp_temperature">26°</string>
+    <string name="more_day">MORE DAY</string>
+    <string name="city_name">Shen Zhen</string>
+    <string name="weather_describe">Mostly Cloudy</string>
+    <string name="gap">|</string>
+    <string name="min_temperature">↓20°</string>
+    <string name="max_temperature">↑28°</string>
+    <string name="today">Today · </string>
+    <string name="today_is">Oct 19</string>
+</resources>
