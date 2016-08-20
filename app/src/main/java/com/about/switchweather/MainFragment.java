@@ -15,7 +15,6 @@ public class MainFragment extends Fragment {
     public static Fragment newInstance(){
         return new MainFragment();
     }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

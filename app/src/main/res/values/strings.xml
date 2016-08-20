@@ -3,11 +3,14 @@
 
     <string name="temp_temperature">26°</string>
     <string name="more_day">MORE DAY</string>
-    <string name="city_name">Shen Zhen</string>
+    <string name="city_name">深圳 ShenZhen</string>
     <string name="weather_describe">Mostly Cloudy</string>
     <string name="gap">|</string>
-    <string name="min_temperature">↓20°</string>
-    <string name="max_temperature">↑28°</string>
+    <string name="min_temperature">20°</string>
+    <string name="max_temperature">28°</string>
     <string name="today">Today · </string>
-    <string name="today_is">Oct 19</string>
+    <string name="date_is">Aug 20</string>
+    <string name="now_time">Now</string>
+    <string name="now_time_is">12:00</string>
+    <string name="weekday_is">Saturday</string>
 </resources>

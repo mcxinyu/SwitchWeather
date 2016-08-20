@@ -4,10 +4,13 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="colorWhite">#FFFFFF</color>
     <color name="colorBackground">#F5FAFC</color>
     <color name="colorMain">#284658</color>
     <color name="colorShadow">#DAE9F4</color>
     <color name="colorShadow2">#8C9FAA</color>
     <color name="colorShadow3">#69808E</color>
     <color name="colorSun">#FFD705</color>
+    <color name="colorTemperature">#007AFF</color>
+    <color name="colorText">#000000</color>
 </resources>
