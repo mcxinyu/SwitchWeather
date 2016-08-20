@@ -94,6 +94,15 @@
                     android:layout_above="@id/more_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
+                <TextView
+                        android:id="@+id/temperature_text_view"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="-90dp"
+                        android:text="@string/temp_temperature"
+                        android:textSize="130sp"
+                        android:textColor="@color/colorTemperature"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
                 <LinearLayout
                         android:id="@+id/weather_info_view"
                         android:layout_centerInParent="true"
@@ -146,15 +155,39 @@
                         android:layout_marginTop="10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
-                <TextView
-                        android:id="@+id/temperature_text_view"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="-90dp"
-                        android:text="@string/temp_temperature"
-                        android:textSize="130sp"
-                        android:textColor="@color/colorTemperature"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                <LinearLayout
+                        android:layout_below="@id/city_name_text_view"
+                        android:visibility="gone"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    <TextView
+                            android:text="@string/temp_text"
+                            android:textSize="24sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    <TextView
+                            android:text="@string/temp_text"
+                            android:textSize="24sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    <TextView
+                            android:text="@string/temp_text"
+                            android:textSize="24sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    <TextView
+                            android:text="@string/temp_text"
+                            android:textSize="24sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    <TextView
+                            android:text="@string/temp_text"
+                            android:textSize="24sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                </LinearLayout>
             </RelativeLayout>
         </RelativeLayout>
     </LinearLayout>
