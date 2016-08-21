@@ -15,4 +15,5 @@
     <string name="weekday_is">Saturday</string>
     <string name="temp_text">temp</string>
     <string name="update_time">Just update</string>
+    <string name="loading">loading...</string>
 </resources>

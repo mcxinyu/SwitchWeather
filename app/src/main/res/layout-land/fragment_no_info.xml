@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:id="@+id/fragment_no_info"
+             android:background="@color/colorWhite"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
+    <ImageView
+            android:id="@+id/no_info_image_view"
+            android:src="@drawable/no_info0"
+            android:alpha="0.5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    <TextView
+            android:text="@string/loading"
+            android:layout_centerInParent="true"
+            android:layout_below="@id/no_info_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView"/>
+</RelativeLayout>
