@@ -14,4 +14,5 @@
     <string name="now_time_is">12:00</string>
     <string name="weekday_is">Saturday</string>
     <string name="temp_text">temp</string>
+    <string name="update_time">Just update</string>
 </resources>
