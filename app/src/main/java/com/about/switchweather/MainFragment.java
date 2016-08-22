@@ -1,22 +1,22 @@
 package com.about.switchweather;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.about.switchweather.Model.WeatherBean;
-import com.about.switchweather.Util.HeWeatherFetch;
 
 /**
  * Created by 跃峰 on 2016/8/20.
  */
 public class MainFragment extends Fragment {
     private static final String TAG = "MainFragment";
+    private static final String ARG_WEATHER_BEAN = "MainFragment";
 
     private TextView mCityNameTextView;
     private TextView mTemperatureTextView;
@@ -28,14 +28,21 @@ public class MainFragment extends Fragment {
 
     private WeatherBean mWeatherBean;
 
-    public static MainFragment newInstance(){
-        return new MainFragment();
+    public static MainFragment newInstance(WeatherBean weatherBean){
+        Log.i(TAG, "newInstance: is start now!");
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_WEATHER_BEAN, weatherBean);
+
+        MainFragment fragment = new MainFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new FetchWeather("深圳").execute();
+
+        mWeatherBean = (WeatherBean) getArguments().getSerializable(ARG_WEATHER_BEAN);
     }
 
     @Nullable
@@ -61,28 +68,9 @@ public class MainFragment extends Fragment {
     private void updateWeatherInfo() {
         mCityNameTextView.setText(mWeatherBean.getBasic().getCity());
         mTemperatureTextView.setText(mWeatherBean.getNow().getTmp() + "°");
-        mUpdateTimeTextView.setText(mWeatherBean.getBasic().getUpdate().getLoc().replace(" ", "\n") + "更新");
+        mUpdateTimeTextView.setText(mWeatherBean.getBasic().getUpdate().getLoc().replace(" ", "\n") + " 更新");
         mMaxTemperatureTextView.setText(mWeatherBean.getDaily_forecast().get(0).getTmp().getMax() + "°");
         mMinTemperatureTextView.setText(mWeatherBean.getDaily_forecast().get(0).getTmp().getMin() + "°");
         mWeatherDescribeTextView.setText(mWeatherBean.getNow().getCond().getTxt());
-    }
-
-    private class FetchWeather extends AsyncTask<Void, Void, WeatherBean> {
-        String mCityName;
-
-        public FetchWeather(String cityName) {
-            this.mCityName = cityName;
-        }
-
-        @Override
-        protected WeatherBean doInBackground(Void... params) {
-            return new HeWeatherFetch().fetchWeatherInfo(mCityName);
-        }
-
-        @Override
-        protected void onPostExecute(WeatherBean weatherBean) {
-            mWeatherBean = weatherBean;
-            updateWeatherInfo();
-        }
     }
 }

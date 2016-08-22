@@ -22,6 +22,8 @@ public class HeWeatherFetch {
 
     private enum WEATHER_PORT {CONDITION, WEATHER, ATTRACTIONS};
 
+    private String weatherInfoExample = "{\"EXAMPLE HeWeather data service 3.0\":[{\"aqi\":{\"city\":{\"aqi\":\"66\",\"co\":\"1\",\"no2\":\"61\",\"o3\":\"82\",\"pm10\":\"64\",\"pm25\":\"35\",\"qlty\":\"良\",\"so2\":\"9\"}},\"basic\":{\"city\":\"深圳\",\"cnty\":\"中国\",\"id\":\"CN101280601\",\"lat\":\"22.544000\",\"lon\":\"114.109000\",\"update\":{\"loc\":\"2016-08-20 20:52\",\"utc\":\"2016-08-20 12:52\"}},\"daily_forecast\":[{\"astro\":{\"sr\":\"06:02\",\"ss\":\"18:51\"},\"cond\":{\"code_d\":\"103\",\"code_n\":\"101\",\"txt_d\":\"晴间多云\",\"txt_n\":\"多云\"},\"date\":\"2016-08-20\",\"hum\":\"66\",\"pcpn\":\"0.0\",\"pop\":\"68\",\"pres\":\"1004\",\"tmp\":{\"max\":\"33\",\"min\":\"27\"},\"vis\":\"10\",\"wind\":{\"deg\":\"248\",\"dir\":\"无持续风向\",\"sc\":\"微风\",\"spd\":\"7\"}},{\"astro\":{\"sr\":\"06:02\",\"ss\":\"18:50\"},\"cond\":{\"code_d\":\"302\",\"code_n\":\"300\",\"txt_d\":\"雷阵雨\",\"txt_n\":\"阵雨\"},\"date\":\"2016-08-21\",\"hum\":\"60\",\"pcpn\":\"5.4\",\"pop\":\"91\",\"pres\":\"1001\",\"tmp\":{\"max\":\"32\",\"min\":\"27\"},\"vis\":\"7\",\"wind\":{\"deg\":\"280\",\"dir\":\"无持续风向\",\"sc\":\"微风\",\"spd\":\"10\"}},{\"astro\":{\"sr\":\"06:03\",\"ss\":\"18:49\"},\"cond\":{\"code_d\":\"300\",\"code_n\":\"101\",\"txt_d\":\"阵雨\",\"txt_n\":\"多云\"},\"date\":\"2016-08-22\",\"hum\":\"69\",\"pcpn\":\"5.3\",\"pop\":\"37\",\"pres\":\"1003\",\"tmp\":{\"max\":\"33\",\"min\":\"28\"},\"vis\":\"10\",\"wind\":{\"deg\":\"135\",\"dir\":\"无持续风向\",\"sc\":\"微风\",\"spd\":\"5\"}},{\"astro\":{\"sr\":\"06:03\",\"ss\":\"18:48\"},\"cond\":{\"code_d\":\"101\",\"code_n\":\"100\",\"txt_d\":\"多云\",\"txt_n\":\"晴\"},\"date\":\"2016-08-23\",\"hum\":\"69\",\"pcpn\":\"1.5\",\"pop\":\"14\",\"pres\":\"1003\",\"tmp\":{\"max\":\"34\",\"min\":\"28\"},\"vis\":\"10\",\"wind\":{\"deg\":\"177\",\"dir\":\"无持续风向\",\"sc\":\"微风\",\"spd\":\"2\"}},{\"astro\":{\"sr\":\"06:03\",\"ss\":\"18:47\"},\"cond\":{\"code_d\":\"100\",\"code_n\":\"100\",\"txt_d\":\"晴\",\"txt_n\":\"晴\"},\"date\":\"2016-08-24\",\"hum\":\"66\",\"pcpn\":\"0.0\",\"pop\":\"0\",\"pres\":\"1002\",\"tmp\":{\"max\":\"34\",\"min\":\"28\"},\"vis\":\"10\",\"wind\":{\"deg\":\"206\",\"dir\":\"无持续风向\",\"sc\":\"微风\",\"spd\":\"8\"}},{\"astro\":{\"sr\":\"06:04\",\"ss\":\"18:47\"},\"cond\":{\"code_d\":\"100\",\"code_n\":\"101\",\"txt_d\":\"晴\",\"txt_n\":\"多云\"},\"date\":\"2016-08-25\",\"hum\":\"68\",\"pcpn\":\"0.2\",\"pop\":\"27\",\"pres\":\"1004\",\"tmp\":{\"max\":\"33\",\"min\":\"28\"},\"vis\":\"10\",\"wind\":{\"deg\":\"207\",\"dir\":\"无持续风向\",\"sc\":\"微风\",\"spd\":\"3\"}},{\"astro\":{\"sr\":\"06:04\",\"ss\":\"18:46\"},\"cond\":{\"code_d\":\"101\",\"code_n\":\"101\",\"txt_d\":\"多云\",\"txt_n\":\"多云\"},\"date\":\"2016-08-26\",\"hum\":\"68\",\"pcpn\":\"0.1\",\"pop\":\"32\",\"pres\":\"1005\",\"tmp\":{\"max\":\"33\",\"min\":\"28\"},\"vis\":\"10\",\"wind\":{\"deg\":\"211\",\"dir\":\"无持续风向\",\"sc\":\"微风\",\"spd\":\"1\"}}],\"hourly_forecast\":[{\"date\":\"2016-08-20 22:00\",\"hum\":\"87\",\"pop\":\"64\",\"pres\":\"1004\",\"tmp\":\"29\",\"wind\":{\"deg\":\"220\",\"dir\":\"西南风\",\"sc\":\"微风\",\"spd\":\"7\"}}],\"now\":{\"cond\":{\"code\":\"300\",\"txt\":\"阵雨\"},\"fl\":\"37\",\"hum\":\"84\",\"pcpn\":\"0\",\"pres\":\"1003\",\"tmp\":\"29\",\"vis\":\"10\",\"wind\":{\"deg\":\"190\",\"dir\":\"南风\",\"sc\":\"3-4\",\"spd\":\"15\"}},\"status\":\"ok\",\"suggestion\":{\"comf\":{\"brf\":\"较不舒适\",\"txt\":\"白天虽然有雨，但仍无法削弱较高气温带来的暑意，同时降雨造成湿度加大会您感到有些闷热，不很舒适。\"},\"cw\":{\"brf\":\"不宜\",\"txt\":\"不宜洗车，未来24小时内有雨，如果在此期间洗车，雨水和路上的泥水可能会再次弄脏您的爱车。\"},\"drsg\":{\"brf\":\"热\",\"txt\":\"天气热，建议着短裙、短裤、短薄外套、T恤等夏季服装。\"},\"flu\":{\"brf\":\"少发\",\"txt\":\"各项气象条件适宜，发生感冒机率较低。但请避免长期处于空调房间中，以防感冒。\"},\"sport\":{\"brf\":\"较不宜\",\"txt\":\"有降水，推荐您在室内进行低强度运动；若坚持户外运动，须注意选择避雨防滑地点，并携带雨具。\"},\"trav\":{\"brf\":\"一般\",\"txt\":\"有降水，稍热，微风，旅游指数一般，外出请尽量避开降雨时间，若外出，请注意防雷并携带雨具。\"},\"uv\":{\"brf\":\"中等\",\"txt\":\"属中等强度紫外线辐射天气，外出时建议涂擦SPF高于15、PA+的防晒护肤品，戴帽子、太阳镜。\"}}}]}";
+
     private String buildUrl(WEATHER_PORT port, String query){
         // condition 天气代码接口（allcond、代码）
         // weather 天气接口
@@ -81,13 +83,15 @@ public class HeWeatherFetch {
     private WeatherBean downloadWeather(String url) {
         WeatherBean mWeatherBean = null;
         try {
-            String result = getUrlString(url);
+            //String result = getUrlString(url);
+            String result = weatherInfoExample;
+            Log.i(TAG, "downloadWeather: Weather info : " + result);
+
             String jsonBody = dealHeWeatherJson(result);
 
             if ("not found".equals(jsonBody)){
                 return null;
             }
-            //parseWeather(mWeatherBean, jsonBody);
             Gson gson = new Gson();
             mWeatherBean = gson.fromJson(jsonBody, WeatherBean.class);
         } catch (Exception e) {
@@ -96,15 +100,9 @@ public class HeWeatherFetch {
         return mWeatherBean;
     }
 
-    private void parseWeather(WeatherBean weatherBean, String jsonBody) {
-        Gson gson = new Gson();
-        weatherBean = gson.fromJson(jsonBody, WeatherBean.class);
-    }
-
     private String dealHeWeatherJson(String result) {
         if (result.contains("\"status\":\"ok\"")) {
             result = result.substring(result.indexOf("[") + 1, result.lastIndexOf("]"));
-            Log.i(TAG, "dealHeWeatherJson: weather info :" + result);
         } else {
             Log.e(TAG, "dealHeWeatherJson: not found weather info : with " + result);
             return "not found";
@@ -124,16 +122,11 @@ public class HeWeatherFetch {
             if (!result.contains("\"status\": \"ok\"")){
                 return null;
             }
-            parseCondition(mConditionBean, result);
+            Gson gson = new Gson();
+            mConditionBean = gson.fromJson(result, ConditionBean.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return mConditionBean;
     }
-
-    private void parseCondition(ConditionBean conditionBean, String result) {
-        Gson gson = new Gson();
-        conditionBean = gson.fromJson(result, conditionBean.getClass());
-    }
-
 }
