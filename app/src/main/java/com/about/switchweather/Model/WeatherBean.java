@@ -1,12 +1,22 @@
 package com.about.switchweather.Model;
 
-import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by 跃峰 on 2016/8/20.
  */
-public class WeatherBean implements Serializable {
+public class WeatherBean {
+    private UUID mUUID;
+
+    public WeatherBean() {
+        mUUID = UUID.randomUUID();
+    }
+
+    public UUID getUUID() {
+        return mUUID;
+    }
+
     /**
      * city : {"aqi":"66","co":"1","no2":"61","o3":"82","pm10":"64","pm25":"35","qlty":"良","so2":"9"}
      */

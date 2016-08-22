@@ -10,6 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.about.switchweather.Model.WeatherBean;
 import com.about.switchweather.Util.HeWeatherFetch;
+import com.about.switchweather.Util.WeatherLab;
+
+import java.util.UUID;
 
 /**
  * Created by 跃峰 on 2016/8/21.
@@ -20,7 +23,7 @@ public class MainEmptyFragment extends Fragment {
      * Required interface for hosting activities.
      */
     public interface Callbacks {
-        void onFetchWeatherComplete(WeatherBean weatherBean);
+        void onFetchWeatherComplete(UUID weatherBeanUUID);
     }
 
     /**
@@ -71,12 +74,14 @@ public class MainEmptyFragment extends Fragment {
 
         @Override
         protected WeatherBean doInBackground(Void... params) {
+
             return new HeWeatherFetch().fetchWeatherInfo(mCityName);
         }
 
         @Override
         protected void onPostExecute(WeatherBean weatherBean) {
-            mCallbacks.onFetchWeatherComplete(weatherBean);
+            WeatherLab.get(getActivity()).addWeatherBean(weatherBean);
+            mCallbacks.onFetchWeatherComplete(weatherBean.getUUID());
         }
     }
 }
