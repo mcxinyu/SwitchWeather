@@ -130,10 +130,10 @@
                         android:layout_height="60dp">
                     <ImageView
                             android:id="@+id/weather_image_view"
-                            tools:src="@drawable/mostly_cloudy"
+                            tools:src="@drawable/weather_icon_506"
                             android:scaleType="centerInside"
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"/>
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"/>
                     <TextView
                             android:id="@+id/weather_describe_text_view"
                             tools:text="@string/weather_describe"
