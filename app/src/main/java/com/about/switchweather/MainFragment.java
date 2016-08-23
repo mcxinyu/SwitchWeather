@@ -2,6 +2,7 @@ package com.about.switchweather;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,16 +13,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.about.switchweather.Model.WeatherBean;
+import com.about.switchweather.Model.WeatherInfo;
+import com.about.switchweather.Util.HeWeatherFetch;
 import com.about.switchweather.Util.WeatherLab;
-
-import java.util.UUID;
 
 /**
  * Created by 跃峰 on 2016/8/20.
  */
 public class MainFragment extends Fragment {
     private static final String TAG = "MainFragment";
-    private static final String ARG_WEATHER_BEAN_UUID = "MainFragment";
+    private static final String ARG_WEATHER_BEAN_ID = "MainFragment";
 
     private TextView mCityNameTextView;
     private TextView mTemperatureTextView;
@@ -31,12 +32,14 @@ public class MainFragment extends Fragment {
     private TextView mWeatherDescribeTextView;
     private ImageView mWeatherIconImageView;
 
-    private WeatherBean mWeatherBean;
+    private WeatherInfo mWeatherInfo;
 
-    public static MainFragment newInstance(UUID weatherBeanUUID){
+    private boolean isUpdate;
+
+    public static MainFragment newInstance(String id){
         Log.i(TAG, "newInstance: is start now!");
         Bundle args = new Bundle();
-        args.putSerializable(ARG_WEATHER_BEAN_UUID, weatherBeanUUID);
+        args.putSerializable(ARG_WEATHER_BEAN_ID, id);
 
         MainFragment fragment = new MainFragment();
         fragment.setArguments(args);
@@ -47,8 +50,8 @@ public class MainFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        UUID weatherBeanUUID = (UUID) getArguments().getSerializable(ARG_WEATHER_BEAN_UUID);
-        mWeatherBean = WeatherLab.get(getActivity()).getWeatherBean(weatherBeanUUID);
+        String id = (String) getArguments().getSerializable(ARG_WEATHER_BEAN_ID);
+        mWeatherInfo = WeatherLab.get(getActivity()).getWeatherInfo(id);
     }
 
     @Nullable
@@ -64,9 +67,16 @@ public class MainFragment extends Fragment {
         mWeatherDescribeTextView = (TextView) view.findViewById(R.id.weather_describe_text_view);
         mWeatherIconImageView = (ImageView) view.findViewById(R.id.weather_image_view);
 
-        if (mWeatherBean != null){
+        if (mWeatherInfo != null){
             updateWeatherInfo();
         }
+
+        mUpdateTimeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new UpdateWeather(mWeatherInfo.getBasicCity()).execute();
+            }
+        });
 
         return view;
     }
@@ -77,13 +87,39 @@ public class MainFragment extends Fragment {
     }
 
     private void updateWeatherInfo() {
-        mCityNameTextView.setText(mWeatherBean.getBasic().getCity());
-        mTemperatureTextView.setText(mWeatherBean.getNow().getTmp() + "°");
-        mUpdateTimeTextView.setText(mWeatherBean.getBasic().getUpdate().getLoc().replace(" ", "\n") + " 更新");
-        mMaxTemperatureTextView.setText(mWeatherBean.getDaily_forecast().get(0).getTmp().getMax() + "°");
-        mMinTemperatureTextView.setText(mWeatherBean.getDaily_forecast().get(0).getTmp().getMin() + "°");
-        mWeatherDescribeTextView.setText(mWeatherBean.getNow().getCond().getTxt());
-        mWeatherIconImageView.setImageDrawable(convertIconToRes(getActivity(), mWeatherBean.getNow().getCond().getCode()));
+        if (isUpdate) {
+            mWeatherInfo = WeatherLab.get(getActivity()).getWeatherInfo(mWeatherInfo.getBasicCityId());
+        }
+
+        mCityNameTextView.setText(mWeatherInfo.getBasicCity());
+        mTemperatureTextView.setText(mWeatherInfo.getNowTmp() + "°");
+        mUpdateTimeTextView.setText(mWeatherInfo.getBasicUpdateLoc().replace(" ", "\n") + " 更新");
+        mMaxTemperatureTextView.setText(mWeatherInfo.getDfTmpMax() + "°");
+        mMinTemperatureTextView.setText(mWeatherInfo.getDfTmpMin() + "°");
+        mWeatherDescribeTextView.setText(mWeatherInfo.getNowCondTxt());
+        mWeatherIconImageView.setImageDrawable(convertIconToRes(getActivity(), mWeatherInfo.getNowCondCode()));
+
+        isUpdate = false;
+    }
+
+    private class UpdateWeather extends AsyncTask<Void, Void, WeatherBean>{
+        String mCityName;
+
+        public UpdateWeather(String cityName) {
+            this.mCityName = cityName;
+        }
+
+        @Override
+        protected WeatherBean doInBackground(Void... params) {
+            return new HeWeatherFetch().fetchWeatherBean(mCityName);
+        }
+
+        @Override
+        protected void onPostExecute(WeatherBean weatherBean) {
+            WeatherLab.get(getActivity()).updateWeatherInfo(weatherBean);
+            isUpdate = true;
+            updateWeatherInfo();
+        }
     }
 
     @SuppressWarnings("deprecation")

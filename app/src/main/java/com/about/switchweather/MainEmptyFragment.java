@@ -12,18 +12,17 @@ import com.about.switchweather.Model.WeatherBean;
 import com.about.switchweather.Util.HeWeatherFetch;
 import com.about.switchweather.Util.WeatherLab;
 
-import java.util.UUID;
-
 /**
  * Created by 跃峰 on 2016/8/21.
  */
 public class MainEmptyFragment extends Fragment {
+    private String city = "深圳";
     private Callbacks mCallbacks;
     /**
      * Required interface for hosting activities.
      */
     public interface Callbacks {
-        void onFetchWeatherComplete(UUID weatherBeanUUID);
+        void onFetchWeatherComplete(String id);
     }
 
     /**
@@ -48,7 +47,7 @@ public class MainEmptyFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new FetchWeather("深圳").execute();
+        new FetchWeather(city).execute();
     }
 
     @Nullable
@@ -74,14 +73,13 @@ public class MainEmptyFragment extends Fragment {
 
         @Override
         protected WeatherBean doInBackground(Void... params) {
-
-            return new HeWeatherFetch().fetchWeatherInfo(mCityName);
+            return new HeWeatherFetch().fetchWeatherBean(mCityName);
         }
 
         @Override
         protected void onPostExecute(WeatherBean weatherBean) {
             WeatherLab.get(getActivity()).addWeatherBean(weatherBean);
-            mCallbacks.onFetchWeatherComplete(weatherBean.getUUID());
+            mCallbacks.onFetchWeatherComplete(weatherBean.getBasic().getId());
         }
     }
 }

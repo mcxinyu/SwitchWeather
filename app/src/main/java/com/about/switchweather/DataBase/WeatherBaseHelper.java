@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.about.switchweather.DataBase.WeatherDbSchema.ConditionTable;
-import com.about.switchweather.DataBase.WeatherDbSchema.WeatherBeanTable;
+import com.about.switchweather.DataBase.WeatherDbSchema.WeatherInfoTable;
 
 /**
  * Created by 跃峰 on 2016/8/21.
@@ -21,28 +21,28 @@ public class WeatherBaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table " + ConditionTable.NAME + "(" +
                 "_id integer primary key autoincrement," +
-                ConditionTable.Columns.UUID + "," +
                 ConditionTable.Columns.CODE + "," +
                 ConditionTable.Columns.TEXT + "," +
                 ConditionTable.Columns.TEXT_EN + "," +
                 ConditionTable.Columns.ICON +
                 ")");
-        db.execSQL("create table " + WeatherBeanTable.NAME + "(" +
+
+        db.execSQL("create table " + WeatherInfoTable.NAME + "(" +
                 "_id integer primary key autoincrement," +
-                WeatherBeanTable.Columns.UUID + "," +
-                WeatherBeanTable.Columns.STATUS + "," +
-                WeatherBeanTable.Columns.Basic.CITY + "," +
-                WeatherBeanTable.Columns.Basic.Update.LOC + "," +
-                WeatherBeanTable.Columns.Now.TMP + "," +
-                WeatherBeanTable.Columns.Now.Cond.CODE + "," +
-                WeatherBeanTable.Columns.Now.Cond.TXT + "," +
-                WeatherBeanTable.Columns.DailyForecast.DATE + "," +
-                WeatherBeanTable.Columns.DailyForecast.Tmp.MAX + "," +
-                WeatherBeanTable.Columns.DailyForecast.Tmp.MIN + "," +
-                WeatherBeanTable.Columns.DailyForecast.Cond.CODE_D + "," +
-                WeatherBeanTable.Columns.DailyForecast.Cond.CODE_N + "," +
-                WeatherBeanTable.Columns.DailyForecast.Cond.TXT_D + "," +
-                WeatherBeanTable.Columns.DailyForecast.Cond.TXT_N +
+                WeatherInfoTable.Columns.Basic.ID + "," +
+                WeatherInfoTable.Columns.Basic.CITY + "," +
+                WeatherInfoTable.Columns.Basic.Update.LOC + "," +
+                WeatherInfoTable.Columns.Now.TMP + "," +
+                WeatherInfoTable.Columns.Now.Cond.CODE + "," +
+                WeatherInfoTable.Columns.Now.Cond.TXT + "," +
+                WeatherInfoTable.Columns.DailyForecast.DATE + "," +
+                WeatherInfoTable.Columns.DailyForecast.Tmp.MAX + "," +
+                WeatherInfoTable.Columns.DailyForecast.Tmp.MIN + "," +
+                WeatherInfoTable.Columns.DailyForecast.Cond.CODE_D + "," +
+                WeatherInfoTable.Columns.DailyForecast.Cond.CODE_N + "," +
+                WeatherInfoTable.Columns.DailyForecast.Cond.TXT_D + "," +
+                WeatherInfoTable.Columns.DailyForecast.Cond.TXT_N + "," +
+                WeatherInfoTable.Columns.STATUS +
                 ")");
     }
 

@@ -117,7 +117,7 @@
                             android:layout_toRightOf="@id/temperature_text_view"
                             android:layout_centerVertical="true"
                             tools:text="@string/update_time"
-                            android:textSize="12dp"
+                            android:textSize="12sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                 </RelativeLayout>

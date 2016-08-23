@@ -11,7 +11,6 @@ public class WeatherDbSchema {
         public static final String NAME = "Condition";
 
         public static final class Columns{
-            public static final String UUID = "uuid";
             public static final String CODE = "code";
             public static final String TEXT = "txt";
             public static final String TEXT_EN = "txt_en";
@@ -19,11 +18,10 @@ public class WeatherDbSchema {
         }
     }
 
-    public static final class WeatherBeanTable{
-        public static final String NAME = "WeatherBean";
+    public static final class WeatherInfoTable {
+        public static final String NAME = "WeatherInfo";
 
         public static final class Columns{
-            public static final String UUID = "uuid";
             public static final String STATUS = "status";
 
             public static final class Aqi {
@@ -51,15 +49,13 @@ public class WeatherDbSchema {
                 public static final String CITY = "basic_city";
                 @SerializedName("cnty")
                 private String CNTY;
-                @SerializedName("id")
-                private String ID;
+                public static final String ID = "city_id";
                 @SerializedName("lat")
                 private String LAT;
                 @SerializedName("lon")
                 private String LON;
 
                 public static final class Update {
-                    @SerializedName("loc")
                     public static final String LOC = "basic_update_loc";
                     @SerializedName("utc")
                     private String UTC;
