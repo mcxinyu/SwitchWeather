@@ -78,7 +78,11 @@ public class MainEmptyFragment extends Fragment {
 
         @Override
         protected void onPostExecute(WeatherBean weatherBean) {
-            WeatherLab.get(getActivity()).addWeatherBean(weatherBean);
+            if (WeatherLab.get(getActivity()).getWeatherInfoWithCityName(city) == null) {
+                WeatherLab.get(getActivity()).addWeatherBean(weatherBean);
+            } else {
+                WeatherLab.get(getActivity()).updateWeatherInfo(weatherBean);
+            }
             mCallbacks.onFetchWeatherComplete(weatherBean.getBasic().getId());
         }
     }

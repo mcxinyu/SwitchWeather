@@ -3,6 +3,7 @@ package com.about.switchweather.DataBase;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import com.about.switchweather.DataBase.WeatherDbSchema.CityTable;
 import com.about.switchweather.DataBase.WeatherDbSchema.ConditionTable;
 import com.about.switchweather.DataBase.WeatherDbSchema.WeatherInfoTable;
 
@@ -43,6 +44,16 @@ public class WeatherBaseHelper extends SQLiteOpenHelper {
                 WeatherInfoTable.Columns.DailyForecast.Cond.TXT_D + "," +
                 WeatherInfoTable.Columns.DailyForecast.Cond.TXT_N + "," +
                 WeatherInfoTable.Columns.STATUS +
+                ")");
+
+        db.execSQL("create table " + CityTable.NAME + "(" +
+                "_id integer primary key autoincrement," +
+                CityTable.Columns.ID + "," +
+                CityTable.Columns.CITY + "," +
+                CityTable.Columns.CNTY + "," +
+                CityTable.Columns.LAT + "," +
+                CityTable.Columns.LON + "," +
+                CityTable.Columns.PROV +
                 ")");
     }
 

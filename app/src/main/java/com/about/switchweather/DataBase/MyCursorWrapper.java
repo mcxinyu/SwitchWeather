@@ -1,8 +1,10 @@
 package com.about.switchweather.DataBase;
 
 import android.database.Cursor;
+import com.about.switchweather.DataBase.WeatherDbSchema.CityTable;
 import com.about.switchweather.DataBase.WeatherDbSchema.ConditionTable;
 import com.about.switchweather.DataBase.WeatherDbSchema.WeatherInfoTable;
+import com.about.switchweather.Model.City;
 import com.about.switchweather.Model.Condition;
 import com.about.switchweather.Model.WeatherInfo;
 
@@ -67,5 +69,24 @@ public class MyCursorWrapper extends android.database.CursorWrapper {
         conditionBean.setIcon(ICON);
 
         return conditionBean;
+    }
+
+    public City getCity(){
+        String ID = getString(getColumnIndex(CityTable.Columns.ID));
+        String CITY = getString(getColumnIndex(CityTable.Columns.CITY));
+        String CNTY = getString(getColumnIndex(CityTable.Columns.CNTY));
+        String LAT = getString(getColumnIndex(CityTable.Columns.LAT));
+        String LON = getString(getColumnIndex(CityTable.Columns.LON));
+        String PROV = getString(getColumnIndex(CityTable.Columns.PROV));
+
+        City city = new City();
+        city.setId(ID);
+        city.setCity(CITY);
+        city.setCnty(CNTY);
+        city.setLat(LAT);
+        city.setLon(LON);
+        city.setProv(PROV);
+
+        return city;
     }
 }

@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import com.about.switchweather.Model.City;
 import com.about.switchweather.Model.Condition;
 import com.about.switchweather.Util.HeWeatherFetch;
 import com.about.switchweather.Util.WeatherLab;
@@ -11,6 +12,7 @@ import com.about.switchweather.Util.WeatherLab;
 import java.util.List;
 
 public class MainActivity extends SingleFragmentActivity implements MainEmptyFragment.Callbacks {
+    private enum UpdateType {CONDITION, CITYLIST}
 
     @Override
     public Fragment createFragment() {
@@ -20,14 +22,14 @@ public class MainActivity extends SingleFragmentActivity implements MainEmptyFra
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (WeatherLab.get(this).getConditionBeanList().size() == 0){
+        if (WeatherLab.get(this).getCityList().size() == 0 || WeatherLab.get(this).getConditionBeanList().size() == 0){
             new FetchCondition().execute();
         }
     }
 
     @Override
     public void onFetchWeatherComplete(String id) {
-        if (WeatherLab.get(this).getWeatherInfo(id) == null){
+        if (WeatherLab.get(this).getWeatherInfoWithCityId(id) == null){
             return;
         }
         MainFragment fragment = MainFragment.newInstance(id);
@@ -37,15 +39,28 @@ public class MainActivity extends SingleFragmentActivity implements MainEmptyFra
                 .commit();
     }
 
-    private class FetchCondition extends AsyncTask<Void, Void, List<Condition>> {
+    private class FetchCondition extends AsyncTask<UpdateType, Void, Boolean> {
+
         @Override
-        protected List<Condition> doInBackground(Void... params) {
-            return new HeWeatherFetch().fetchConditionList();
+        protected Boolean doInBackground(UpdateType... params) {
+            if (params == null){
+
+            }
+            for (int i = 0; i < params.length; i++) {
+                if (params[i].equals(UpdateType.CITYLIST)){
+                    List<City> cityList = new HeWeatherFetch().fetchCityList();
+                    storeCityList(cityList);
+                } else if (params[i].equals(UpdateType.CONDITION)){
+                    List<Condition> conditions = new HeWeatherFetch().fetchConditionList();
+                    storeCondition(conditions);
+                }
+            }
+            return true;
         }
 
         @Override
-        protected void onPostExecute(List<Condition> conditions) {
-            storeCondition(conditions);
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
         }
     }
 
@@ -54,5 +69,12 @@ public class MainActivity extends SingleFragmentActivity implements MainEmptyFra
             return;
         }
         WeatherLab.get(this).addConditionBean(conditions);
+    }
+
+    private void storeCityList(List<City> cityList) {
+        if (cityList == null){
+            return;
+        }
+        WeatherLab.get(this).addCityList(cityList);
     }
 }

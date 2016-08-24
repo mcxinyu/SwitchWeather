@@ -6,8 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import com.about.switchweather.DataBase.MyCursorWrapper;
 import com.about.switchweather.DataBase.WeatherBaseHelper;
+import com.about.switchweather.DataBase.WeatherDbSchema.CityTable;
 import com.about.switchweather.DataBase.WeatherDbSchema.ConditionTable;
 import com.about.switchweather.DataBase.WeatherDbSchema.WeatherInfoTable;
+import com.about.switchweather.Model.City;
 import com.about.switchweather.Model.Condition;
 import com.about.switchweather.Model.WeatherBean;
 import com.about.switchweather.Model.WeatherInfo;
@@ -58,8 +60,21 @@ public class WeatherLab {
         return weatherInfoList;
     }
 
-    public WeatherInfo getWeatherInfo(String id) {
-        MyCursorWrapper cursor = queryAllRows(WeatherInfoTable.NAME, WeatherInfoTable.Columns.Basic.ID + "=?", new String[]{id});
+    public WeatherInfo getWeatherInfoWithCityId(String cityId) {
+        MyCursorWrapper cursor = queryAllRows(WeatherInfoTable.NAME, WeatherInfoTable.Columns.Basic.ID + "=?", new String[]{cityId});
+        try {
+            if (cursor.getCount() == 0){
+                return null;
+            }
+            cursor.moveToFirst();
+            return cursor.getWeatherInfo();
+        } finally {
+            cursor.close();
+        }
+    }
+
+    public WeatherInfo getWeatherInfoWithCityName(String cityName) {
+        MyCursorWrapper cursor = queryAllRows(WeatherInfoTable.NAME, WeatherInfoTable.Columns.Basic.CITY + "=?", new String[]{cityName});
         try {
             if (cursor.getCount() == 0){
                 return null;
@@ -104,19 +119,6 @@ public class WeatherLab {
         return values;
     }
 
-    private static List<ContentValues> getConditionValues(List<Condition> conditionBeanList){
-        List<ContentValues> list = new ArrayList<>();
-        for (int i = 0; i < conditionBeanList.size(); i++) {
-            ContentValues values = new ContentValues();
-            values.put(ConditionTable.Columns.CODE, conditionBeanList.get(i).getCode());
-            values.put(ConditionTable.Columns.TEXT, conditionBeanList.get(i).getTxt());
-            values.put(ConditionTable.Columns.TEXT_EN, conditionBeanList.get(i).getTxt_en());
-            values.put(ConditionTable.Columns.ICON, conditionBeanList.get(i).getIcon());
-            list.add(values);
-        }
-        return list;
-    }
-
     public void addConditionBean(List<Condition> conditionBeanList){
         if (getConditionBeanList().size() != 0) {
             removeConditionBean();
@@ -158,5 +160,85 @@ public class WeatherLab {
 
     public void removeConditionBean(){
         mDatabase.delete(ConditionTable.NAME, null, null);
+    }
+
+    private static List<ContentValues> getConditionValues(List<Condition> conditionBeanList){
+        List<ContentValues> list = new ArrayList<>();
+        for (int i = 0; i < conditionBeanList.size(); i++) {
+            ContentValues values = new ContentValues();
+            values.put(ConditionTable.Columns.CODE, conditionBeanList.get(i).getCode());
+            values.put(ConditionTable.Columns.TEXT, conditionBeanList.get(i).getTxt());
+            values.put(ConditionTable.Columns.TEXT_EN, conditionBeanList.get(i).getTxt_en());
+            values.put(ConditionTable.Columns.ICON, conditionBeanList.get(i).getIcon());
+            list.add(values);
+        }
+        return list;
+    }
+
+    public void addCityList(List<City> cityList){
+        List<ContentValues> valuesList = getCityListValues(cityList);
+        for (int i = 0; i < cityList.size(); i++) {
+            mDatabase.insert(CityTable.NAME, null, valuesList.get(i));
+        }
+    }
+
+    public List<City> getCityList(){
+        List<City> cityList = new ArrayList<>();
+        MyCursorWrapper cursor = queryAllRows(CityTable.NAME, null, null);
+        try {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()){
+                cityList.add(cursor.getCity());
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+        return cityList;
+    }
+
+    public City getCityWithCityId(String cityId){
+        MyCursorWrapper cursor = queryAllRows(CityTable.NAME, CityTable.Columns.ID, new String[]{cityId});
+        try {
+            if (cursor.getCount() == 0){
+                return null;
+            }
+            cursor.moveToFirst();
+            return cursor.getCity();
+        } finally {
+            cursor.close();
+        }
+    }
+
+    public City getCityWithCityName(String cityName){
+        MyCursorWrapper cursor = queryAllRows(CityTable.NAME, CityTable.Columns.CITY, new String[]{cityName});
+        try {
+            if (cursor.getCount() == 0){
+                return null;
+            }
+            cursor.moveToFirst();
+            return cursor.getCity();
+        } finally {
+            cursor.close();
+        }
+    }
+
+    public void removeCityList(){
+        mDatabase.delete(CityTable.NAME, null, null);
+    }
+
+    private static List<ContentValues> getCityListValues(List<City> cityList){
+        List<ContentValues> list = new ArrayList<>();
+        for (int i = 0; i < cityList.size(); i++) {
+            ContentValues values = new ContentValues();
+            values.put(CityTable.Columns.ID, cityList.get(i).getId());
+            values.put(CityTable.Columns.CITY, cityList.get(i).getCity());
+            values.put(CityTable.Columns.CNTY, cityList.get(i).getCnty());
+            values.put(CityTable.Columns.LAT, cityList.get(i).getLat());
+            values.put(CityTable.Columns.LON, cityList.get(i).getLon());
+            values.put(CityTable.Columns.PROV, cityList.get(i).getProv());
+            list.add(values);
+        }
+        return list;
     }
 }

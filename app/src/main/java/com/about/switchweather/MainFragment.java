@@ -51,7 +51,7 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         String id = (String) getArguments().getSerializable(ARG_WEATHER_BEAN_ID);
-        mWeatherInfo = WeatherLab.get(getActivity()).getWeatherInfo(id);
+        mWeatherInfo = WeatherLab.get(getActivity()).getWeatherInfoWithCityId(id);
     }
 
     @Nullable
@@ -68,7 +68,7 @@ public class MainFragment extends Fragment {
         mWeatherIconImageView = (ImageView) view.findViewById(R.id.weather_image_view);
 
         if (mWeatherInfo != null){
-            updateWeatherInfo();
+            updateWeatherUI();
         }
 
         mUpdateTimeTextView.setOnClickListener(new View.OnClickListener() {
@@ -86,9 +86,9 @@ public class MainFragment extends Fragment {
         super.onPause();
     }
 
-    private void updateWeatherInfo() {
+    private void updateWeatherUI() {
         if (isUpdate) {
-            mWeatherInfo = WeatherLab.get(getActivity()).getWeatherInfo(mWeatherInfo.getBasicCityId());
+            mWeatherInfo = WeatherLab.get(getActivity()).getWeatherInfoWithCityId(mWeatherInfo.getBasicCityId());
         }
 
         mCityNameTextView.setText(mWeatherInfo.getBasicCity());
@@ -118,7 +118,7 @@ public class MainFragment extends Fragment {
         protected void onPostExecute(WeatherBean weatherBean) {
             WeatherLab.get(getActivity()).updateWeatherInfo(weatherBean);
             isUpdate = true;
-            updateWeatherInfo();
+            updateWeatherUI();
         }
     }
 
