@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">切换天气</string>
+
+    <string name="temp_temperature">26°</string>
+    <string name="more_day">多天天气</string>
+    <string name="weather_describe">多云</string>
+    <string name="gap">|</string>
+    <string name="min_temperature">20°</string>
+    <string name="max_temperature">28°</string>
+    <string name="today">今天 · </string>
+    <string name="date_is">8月20日</string>
+    <string name="now_time">现在</string>
+    <string name="now_time_is">12:00</string>
+    <string name="weekday_is">星期六</string>
+    <string name="temp_text">temp</string>
+    <string name="update_time">刚刚更新</string>
+    <string name="loading">正在加载...</string>
+    <string name="city_name">深圳</string>
+</resources>

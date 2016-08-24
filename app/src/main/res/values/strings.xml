@@ -3,7 +3,7 @@
 
     <string name="temp_temperature">26°</string>
     <string name="more_day">MORE DAY</string>
-    <string name="city_name">深圳 ShenZhen</string>
+    <string name="city_name">ShenZhen</string>
     <string name="weather_describe">Mostly Cloudy</string>
     <string name="gap">|</string>
     <string name="min_temperature">20°</string>

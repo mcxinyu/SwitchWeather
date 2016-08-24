@@ -176,6 +176,10 @@ public class WeatherLab {
     }
 
     public void addCityList(List<City> cityList){
+        if (getCityList().size() != 0) {
+            removeCityList();
+        }
+
         List<ContentValues> valuesList = getCityListValues(cityList);
         for (int i = 0; i < cityList.size(); i++) {
             mDatabase.insert(CityTable.NAME, null, valuesList.get(i));

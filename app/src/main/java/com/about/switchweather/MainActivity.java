@@ -12,7 +12,6 @@ import com.about.switchweather.Util.WeatherLab;
 import java.util.List;
 
 public class MainActivity extends SingleFragmentActivity implements MainEmptyFragment.Callbacks {
-    private enum UpdateType {CONDITION, CITYLIST}
 
     @Override
     public Fragment createFragment() {
@@ -39,22 +38,14 @@ public class MainActivity extends SingleFragmentActivity implements MainEmptyFra
                 .commit();
     }
 
-    private class FetchCondition extends AsyncTask<UpdateType, Void, Boolean> {
+    private class FetchCondition extends AsyncTask<Void, Void, Boolean> {
 
         @Override
-        protected Boolean doInBackground(UpdateType... params) {
-            if (params == null){
-
-            }
-            for (int i = 0; i < params.length; i++) {
-                if (params[i].equals(UpdateType.CITYLIST)){
-                    List<City> cityList = new HeWeatherFetch().fetchCityList();
-                    storeCityList(cityList);
-                } else if (params[i].equals(UpdateType.CONDITION)){
-                    List<Condition> conditions = new HeWeatherFetch().fetchConditionList();
-                    storeCondition(conditions);
-                }
-            }
+        protected Boolean doInBackground(Void... params) {
+            List<City> cityList = new HeWeatherFetch().fetchCityList();
+            storeCityList(cityList);
+            List<Condition> conditions = new HeWeatherFetch().fetchConditionList();
+            storeCondition(conditions);
             return true;
         }
 
