@@ -8,11 +8,10 @@ import com.about.switchweather.DataBase.MyCursorWrapper;
 import com.about.switchweather.DataBase.WeatherBaseHelper;
 import com.about.switchweather.DataBase.WeatherDbSchema.CityTable;
 import com.about.switchweather.DataBase.WeatherDbSchema.ConditionTable;
+import com.about.switchweather.DataBase.WeatherDbSchema.DailyForecastTable;
 import com.about.switchweather.DataBase.WeatherDbSchema.WeatherInfoTable;
-import com.about.switchweather.Model.City;
-import com.about.switchweather.Model.Condition;
-import com.about.switchweather.Model.WeatherBean;
-import com.about.switchweather.Model.WeatherInfo;
+import com.about.switchweather.Model.*;
+import com.about.switchweather.Model.WeatherBean.DailyForecastBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -168,7 +167,7 @@ public class WeatherLab {
             ContentValues values = new ContentValues();
             values.put(ConditionTable.Columns.CODE, conditionBeanList.get(i).getCode());
             values.put(ConditionTable.Columns.TEXT, conditionBeanList.get(i).getTxt());
-            values.put(ConditionTable.Columns.TEXT_EN, conditionBeanList.get(i).getTxt_en());
+            values.put(ConditionTable.Columns.TEXT_EN, conditionBeanList.get(i).getTxtEn());
             values.put(ConditionTable.Columns.ICON, conditionBeanList.get(i).getIcon());
             list.add(values);
         }
@@ -244,5 +243,76 @@ public class WeatherLab {
             list.add(values);
         }
         return list;
+    }
+
+    private static List<ContentValues> getDailyForecastListValues(WeatherBean weatherBean){
+        List<DailyForecastBean> dailyForecastBeanList = weatherBean.getDaily_forecast();
+
+        List<ContentValues> list = new ArrayList<>();
+        for (int i = 0; i < dailyForecastBeanList.size(); i++) {
+            ContentValues values = new ContentValues();
+            values.put(DailyForecastTable.Columns.DATE, dailyForecastBeanList.get(i).getDate());
+            values.put(DailyForecastTable.Columns.CITY_ID, weatherBean.getBasic().getId());
+            values.put(DailyForecastTable.Columns.CITY, weatherBean.getBasic().getCity());
+            values.put(DailyForecastTable.Columns.ASTRO_SR, dailyForecastBeanList.get(i).getAstro().getSr());
+            values.put(DailyForecastTable.Columns.ASTRO_SS, dailyForecastBeanList.get(i).getAstro().getSs());
+            values.put(DailyForecastTable.Columns.COND_CODE_D, dailyForecastBeanList.get(i).getCond().getCode_n());
+            values.put(DailyForecastTable.Columns.COND_CODE_N, dailyForecastBeanList.get(i).getCond().getCode_n());
+            values.put(DailyForecastTable.Columns.COND_TXT_D, dailyForecastBeanList.get(i).getCond().getTxt_d());
+            values.put(DailyForecastTable.Columns.COND_TXT_N, dailyForecastBeanList.get(i).getCond().getTxt_n());
+            values.put(DailyForecastTable.Columns.HUM, dailyForecastBeanList.get(i).getHum());
+            values.put(DailyForecastTable.Columns.PCPN, dailyForecastBeanList.get(i).getPcpn());
+            values.put(DailyForecastTable.Columns.POP, dailyForecastBeanList.get(i).getPop());
+            values.put(DailyForecastTable.Columns.PRES, dailyForecastBeanList.get(i).getPres());
+            values.put(DailyForecastTable.Columns.TMP_MAX, dailyForecastBeanList.get(i).getTmp().getMax());
+            values.put(DailyForecastTable.Columns.TMP_MIN, dailyForecastBeanList.get(i).getTmp().getMin());
+            values.put(DailyForecastTable.Columns.VIS, dailyForecastBeanList.get(i).getVis());
+            values.put(DailyForecastTable.Columns.WIND_DEG, dailyForecastBeanList.get(i).getWind().getDeg());
+            values.put(DailyForecastTable.Columns.WIND_DIR, dailyForecastBeanList.get(i).getWind().getDir());
+            values.put(DailyForecastTable.Columns.WIND_SC, dailyForecastBeanList.get(i).getWind().getSc());
+            values.put(DailyForecastTable.Columns.WIND_SPD, dailyForecastBeanList.get(i).getWind().getSpd());
+
+            list.add(values);
+        }
+        return list;
+    }
+
+    public void addDailyForecastList(WeatherBean weatherBean){
+        deleteDailyForecastOldDate(weatherBean.getBasic().getId());
+
+        List<ContentValues> valuesList = getDailyForecastListValues(weatherBean);
+        for (int i = 0; i < valuesList.size(); i++) {
+            mDatabase.insert(DailyForecastTable.NAME, null, valuesList.get(i));
+        }
+    }
+
+    public void updateDailyForecastList(WeatherBean weatherBean){
+        List<DailyForecastBean> dailyForecastBeanList = weatherBean.getDaily_forecast();
+        String cityId = weatherBean.getBasic().getId();
+
+        List<ContentValues> valuesList = getDailyForecastListValues(weatherBean);
+        for (int i = 0; i < valuesList.size(); i++) {
+            String date = dailyForecastBeanList.get(i).getDate();
+            mDatabase.update(DailyForecastTable.NAME, valuesList.get(i), DailyForecastTable.Columns.CITY_ID + "=? and " + DailyForecastTable.Columns.DATE + "=?", new String[]{cityId, date});
+        }
+    }
+
+    public List<DailyForecast> getDailyForecastList(String cityId){
+        List<DailyForecast> dailyForecastList = new ArrayList<>();
+        MyCursorWrapper cursor = queryAllRows(DailyForecastTable.NAME, DailyForecastTable.Columns.CITY_ID + "=? and " + DailyForecastTable.Columns.DATE + ">DATE('now','-2 day','localtime')", new String[]{cityId});
+        try {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()){
+                dailyForecastList.add(cursor.getDailyForecast());
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+        return dailyForecastList;
+    }
+
+    public void deleteDailyForecastOldDate(String cityId){
+        mDatabase.delete(DailyForecastTable.NAME, DailyForecastTable.Columns.CITY_ID + "=? and " + DailyForecastTable.Columns.DATE + "<DATE('now','-20 day','localtime')", new String[]{cityId});
     }
 }

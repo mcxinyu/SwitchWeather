@@ -16,4 +16,6 @@
     <string name="temp_text">temp</string>
     <string name="update_time">Just update</string>
     <string name="loading">loading...</string>
+    <string name="network_is_not_available">Network is not available</string>
+    <string name="retry_to_connect">Retry</string>
 </resources>

@@ -27,11 +27,11 @@ public class MainActivity extends SingleFragmentActivity implements MainEmptyFra
     }
 
     @Override
-    public void onFetchWeatherComplete(String id) {
-        if (WeatherLab.get(this).getWeatherInfoWithCityId(id) == null){
+    public void onFetchWeatherComplete(String cityId, boolean updated) {
+        if (WeatherLab.get(this).getWeatherInfoWithCityId(cityId) == null){
             return;
         }
-        MainFragment fragment = MainFragment.newInstance(id);
+        MainFragment fragment = MainFragment.newInstance(cityId, updated);
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment)

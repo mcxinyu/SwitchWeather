@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.about.switchweather.DataBase.WeatherDbSchema.CityTable;
 import com.about.switchweather.DataBase.WeatherDbSchema.ConditionTable;
+import com.about.switchweather.DataBase.WeatherDbSchema.DailyForecastTable;
 import com.about.switchweather.DataBase.WeatherDbSchema.WeatherInfoTable;
 
 /**
@@ -54,6 +55,30 @@ public class WeatherBaseHelper extends SQLiteOpenHelper {
                 CityTable.Columns.LAT + "," +
                 CityTable.Columns.LON + "," +
                 CityTable.Columns.PROV +
+                ")");
+
+        db.execSQL("create table " + DailyForecastTable.NAME + "(" +
+                "_id integer primary key autoincrement," +
+                DailyForecastTable.Columns.DATE + "," +
+                DailyForecastTable.Columns.CITY_ID + "," +
+                DailyForecastTable.Columns.CITY + "," +
+                DailyForecastTable.Columns.ASTRO_SR + "," +
+                DailyForecastTable.Columns.ASTRO_SS + "," +
+                DailyForecastTable.Columns.COND_CODE_D + "," +
+                DailyForecastTable.Columns.COND_CODE_N + "," +
+                DailyForecastTable.Columns.COND_TXT_D + "," +
+                DailyForecastTable.Columns.COND_TXT_N + "," +
+                DailyForecastTable.Columns.HUM + "," +
+                DailyForecastTable.Columns.PCPN + "," +
+                DailyForecastTable.Columns.POP + "," +
+                DailyForecastTable.Columns.PRES + "," +
+                DailyForecastTable.Columns.TMP_MAX + "," +
+                DailyForecastTable.Columns.TMP_MIN + "," +
+                DailyForecastTable.Columns.VIS + "," +
+                DailyForecastTable.Columns.WIND_DEG + "," +
+                DailyForecastTable.Columns.WIND_DIR + "," +
+                DailyForecastTable.Columns.WIND_SC + "," +
+                DailyForecastTable.Columns.WIND_SPD +
                 ")");
     }
 

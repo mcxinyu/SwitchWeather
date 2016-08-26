@@ -17,7 +17,7 @@
         <RelativeLayout
                 android:id="@+id/date_info_view"
                 android:gravity="center_horizontal"
-                android:layout_weight="0.8"
+                android:layout_weight="0.6"
                 android:layout_width="match_parent"
                 android:layout_height="0dp">
             <LinearLayout
@@ -78,25 +78,20 @@
                 android:clipChildren="false"
                 android:layout_width="match_parent"
                 android:layout_height="0dp">
-            <RelativeLayout
-                    android:id="@+id/more_view"
+            <android.support.v7.widget.RecyclerView
+                    android:id="@+id/daily_forecast_recycler_view"
                     android:layout_marginTop="2dp"
                     android:background="@color/colorWhite"
                     android:layout_alignParentBottom="true"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp">
-                <TextView
-                        tools:text="@string/more_day"
-                        android:textSize="30sp"
-                        android:layout_centerInParent="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-            </RelativeLayout>
+                    android:layout_height="100dp"
+                    android:scrollbars="none">
+            </android.support.v7.widget.RecyclerView>
             <RelativeLayout
                     android:id="@+id/weather_view"
                     android:background="@color/colorWhite"
                     android:clipChildren="false"
-                    android:layout_above="@id/more_view"
+                    android:layout_above="@id/daily_forecast_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                 <RelativeLayout
@@ -132,8 +127,8 @@
                             android:id="@+id/weather_image_view"
                             tools:src="@drawable/weather_icon_506"
                             android:scaleType="centerInside"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"/>
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"/>
                     <TextView
                             android:id="@+id/weather_describe_text_view"
                             tools:text="@string/weather_describe"

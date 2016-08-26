@@ -246,4 +246,31 @@ public class WeatherDbSchema {
             public static final String PROV = "prov";
         }
     }
+
+    public static final class DailyForecastTable {
+        public static final String NAME = "DailyForecast";
+
+        public static final class Columns{
+            public static final String DATE = "date";
+            public static final String CITY_ID = "city_id";
+            public static final String CITY = "city";
+            public static final String ASTRO_SR = "astro_sr";
+            public static final String ASTRO_SS = "astro_ss";
+            public static final String COND_CODE_D = "cond_code_d";
+            public static final String COND_CODE_N = "cond_code_n";
+            public static final String COND_TXT_D = "cond_txt_d";
+            public static final String COND_TXT_N = "cond_txt_n";
+            public static final String HUM = "hum";
+            public static final String PCPN = "pcpn";
+            public static final String POP = "pop";
+            public static final String PRES = "pres";
+            public static final String TMP_MAX = "tmp_max";
+            public static final String TMP_MIN = "tmp_min";
+            public static final String VIS = "vis";
+            public static final String WIND_DEG = "wind_deg";
+            public static final String WIND_DIR = "wind_dir";
+            public static final String WIND_SC = "wind_sc";
+            public static final String WIND_SPD = "wind_spd";
+        }
+    }
 }

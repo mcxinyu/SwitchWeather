@@ -28,23 +28,19 @@
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
-            <RelativeLayout
-                    android:id="@+id/more_view"
-                    android:layout_marginTop="2dp"
+            <android.support.v7.widget.RecyclerView
+                    android:id="@+id/daily_forecast_recycler_view"
+                    android:layout_marginLeft="2dp"
                     android:background="@color/colorWhite"
                     android:layout_alignParentRight="true"
-                    android:layout_width="80dp"
-                    android:layout_height="match_parent">
-                <TextView
-                        tools:text="@string/more_day"
-                        android:layout_centerInParent="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-            </RelativeLayout>
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:scrollbars="none">
+            </android.support.v7.widget.RecyclerView>
             <RelativeLayout
                     android:id="@+id/weather_view"
                     android:background="@color/colorWhite"
-                    android:layout_toLeftOf="@id/more_view"
+                    android:layout_toLeftOf="@id/daily_forecast_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                 <RelativeLayout
@@ -134,8 +130,8 @@
                             android:id="@+id/weather_image_view"
                             tools:src="@drawable/weather_icon_506"
                             android:scaleType="centerInside"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"/>
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"/>
                     <TextView
                             android:id="@+id/weather_describe_text_view"
                             tools:text="@string/weather_describe"

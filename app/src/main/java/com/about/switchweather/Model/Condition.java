@@ -6,7 +6,7 @@ package com.about.switchweather.Model;
 public class Condition {
     private String code;
     private String txt;
-    private String txt_en;
+    private String txtEn;
     private String icon;
 
     public String getCode() {
@@ -25,12 +25,12 @@ public class Condition {
         this.txt = txt;
     }
 
-    public String getTxt_en() {
-        return txt_en;
+    public String getTxtEn() {
+        return txtEn;
     }
 
-    public void setTxt_en(String txt_en) {
-        this.txt_en = txt_en;
+    public void setTxtEn(String txtEn) {
+        this.txtEn = txtEn;
     }
 
     public String getIcon() {

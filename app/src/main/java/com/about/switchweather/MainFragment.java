@@ -1,21 +1,30 @@
 package com.about.switchweather;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.about.switchweather.Model.DailyForecast;
 import com.about.switchweather.Model.WeatherBean;
 import com.about.switchweather.Model.WeatherInfo;
+import com.about.switchweather.Util.ColoredSnackbar;
 import com.about.switchweather.Util.HeWeatherFetch;
 import com.about.switchweather.Util.WeatherLab;
+
+import java.util.List;
 
 /**
  * Created by 跃峰 on 2016/8/20.
@@ -23,6 +32,7 @@ import com.about.switchweather.Util.WeatherLab;
 public class MainFragment extends Fragment {
     private static final String TAG = "MainFragment";
     private static final String ARG_WEATHER_BEAN_ID = "MainFragment";
+    private static final String ARG_WEATHER_UPDATED = "Weather_updated";
 
     private TextView mCityNameTextView;
     private TextView mTemperatureTextView;
@@ -31,15 +41,21 @@ public class MainFragment extends Fragment {
     private TextView mMinTemperatureTextView;
     private TextView mWeatherDescribeTextView;
     private ImageView mWeatherIconImageView;
+    private RecyclerView mRecyclerView;
+    private DailyForecastAdapter mAdapter;
+    private View mWeatherView;
 
     private WeatherInfo mWeatherInfo;
+    private List<DailyForecast> mDailyForecastList;
 
     private boolean isUpdate;
+    private boolean weatherUpdated;
 
-    public static MainFragment newInstance(String id){
+    public static MainFragment newInstance(String id, boolean updated){
         Log.i(TAG, "newInstance: is start now!");
         Bundle args = new Bundle();
         args.putSerializable(ARG_WEATHER_BEAN_ID, id);
+        args.putBoolean(ARG_WEATHER_UPDATED, updated);
 
         MainFragment fragment = new MainFragment();
         fragment.setArguments(args);
@@ -51,13 +67,16 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         String id = (String) getArguments().getSerializable(ARG_WEATHER_BEAN_ID);
+        weatherUpdated = getArguments().getBoolean(ARG_WEATHER_UPDATED);
         mWeatherInfo = WeatherLab.get(getActivity()).getWeatherInfoWithCityId(id);
+        mDailyForecastList = WeatherLab.get(getActivity()).getDailyForecastList(mWeatherInfo.getBasicCityId());
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
+        mWeatherView = view.findViewById(R.id.weather_view);
 
         mCityNameTextView = (TextView) view.findViewById(R.id.city_name_text_view);
         mTemperatureTextView = (TextView) view.findViewById(R.id.temperature_text_view);
@@ -66,6 +85,13 @@ public class MainFragment extends Fragment {
         mMinTemperatureTextView = (TextView) view.findViewById(R.id.min_temperature_text_view);
         mWeatherDescribeTextView = (TextView) view.findViewById(R.id.weather_describe_text_view);
         mWeatherIconImageView = (ImageView) view.findViewById(R.id.weather_image_view);
+
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.daily_forecast_recycler_view);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        if (!isScreenLandscape()){
+            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        }
+        mRecyclerView.setLayoutManager(layoutManager);
 
         if (mWeatherInfo != null){
             updateWeatherUI();
@@ -82,6 +108,14 @@ public class MainFragment extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (!weatherUpdated){
+            showSnackbarAlert("更新失败");
+        }
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
     }
@@ -89,6 +123,7 @@ public class MainFragment extends Fragment {
     private void updateWeatherUI() {
         if (isUpdate) {
             mWeatherInfo = WeatherLab.get(getActivity()).getWeatherInfoWithCityId(mWeatherInfo.getBasicCityId());
+            mDailyForecastList = WeatherLab.get(getActivity()).getDailyForecastList(mWeatherInfo.getBasicCityId());
         }
 
         mCityNameTextView.setText(mWeatherInfo.getBasicCity());
@@ -99,7 +134,58 @@ public class MainFragment extends Fragment {
         mWeatherDescribeTextView.setText(mWeatherInfo.getNowCondTxt());
         mWeatherIconImageView.setImageDrawable(convertIconToRes(getActivity(), mWeatherInfo.getNowCondCode()));
 
+        mAdapter = new DailyForecastAdapter();
+        mRecyclerView.setAdapter(mAdapter);
+
         isUpdate = false;
+    }
+
+    private class DailyForecastAdapter extends RecyclerView.Adapter<DailyForecastHolder> {
+
+        @Override
+        public DailyForecastHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+            View view = layoutInflater.inflate(R.layout.item_daily_forecast, parent, false);
+            return new DailyForecastHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(DailyForecastHolder holder, int position) {
+            DailyForecast dailyForecast = mDailyForecastList.get(position);
+            holder.bindDailyForecast(dailyForecast);
+        }
+
+        @Override
+        public int getItemCount() {
+            return mDailyForecastList.size();
+        }
+    }
+
+    private class DailyForecastHolder extends RecyclerView.ViewHolder {
+        private DailyForecast mDailyForecast;
+        private TextView mDailyForecastDateTextView;
+        private TextView mDailyForecastWeeklyTextView;
+        private ImageView mDailyForecastIconImageView;
+        private TextView mDailyForecastTemperatureTextView;
+        private TextView mDailyForecastWindTextView;
+
+        public DailyForecastHolder(View itemView) {
+            super(itemView);
+            mDailyForecastWeeklyTextView = (TextView) itemView.findViewById(R.id.daily_forecast_weekly_text_view);
+            mDailyForecastDateTextView = (TextView) itemView.findViewById(R.id.daily_forecast_date_text_view);
+            mDailyForecastIconImageView = (ImageView) itemView.findViewById(R.id.daily_forecast_icon_image_view );
+            mDailyForecastTemperatureTextView = (TextView) itemView.findViewById(R.id.daily_forecast_temperature_text_view);
+            mDailyForecastWindTextView = (TextView) itemView.findViewById(R.id.daily_forecast_wind_text_view);
+        }
+
+        public void bindDailyForecast(DailyForecast dailyForecast){
+            mDailyForecast = dailyForecast;
+            mDailyForecastWeeklyTextView.setText("??");
+            mDailyForecastDateTextView.setText(mDailyForecast.getDate());
+            mDailyForecastIconImageView.setImageDrawable(convertIconToRes(getActivity(), mDailyForecast.getCondCodeD()));
+            mDailyForecastTemperatureTextView.setText(mDailyForecast.getTmpMin() + "°-" + mDailyForecast.getTmpMax() + "°");
+            mDailyForecastWindTextView.setText(mDailyForecast.getWindSc());
+        }
     }
 
     private class UpdateWeather extends AsyncTask<Void, Void, WeatherBean>{
@@ -116,8 +202,18 @@ public class MainFragment extends Fragment {
 
         @Override
         protected void onPostExecute(WeatherBean weatherBean) {
+            if (!isNetworkAvailableAndConnected()){
+                showSnackbarAlert(getResources().getString(R.string.network_is_not_available));
+                return;
+            }
+            if (weatherBean == null){
+                showSnackbarAlert("更新失败");
+                return;
+            }
             WeatherLab.get(getActivity()).updateWeatherInfo(weatherBean);
+            WeatherLab.get(getActivity()).updateDailyForecastList(weatherBean);
             isUpdate = true;
+            weatherUpdated = true;
             updateWeatherUI();
         }
     }
@@ -232,5 +328,39 @@ public class MainFragment extends Fragment {
             default:
                 return context.getResources().getDrawable(R.drawable.weather_icon_999);
         }
+    }
+
+    private boolean isScreenLandscape() {
+        //获取设置的配置信息
+        Configuration mConfiguration = this.getResources().getConfiguration();
+        //获取屏幕方向
+        int ori = mConfiguration.orientation ;
+
+        if(ori == mConfiguration.ORIENTATION_LANDSCAPE){
+            //横屏
+            return true;
+        }else if(ori == mConfiguration.ORIENTATION_PORTRAIT){
+            //竖屏
+            return false;
+        }
+        return false;
+    }
+
+    private boolean isNetworkAvailableAndConnected(){
+        ConnectivityManager manager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean isNetworkAvailable = manager.getActiveNetworkInfo() != null;
+        boolean isNetworkConnected = isNetworkAvailable && manager.getActiveNetworkInfo().isConnected();
+        return isNetworkConnected;
+    }
+
+    private void showSnackbarAlert(String text) {
+        Snackbar snackbar = Snackbar.make(mWeatherView, text, Snackbar.LENGTH_INDEFINITE)
+                .setAction(getResources().getString(R.string.retry_to_connect), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new UpdateWeather(mWeatherInfo.getBasicCity()).execute();
+                    }
+                }).setActionTextColor(getResources().getColor(R.color.colorWhite));
+        ColoredSnackbar.alert(snackbar).show();
     }
 }
