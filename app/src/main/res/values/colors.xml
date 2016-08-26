@@ -13,4 +13,6 @@
     <color name="colorSun">#FFD705</color>
     <color name="colorTemperature">#007AFF</color>
     <color name="colorText">#000000</color>
+
+    <color name="translucent_background">#00FFFFFF</color>
 </resources>

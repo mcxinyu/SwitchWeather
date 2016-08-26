@@ -18,4 +18,5 @@
     <string name="city_name">深圳</string>
     <string name="network_is_not_available">网络不可用</string>
     <string name="retry_to_connect">重试</string>
+    <string name="new_city">新建</string>
 </resources>
