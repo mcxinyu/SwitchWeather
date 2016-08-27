@@ -167,7 +167,7 @@
                         android:layout_below="@id/weather_info_view"
                         android:layout_alignLeft="@id/now_time_view"
                         tools:text="@string/city_name"
-                        android:textSize="26sp"
+                        android:textSize="28sp"
                         android:layout_marginTop="10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
@@ -179,27 +179,27 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                     <TextView
-                            android:text="@string/temp_text"
+                            android:text="@string/placeholder_text"
                             android:textSize="24sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                     <TextView
-                            android:text="@string/temp_text"
+                            android:text="@string/placeholder_text"
                             android:textSize="24sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                     <TextView
-                            android:text="@string/temp_text"
+                            android:text="@string/placeholder_text"
                             android:textSize="24sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                     <TextView
-                            android:text="@string/temp_text"
+                            android:text="@string/placeholder_text"
                             android:textSize="24sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                     <TextView
-                            android:text="@string/temp_text"
+                            android:text="@string/placeholder_text"
                             android:textSize="24sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>

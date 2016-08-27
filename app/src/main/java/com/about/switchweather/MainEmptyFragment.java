@@ -101,7 +101,7 @@ public class MainEmptyFragment extends Fragment {
                     return;
                 }
                 //有网、不成功，无存储
-                showSnackbarAlert("更新失败");
+                showSnackbarAlert(getResources().getString(R.string.update_failed));
                 return;
             }
             if (WeatherLab.get(getActivity()).getWeatherInfoWithCityName(city) == null) {

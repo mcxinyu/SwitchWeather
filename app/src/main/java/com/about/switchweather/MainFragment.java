@@ -22,8 +22,10 @@ import com.about.switchweather.Model.WeatherBean;
 import com.about.switchweather.Model.WeatherInfo;
 import com.about.switchweather.Util.ColoredSnackbar;
 import com.about.switchweather.Util.HeWeatherFetch;
+import com.about.switchweather.Util.TimeUtil;
 import com.about.switchweather.Util.WeatherLab;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -100,6 +102,7 @@ public class MainFragment extends Fragment {
         mUpdateTimeTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mUpdateTimeTextView.setText(getResources().getString(R.string.update_in_progress));
                 new UpdateWeather(mWeatherInfo.getBasicCity()).execute();
             }
         });
@@ -111,7 +114,7 @@ public class MainFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (!weatherUpdated){
-            showSnackbarAlert("更新失败");
+            showSnackbarAlert(getResources().getString(R.string.update_failed));
         }
     }
 
@@ -128,7 +131,7 @@ public class MainFragment extends Fragment {
 
         mCityNameTextView.setText(mWeatherInfo.getBasicCity());
         mTemperatureTextView.setText(mWeatherInfo.getNowTmp() + "°");
-        mUpdateTimeTextView.setText(mWeatherInfo.getBasicUpdateLoc().replace(" ", "\n") + " 更新");
+        mUpdateTimeTextView.setText(TimeUtil.getDIYTime(MyApplication.getContext(), mWeatherInfo.getBasicUpdateLoc(), new SimpleDateFormat("yyyy-MM-dd HH:mm")) + getResources().getString(R.string.update_text));
         mMaxTemperatureTextView.setText(mWeatherInfo.getDfTmpMax() + "°");
         mMinTemperatureTextView.setText(mWeatherInfo.getDfTmpMin() + "°");
         mWeatherDescribeTextView.setText(mWeatherInfo.getNowCondTxt());
@@ -180,11 +183,11 @@ public class MainFragment extends Fragment {
 
         public void bindDailyForecast(DailyForecast dailyForecast){
             mDailyForecast = dailyForecast;
-            mDailyForecastWeeklyTextView.setText("??");
-            mDailyForecastDateTextView.setText(mDailyForecast.getDate());
+            mDailyForecastWeeklyTextView.setText(TimeUtil.getNear3Weekday(MyApplication.getContext(), mDailyForecast.getDate(), new SimpleDateFormat("yyyy-MM-dd")));
+            mDailyForecastDateTextView.setText(TimeUtil.getDate(mDailyForecast.getDate(), new SimpleDateFormat("yyyy-MM-dd")));
             mDailyForecastIconImageView.setImageDrawable(convertIconToRes(getActivity(), mDailyForecast.getCondCodeD()));
             mDailyForecastTemperatureTextView.setText(mDailyForecast.getTmpMin() + "°-" + mDailyForecast.getTmpMax() + "°");
-            mDailyForecastWindTextView.setText(mDailyForecast.getWindSc());
+            mDailyForecastWindTextView.setText(mDailyForecast.getCondTxtD());
         }
     }
 
@@ -207,7 +210,7 @@ public class MainFragment extends Fragment {
                 return;
             }
             if (weatherBean == null){
-                showSnackbarAlert("更新失败");
+                showSnackbarAlert(getResources().getString(R.string.update_failed));
                 return;
             }
             WeatherLab.get(getActivity()).updateWeatherInfo(weatherBean);

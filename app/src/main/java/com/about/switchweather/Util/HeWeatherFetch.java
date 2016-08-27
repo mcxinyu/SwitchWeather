@@ -101,8 +101,8 @@ public class HeWeatherFetch {
     private WeatherBean downloadWeather(String url) {
         WeatherBean weatherBean = null;
         try {
-            //String result = getUrlString(url);
-            String result = weatherInfoExample;
+            String result = getUrlString(url);
+            //String result = weatherInfoExample;
             Log.i(TAG, "downloadWeather: Weather info : " + result);
 
             String jsonBody = dealHeWeatherJson(result);
@@ -122,7 +122,7 @@ public class HeWeatherFetch {
         List<Condition> conditionBeanList = null;
         try {
             String result = getUrlString(url);
-            //Log.i(TAG, "downloadConditionList: " + result);
+            Log.i(TAG, "downloadConditionList: " + result);
 
             String jsonBody = dealHeWeatherJson(result);
             if ("not found".equals(jsonBody)){
@@ -141,7 +141,7 @@ public class HeWeatherFetch {
         List<City> cityListList = null;
         try {
             String result = getUrlString(url);
-            //Log.i(TAG, "downloadCityList: " + result);
+            Log.i(TAG, "downloadCityList: " + result);
 
             String jsonBody = dealHeWeatherJson(result);
             if ("not found".equals(jsonBody)){

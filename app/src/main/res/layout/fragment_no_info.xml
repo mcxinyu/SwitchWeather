@@ -8,7 +8,7 @@
     <ImageView
             android:id="@+id/no_info_image_view"
             android:src="@drawable/no_info"
-            android:alpha="0.2"
+            android:alpha="0.4"
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

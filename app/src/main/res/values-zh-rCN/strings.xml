@@ -12,11 +12,19 @@
     <string name="now_time">现在</string>
     <string name="now_time_is">12:00</string>
     <string name="weekday_is">星期六</string>
-    <string name="temp_text">temp</string>
+    <string name="placeholder_text">占位符</string>
     <string name="update_time">刚刚更新</string>
     <string name="loading">正在加载...</string>
     <string name="city_name">深圳</string>
     <string name="network_is_not_available">网络不可用</string>
     <string name="retry_to_connect">重试</string>
     <string name="new_city">新建</string>
+    <string name="update_failed">更新失败</string>
+    <string name="update_text"> 更新</string>
+    <string name="today_text">今天</string>
+    <string name="tomorrow_text">明天</string>
+    <string name="yesterday_text">昨天</string>
+    <string name="just_text">刚刚</string>
+    <string name="minutes_text"> 分钟前</string>
+    <string name="update_in_progress">正在更新</string>
 </resources>

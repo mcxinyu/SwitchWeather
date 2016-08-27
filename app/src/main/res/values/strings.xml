@@ -13,10 +13,18 @@
     <string name="now_time">Now</string>
     <string name="now_time_is">12:00</string>
     <string name="weekday_is">Saturday</string>
-    <string name="temp_text">temp</string>
+    <string name="placeholder_text">placeholder</string>
     <string name="update_time">Just update</string>
     <string name="loading">loading...</string>
     <string name="network_is_not_available">Network is not available</string>
     <string name="retry_to_connect">Retry</string>
     <string name="new_city">New</string>
+    <string name="update_failed">Update Failed</string>
+    <string name="update_text"> Update</string>
+    <string name="yesterday_text">Yesterday</string>
+    <string name="today_text">Today</string>
+    <string name="tomorrow_text">Tomorrow</string>
+    <string name="just_text">Just</string>
+    <string name="minutes_text">minutes ago</string>
+    <string name="update_in_progress">Update in progress</string>
 </resources>
