@@ -36,7 +36,7 @@ public class WeatherPagerActivity extends AppCompatActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private RecyclerView mSlidingTabRecyclerView;
     private SlidingTabAdapter mAdapter;
-    private String cityId;
+    private String mCityId;
 
     public static Intent newIntent(Context context, String cityId) {
         Intent intent = new Intent(context, WeatherPagerActivity.class);
@@ -48,12 +48,12 @@ public class WeatherPagerActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pager_fragment);
-        cityId = (String) getIntent().getSerializableExtra(EXTRA_WEATHER_CITY_ID);
+        mCityId = (String) getIntent().getSerializableExtra(EXTRA_WEATHER_CITY_ID);
 
         initSlidingTab();
 
         mWeatherInfoList = WeatherLab.get(MyApplication.getContext()).getWeatherInfoList();
-        mViewPager = (ViewPager) findViewById(R.id.weather_view_pager);
+        mViewPager = (ViewPager) findViewById(R.id.weather_view_pager_container);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
@@ -70,7 +70,7 @@ public class WeatherPagerActivity extends AppCompatActivity {
         });
 
         for (int i = 0; i < mWeatherInfoList.size(); i++) {
-            if (mWeatherInfoList.get(i).getBasicCityId() == cityId){
+            if (mWeatherInfoList.get(i).getBasicCityId() == mCityId){
                 mViewPager.setCurrentItem(i);
                 break;
             }
@@ -84,13 +84,17 @@ public class WeatherPagerActivity extends AppCompatActivity {
         }
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
-        mActionBar.setDefaultDisplayHomeAsUpEnabled(true);
+        // 给左上角图标的左边加上一个返回的图标
+        mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setHomeButtonEnabled(true);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        //声明mDrawerToggle对象,其中R.string.open和R.string.close简单可以用"open"和"close"替代
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.app_name, R.string.app_name);
+        //实现箭头和三条杠图案切换和抽屉拉合的同步
         mDrawerToggle.syncState();
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        //监听实现侧边栏的拉开和闭合,即抽屉drawer的闭合和打开
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
 
         mSlidingTabRecyclerView = (RecyclerView) findViewById(R.id.drawer_site_recycler_view);
         mSlidingTabRecyclerView.setLayoutManager(new LinearLayoutManager(MyApplication.getContext()));
@@ -98,12 +102,6 @@ public class WeatherPagerActivity extends AppCompatActivity {
         mAdapter = new SlidingTabAdapter();
         mSlidingTabRecyclerView.setAdapter(mAdapter);
 
-        mToolbar.setNavigationIcon(R.drawable.ic_select_icon);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -156,8 +154,13 @@ public class WeatherPagerActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
-            Intent intent = WeatherPagerActivity.newIntent(MyApplication.getContext(), mWeatherInfo.getBasicCityId());
-            startActivity(intent);
+            mCityId = mWeatherInfo.getBasicCityId();
+            for (int i = 0; i < mWeatherInfoList.size(); i++) {
+                if (mWeatherInfoList.get(i).getBasicCityId() == mCityId){
+                    mViewPager.setCurrentItem(i);
+                    break;
+                }
+            }
             mDrawerLayout.closeDrawers();
         }
     }

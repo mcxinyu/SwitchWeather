@@ -33,7 +33,7 @@
                     android:layout_marginLeft="2dp"
                     android:background="@color/colorWhite"
                     android:layout_alignParentRight="true"
-                    android:layout_width="100dp"
+                    android:layout_width="110dp"
                     android:layout_height="match_parent"
                     android:scrollbars="none">
             </android.support.v7.widget.RecyclerView>

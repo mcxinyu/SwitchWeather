@@ -35,6 +35,7 @@ public class MainActivity extends SingleFragmentActivity implements MainEmptyFra
         }
         Intent intent = WeatherPagerActivity.newIntent(MyApplication.getContext(), cityId);
         startActivity(intent);
+        finish();
     }
 
     private class FetchCondition extends AsyncTask<Void, Void, Boolean> {
