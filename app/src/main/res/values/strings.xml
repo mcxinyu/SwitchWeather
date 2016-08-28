@@ -15,6 +15,7 @@
     <string name="weekday_is">Saturday</string>
     <string name="placeholder_text">placeholder</string>
     <string name="update_time">Just update</string>
+
     <string name="loading">loading...</string>
     <string name="network_is_not_available">Network is not available</string>
     <string name="retry_to_connect">Retry</string>
@@ -27,4 +28,6 @@
     <string name="just_text">Just</string>
     <string name="minutes_text">minutes ago</string>
     <string name="update_in_progress">Update in progress</string>
+    <string name="setting_text">Settings</string>
+    <string name="edit_text">Edit Site</string>
 </resources>
