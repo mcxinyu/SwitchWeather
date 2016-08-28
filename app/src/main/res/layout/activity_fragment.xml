@@ -1,63 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:id="@+id/fragment_container"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
-
-    <android.support.v4.widget.DrawerLayout
-            android:id="@+id/drawer_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        <!-- 内容界面，存放 fragment -->
-        <FrameLayout android:id="@+id/fragment_container"
-                         android:layout_width="match_parent"
-                         android:layout_height="match_parent">
-        </FrameLayout>
-
-        <include android:id="@+id/toolbar" layout="@layout/toolbar"/>
-
-        <!-- 侧滑菜单内容 -->
-        <ScrollView
-                android:layout_gravity="start"
-                android:scrollbars="none"
-                android:background="@color/colorMain"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                <TextView
-                        android:id="@+id/edit_site_text_view"
-                        android:text="@string/edit_text"
-                        android:textSize="18sp"
-                        android:textColor="@color/colorWhite"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="16dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-                <android.support.v7.widget.RecyclerView
-                        android:id="@+id/drawer_site_recycler_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-                </android.support.v7.widget.RecyclerView>
-                <TextView
-                        android:id="@+id/setting_text_view"
-                        android:text="@string/setting_text"
-                        android:textSize="18sp"
-                        android:textColor="@color/colorWhite"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="16dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-            </LinearLayout>
-        </ScrollView>
-
-    </android.support.v4.widget.DrawerLayout>
-
 
 </FrameLayout>

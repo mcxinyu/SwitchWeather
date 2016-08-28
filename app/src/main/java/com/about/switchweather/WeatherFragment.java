@@ -10,7 +10,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,9 +26,9 @@ import java.util.List;
 /**
  * Created by 跃峰 on 2016/8/20.
  */
-public class MainFragment extends Fragment {
-    private static final String TAG = "MainFragment";
-    private static final String ARG_WEATHER_BEAN_ID = "MainFragment";
+public class WeatherFragment extends Fragment {
+    private static final String TAG = "WeatherFragment";
+    private static final String ARG_WEATHER_BEAN_ID = "WeatherFragment";
     private static final String ARG_WEATHER_UPDATED = "Weather_updated";
 
     private TextView mCityNameTextView;
@@ -49,13 +48,13 @@ public class MainFragment extends Fragment {
     private boolean isUpdate;
     private boolean weatherUpdated;
 
-    public static MainFragment newInstance(String id, boolean updated){
-        Log.i(TAG, "newInstance: is start now!");
+    public static WeatherFragment newInstance(String id, boolean updated){
+        //Log.i(TAG, "newInstance: is start now!");
         Bundle args = new Bundle();
         args.putSerializable(ARG_WEATHER_BEAN_ID, id);
         args.putBoolean(ARG_WEATHER_UPDATED, updated);
 
-        MainFragment fragment = new MainFragment();
+        WeatherFragment fragment = new WeatherFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -73,7 +72,7 @@ public class MainFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_weather, container, false);
         mWeatherView = view.findViewById(R.id.weather_view);
 
         mCityNameTextView = (TextView) view.findViewById(R.id.city_name_text_view);
