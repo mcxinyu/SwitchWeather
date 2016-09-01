@@ -19,7 +19,6 @@
     <string name="city_name">深圳</string>
     <string name="network_is_not_available">网络不可用</string>
     <string name="retry_to_connect">重试</string>
-    <string name="new_city">新建</string>
     <string name="update_failed">更新失败</string>
     <string name="update_text"> 更新</string>
     <string name="today_text">今天</string>
@@ -30,4 +29,9 @@
     <string name="update_in_progress">正在更新</string>
     <string name="setting_text">设置</string>
     <string name="edit_text">编辑地点</string>
+    <string name="search_view_hint_text">输入城市名</string>
+    <string name="comma">，</string>
+    <string name="search_city">搜索</string>
+    <string name="feedback_text">一切反馈</string>
+    <string name="communicate_text">联系及工具</string>
 </resources>

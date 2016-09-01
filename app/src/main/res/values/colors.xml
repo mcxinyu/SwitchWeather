@@ -9,10 +9,11 @@
     <color name="colorMain">#373737</color>
     <color name="colorShadow">#DAE9F4</color>
     <color name="colorShadow2">#8C9FAA</color>
-    <color name="colorShadow3">#69808E</color>
+    <color name="colorShadow3">#969696</color>
     <color name="colorSun">#FFD705</color>
     <color name="colorTemperature">#007AFF</color>
     <color name="colorText">#000000</color>
 
-    <color name="translucent_background">#00FFFFFF</color>
+    <color name="translucent_background">#00000000</color>
+    <color name="translucence_background">#60000000</color>
 </resources>

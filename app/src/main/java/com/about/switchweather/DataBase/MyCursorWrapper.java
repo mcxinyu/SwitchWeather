@@ -81,13 +81,13 @@ public class MyCursorWrapper extends android.database.CursorWrapper {
         String LON = getString(getColumnIndex(CityTable.Columns.LON));
         String PROV = getString(getColumnIndex(CityTable.Columns.PROV));
 
-        City city = new City();
-        city.setId(ID);
-        city.setCity(CITY);
-        city.setCnty(CNTY);
-        city.setLat(LAT);
-        city.setLon(LON);
-        city.setProv(PROV);
+        City city = new City(CITY, CNTY, ID, LAT, LON, PROV);
+        //city.setId(ID);
+        //city.setCity(CITY);
+        //city.setCnty(CNTY);
+        //city.setLat(LAT);
+        //city.setLon(LON);
+        //city.setProv(PROV);
 
         return city;
     }

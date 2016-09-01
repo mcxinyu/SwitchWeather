@@ -21,7 +21,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".WeatherPagerActivity"
+        <activity android:name=".WeatherActivity"
+                  android:configChanges="orientation|keyboard|keyboardHidden|navigation"
+                  android:windowSoftInputMode="adjustPan"
                   android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>

@@ -10,7 +10,7 @@
         <!-- 窗口的背景颜色 -->
         <item name="colorAccent">@color/colorAccent</item>
         <!--文字颜色-->
-        <item name="android:textColorTertiary">@color/abc_primary_text_material_light</item>
+        <item name="android:textColorTertiary">@color/colorText</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -20,4 +20,13 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <!-- 让 Toolbar 透明 -->
+    <style name="Widget.Design.AppBarLayout" parent="android:Widget">
+        <item name="elevation">0dp</item>
+        <item name="android:background">?attr/colorPrimary</item>
+    </style>
 </resources>

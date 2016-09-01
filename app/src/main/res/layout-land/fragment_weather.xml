@@ -21,6 +21,10 @@
                 android:layout_weight="0.45"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
+            <ImageView
+                    android:background="@color/colorPrimaryDark"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
         </RelativeLayout>
         <RelativeLayout
                 android:background="@color/colorShadow"

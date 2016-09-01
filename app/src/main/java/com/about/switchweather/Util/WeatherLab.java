@@ -200,6 +200,21 @@ public class WeatherLab {
         return cityList;
     }
 
+    public List<City> getCityListLikeName(String cityName){
+        List<City> cityList = new ArrayList<>();
+        MyCursorWrapper cursor = queryAllRows(CityTable.NAME, CityTable.Columns.CITY + "like '%?%'", new String[]{cityName});
+        try {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()){
+                cityList.add(cursor.getCity());
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+        return cityList;
+    }
+
     public City getCityWithCityId(String cityId){
         MyCursorWrapper cursor = queryAllRows(CityTable.NAME, CityTable.Columns.ID, new String[]{cityId});
         try {

@@ -33,7 +33,7 @@ public class MainActivity extends SingleFragmentActivity implements MainEmptyFra
         if (WeatherLab.get(MyApplication.getContext()).getWeatherInfoWithCityId(cityId) == null){
             return;
         }
-        Intent intent = WeatherPagerActivity.newIntent(MyApplication.getContext(), cityId);
+        Intent intent = WeatherActivity.newIntent(MyApplication.getContext(), cityId, updated);
         startActivity(intent);
         finish();
     }
