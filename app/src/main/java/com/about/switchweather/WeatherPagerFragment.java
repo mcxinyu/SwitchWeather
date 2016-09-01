@@ -69,7 +69,7 @@ public class WeatherPagerFragment extends Fragment implements WeatherActivity.Ca
         });
 
         for (int i = 0; i < mWeatherInfoList.size(); i++) {
-            if (mWeatherInfoList.get(i).getBasicCityId() == mCityId){
+            if (mWeatherInfoList.get(i).getBasicCityId().equals(mCityId)){
                 mViewPager.setCurrentItem(i);
                 break;
             }

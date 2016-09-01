@@ -27,11 +27,10 @@ import java.util.List;
 public class WeatherActivity extends SingleFragmentActivity {
     private static final String EXTRA_WEATHER_CITY_ID = "WeatherActivity.Weather_City_id";
     private static final String EXTRA_WEATHER_INFO_UPDATED = "WeatherActivity.Weather_Info_Updated";
-    private static final String TAG = "WeatherActivity";
+    private static final String TAG = WeatherActivity.class.getSimpleName();
     private List<WeatherInfo> mWeatherInfoList;
     private boolean mWeatherInfoIsUpdated;
 
-    private final String[] mHotCities = { "深圳", "潮州", "广州", "上海", "北京" };
     private Toolbar mToolbar;
     private SearchView mSearchView;
     private DrawerLayout mDrawer;
@@ -70,10 +69,10 @@ public class WeatherActivity extends SingleFragmentActivity {
 
         weatherPagerFragment = WeatherPagerFragment.newInstance(mCityId, mWeatherInfoIsUpdated);
 
-        if (!(weatherPagerFragment instanceof Callbacks)){
+        try {
+            mCallbacks = weatherPagerFragment;
+        } catch (ClassCastException e) {
             throw new ClassCastException("Child fragment must implement BackHandledInterface");
-        } else {
-            mCallbacks = (Callbacks) weatherPagerFragment;
         }
 
         return weatherPagerFragment;
@@ -82,7 +81,6 @@ public class WeatherActivity extends SingleFragmentActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mWeatherInfoList = WeatherLab.get(MyApplication.getContext()).getWeatherInfoList();
         initNavTab();
     }
@@ -153,25 +151,32 @@ public class WeatherActivity extends SingleFragmentActivity {
             @Override
             public void onClick(View v) {
                 mCallbacks = null;
-                searchCityFragment = SearchCityFragment.newInstance();
-                mCallbacks = (Callbacks) searchCityFragment;
-                getSupportFragmentManager().beginTransaction()
-                        .hide(weatherPagerFragment)
-                        .add(R.id.fragment_container, searchCityFragment, "SearchCityFragment")
-                        .addToBackStack("SearchCityFragment")
-                        .commit();
+                searchCityFragment = (SearchCityFragment) getSupportFragmentManager().findFragmentByTag(SearchCityFragment.TAG);
+                if (searchCityFragment == null) {
+                    searchCityFragment = SearchCityFragment.newInstance();
+                    getSupportFragmentManager().beginTransaction()
+                            .hide(weatherPagerFragment)
+                            .add(R.id.fragment_container, searchCityFragment, SearchCityFragment.TAG)
+                            .addToBackStack(null)
+                            .commit();
+                }
+                try {
+                    mCallbacks = searchCityFragment;
+                } catch (ClassCastException e) {
+                    throw new ClassCastException("Child fragment must implement BackHandledInterface");
+                }
             }
         });
         mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
                 mCallbacks = null;
+                try {
+                    mCallbacks = weatherPagerFragment;
+                } catch (ClassCastException e) {
+                    throw new ClassCastException("Child fragment must implement BackHandledInterface");
+                }
                 //返回true的话，截取关闭事件，不让搜索框收起来
-                getSupportFragmentManager().beginTransaction()
-                        .remove(searchCityFragment)
-                        .show(weatherPagerFragment)
-                        .commit();
-                mCallbacks = (Callbacks) weatherPagerFragment;
                 return false;
             }
         });

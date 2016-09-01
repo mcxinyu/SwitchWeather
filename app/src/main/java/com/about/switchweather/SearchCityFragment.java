@@ -21,6 +21,7 @@ import java.util.List;
  * Created by 跃峰 on 2016/8/30.
  */
 public class SearchCityFragment extends Fragment implements WeatherActivity.Callbacks{
+    public static final String TAG = SearchCityFragment.class.getSimpleName();
     private static final Comparator<City> ALPHABETICAL_COMPARATOR = new Comparator<City>() {
         @Override
         public int compare(City city1, City city2) {

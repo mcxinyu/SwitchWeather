@@ -9,7 +9,7 @@
         tools:context=".WeatherActivity">
 
     <!-- 主视图 -->
-    <include layout="@layout/content_weather"/>
+    <include layout="@layout/fragment_content_weather"/>
 
     <!-- Toolbar 视图 -->
     <android.support.design.widget.AppBarLayout
