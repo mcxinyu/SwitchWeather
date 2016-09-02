@@ -145,7 +145,7 @@ public class WeatherLab {
     }
 
     public Condition getConditionBean(String code){
-        MyCursorWrapper cursor = queryAllRows(ConditionTable.NAME, ConditionTable.Columns.CODE, new String[]{code});
+        MyCursorWrapper cursor = queryAllRows(ConditionTable.NAME, ConditionTable.Columns.CODE + "=?", new String[]{code});
         try {
             if (cursor.getCount() == 0){
                 return null;
@@ -202,7 +202,7 @@ public class WeatherLab {
 
     public List<City> getCityListLikeName(String cityName){
         List<City> cityList = new ArrayList<>();
-        MyCursorWrapper cursor = queryAllRows(CityTable.NAME, CityTable.Columns.CITY + "like '%?%'", new String[]{cityName});
+        MyCursorWrapper cursor = queryAllRows(CityTable.NAME, CityTable.Columns.CITY + " like '%?%'", new String[]{cityName});
         try {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()){
@@ -215,8 +215,9 @@ public class WeatherLab {
         return cityList;
     }
 
+    //老出问题，可能是数据库里面的格式不对？？？查一查
     public City getCityWithCityId(String cityId){
-        MyCursorWrapper cursor = queryAllRows(CityTable.NAME, CityTable.Columns.ID, new String[]{cityId});
+        MyCursorWrapper cursor = queryAllRows(CityTable.NAME, CityTable.Columns.ID + "=?", new String[]{cityId});
         try {
             if (cursor.getCount() == 0){
                 return null;
@@ -229,7 +230,7 @@ public class WeatherLab {
     }
 
     public City getCityWithCityName(String cityName){
-        MyCursorWrapper cursor = queryAllRows(CityTable.NAME, CityTable.Columns.CITY, new String[]{cityName});
+        MyCursorWrapper cursor = queryAllRows(CityTable.NAME, CityTable.Columns.CITY + "=?", new String[]{cityName});
         try {
             if (cursor.getCount() == 0){
                 return null;
