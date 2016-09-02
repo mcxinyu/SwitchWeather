@@ -41,13 +41,10 @@ public class WeatherActivity extends SingleFragmentActivity {
     private String mCityId;
 
     private Callbacks mCallbacks;
-    private WeatherPagerFragment weatherPagerFragment;
-    private SearchCityFragment searchCityFragment;
     private ActionBar mActionBar;
 
     public interface Callbacks{
         void onCurrentPagerItemChange(String cityId, boolean updated);
-        boolean onQueryTextChange(String query);
     }
 
     public static Intent newIntent(Context context, String cityId, boolean updated) {
@@ -67,7 +64,7 @@ public class WeatherActivity extends SingleFragmentActivity {
         mCityId = getIntent().getStringExtra(EXTRA_WEATHER_CITY_ID);
         mWeatherInfoIsUpdated = getIntent().getBooleanExtra(EXTRA_WEATHER_INFO_UPDATED, false);
 
-        weatherPagerFragment = WeatherPagerFragment.newInstance(mCityId, mWeatherInfoIsUpdated);
+        WeatherPagerFragment weatherPagerFragment = WeatherPagerFragment.newInstance(mCityId, mWeatherInfoIsUpdated);
 
         try {
             mCallbacks = weatherPagerFragment;
@@ -82,7 +79,9 @@ public class WeatherActivity extends SingleFragmentActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mWeatherInfoList = WeatherLab.get(MyApplication.getContext()).getWeatherInfoList();
-        initNavTab();
+
+        initToolbar();
+        initDrawer();
     }
 
     @Override
@@ -94,7 +93,7 @@ public class WeatherActivity extends SingleFragmentActivity {
         }
     }
 
-    private void initNavTab() {
+    private void initToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         if (mToolbar != null) {
             mToolbar.setTitle("");
@@ -104,7 +103,9 @@ public class WeatherActivity extends SingleFragmentActivity {
         // 给左上角图标的左边加上一个返回的图标
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setHomeButtonEnabled(true);
+    }
 
+    private void initDrawer() {
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         //声明mDrawerToggle对象,其中R.string.open和R.string.close简单可以用"open"和"close"替代
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawer, mToolbar, R.string.app_name, R.string.app_name);
@@ -140,60 +141,20 @@ public class WeatherActivity extends SingleFragmentActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_list, menu);
+        getMenuInflater().inflate(R.menu.menu_list_weather_activity, menu);
+        return true;
+    }
 
-
-        MenuItem searchItem = menu.findItem(R.id.search_menu_item);
-        mSearchView = (SearchView) searchItem.getActionView();
-        mSearchView.setQueryHint(getString(R.string.search_view_hint_text));
-
-        mSearchView.setOnSearchClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallbacks = null;
-                searchCityFragment = (SearchCityFragment) getSupportFragmentManager().findFragmentByTag(SearchCityFragment.TAG);
-                if (searchCityFragment == null) {
-                    searchCityFragment = SearchCityFragment.newInstance();
-                    getSupportFragmentManager().beginTransaction()
-                            .hide(weatherPagerFragment)
-                            .add(R.id.fragment_container, searchCityFragment, SearchCityFragment.TAG)
-                            .addToBackStack(null)
-                            .commit();
-                }
-                try {
-                    mCallbacks = searchCityFragment;
-                } catch (ClassCastException e) {
-                    throw new ClassCastException("Child fragment must implement BackHandledInterface");
-                }
-            }
-        });
-        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                mCallbacks = null;
-                try {
-                    mCallbacks = weatherPagerFragment;
-                } catch (ClassCastException e) {
-                    throw new ClassCastException("Child fragment must implement BackHandledInterface");
-                }
-                //返回true的话，截取关闭事件，不让搜索框收起来
-                return false;
-            }
-        });
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                // 在这里实现数据的过滤
-                mCallbacks.onQueryTextChange(newText);
-                return true;
-            }
-        });
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.add_menu_item:
+                Intent intent = SearchCityActivity.newIntent(this);
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
         return true;
     }
 

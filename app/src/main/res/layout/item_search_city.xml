@@ -6,11 +6,13 @@
 
     <RelativeLayout
             android:clickable="true"
+            android:focusable="true"
+            style="?android:attr/buttonStyle"
+            android:background="@color/colorPrimaryDark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         <LinearLayout
                 android:orientation="vertical"
-                android:layout_margin="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
             <LinearLayout

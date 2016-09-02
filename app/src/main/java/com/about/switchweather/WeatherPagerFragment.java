@@ -88,10 +88,4 @@ public class WeatherPagerFragment extends Fragment implements WeatherActivity.Ca
             }
         }
     }
-
-    @Override
-    public boolean onQueryTextChange(String query) {
-        // 由 SearchCityFragment 完成
-        return false;
-    }
 }

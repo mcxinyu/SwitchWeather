@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import com.about.switchweather.Model.City;
 import com.about.switchweather.Util.SortedListAdapter;
 import com.about.switchweather.Util.WeatherLab;
@@ -20,7 +21,7 @@ import java.util.List;
 /**
  * Created by 跃峰 on 2016/8/30.
  */
-public class SearchCityFragment extends Fragment implements WeatherActivity.Callbacks{
+public class SearchCityFragment extends Fragment implements SearchCityActivity.Callbacks{
     public static final String TAG = SearchCityFragment.class.getSimpleName();
     private static final Comparator<City> ALPHABETICAL_COMPARATOR = new Comparator<City>() {
         @Override
@@ -95,7 +96,7 @@ public class SearchCityFragment extends Fragment implements WeatherActivity.Call
         public SearchHolder(com.about.switchweather.databinding.ItemSearchCityBinding binding) {
             super(binding.getRoot());
             mBinding = binding;
-            binding.getRoot().setOnClickListener(this);
+            mBinding.getRoot().setOnClickListener(this);
         }
 
         @Override
@@ -105,7 +106,9 @@ public class SearchCityFragment extends Fragment implements WeatherActivity.Call
 
         @Override
         public void onClick(View v) {
-            // 添加城市
+            //WeatherLab.get(getActivity())
+
+            Toast.makeText(MyApplication.getContext(), mBinding.getCity().getId() + mBinding.getCity().getCity(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -113,16 +116,12 @@ public class SearchCityFragment extends Fragment implements WeatherActivity.Call
         List<City> filteredList = new ArrayList<>();
         for (City city : cityList) {
             String cityName = city.getCity();
-            if (cityName.contains(query)){
+            String cntyName = city.getCnty();
+            if (cityName.contains(query) | cntyName.contains(query)){
                 filteredList.add(city);
             }
         }
         return filteredList;
-    }
-
-    @Override
-    public void onCurrentPagerItemChange(String cityId, boolean updated) {
-        // 由 WeatherPagerFragment 完成
     }
 
     @Override

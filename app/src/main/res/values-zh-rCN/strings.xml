@@ -31,7 +31,8 @@
     <string name="edit_text">编辑地点</string>
     <string name="search_view_hint_text">输入城市名</string>
     <string name="comma">，</string>
-    <string name="search_city">搜索</string>
     <string name="feedback_text">一切反馈</string>
     <string name="communicate_text">联系及工具</string>
+    <string name="add_city">添加城市</string>
+    <string name="search_city">搜索城市</string>
 </resources>

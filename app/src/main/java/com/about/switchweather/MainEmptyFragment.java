@@ -39,10 +39,10 @@ public class MainEmptyFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        if (!(activity instanceof Callbacks)){
-            throw new ClassCastException("Hosting Activity must implement BackHandledInterface");
-        } else {
+        try {
             mCallbacks = (Callbacks) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Hosting Activity must implement Interface");
         }
     }
 
