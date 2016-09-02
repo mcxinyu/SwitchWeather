@@ -1,5 +1,6 @@
 package com.about.switchweather;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,10 +14,20 @@ import com.about.switchweather.Util.WeatherLab;
 import java.util.List;
 
 public class MainActivity extends SingleFragmentActivity implements MainEmptyFragment.Callbacks {
+    private static final String EXTRA_WEATHER_CITY_NAME = "MainActivity.Weather_City_id";
 
     @Override
     public Fragment createFragment() {
-        return MainEmptyFragment.newInstance();
+        String cityName = getIntent().getStringExtra(EXTRA_WEATHER_CITY_NAME);
+        return MainEmptyFragment.newInstance(cityName);
+    }
+
+    public static Intent newIntent(Context context, @Nullable String cityName) {
+        Intent intent = new Intent(context, MainActivity.class);
+        if (cityName != null) {
+            intent.putExtra(EXTRA_WEATHER_CITY_NAME, cityName);
+        }
+        return intent;
     }
 
     @Override

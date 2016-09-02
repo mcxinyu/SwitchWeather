@@ -28,7 +28,7 @@ import java.util.List;
  */
 public class WeatherFragment extends Fragment {
     private static final String TAG = "WeatherFragment";
-    private static final String ARG_WEATHER_BEAN_ID = "WeatherFragment";
+    private static final String ARG_WEATHER_CITY_ID = "WeatherFragment";
     private static final String ARG_WEATHER_UPDATED = "Weather_updated";
 
     private TextView mCityNameTextView;
@@ -48,10 +48,10 @@ public class WeatherFragment extends Fragment {
     private boolean isUpdate;
     private boolean weatherUpdated;
 
-    public static WeatherFragment newInstance(String id, boolean updated){
+    public static WeatherFragment newInstance(String cityId, boolean updated){
         //Log.i(TAG, "newInstance: is start now!");
         Bundle args = new Bundle();
-        args.putSerializable(ARG_WEATHER_BEAN_ID, id);
+        args.putSerializable(ARG_WEATHER_CITY_ID, cityId);
         args.putBoolean(ARG_WEATHER_UPDATED, updated);
 
         WeatherFragment fragment = new WeatherFragment();
@@ -63,9 +63,9 @@ public class WeatherFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String id = (String) getArguments().getSerializable(ARG_WEATHER_BEAN_ID);
+        String cityId = (String) getArguments().getSerializable(ARG_WEATHER_CITY_ID);
         weatherUpdated = getArguments().getBoolean(ARG_WEATHER_UPDATED);
-        mWeatherInfo = WeatherLab.get(getActivity()).getWeatherInfoWithCityId(id);
+        mWeatherInfo = WeatherLab.get(getActivity()).getWeatherInfoWithCityId(cityId);
         mDailyForecastList = WeatherLab.get(getActivity()).getDailyForecastList(mWeatherInfo.getBasicCityId());
     }
 

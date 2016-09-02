@@ -13,16 +13,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.about.switchweather.Model.WeatherBean;
+import com.about.switchweather.Model.WeatherInfo;
 import com.about.switchweather.Util.ColoredSnackbar;
 import com.about.switchweather.Util.HeWeatherFetch;
 import com.about.switchweather.Util.WeatherLab;
+
+import java.util.List;
 
 /**
  * Created by 跃峰 on 2016/8/21.
  */
 public class MainEmptyFragment extends Fragment {
+    private static final String ARG_WEATHER_CITY_NAME = "WeatherFragment";
     private TextView mLoadingTextView;
-    private String city = "深圳";
     private Callbacks mCallbacks;
     /**
      * Required interface for hosting activities.
@@ -46,14 +49,30 @@ public class MainEmptyFragment extends Fragment {
         }
     }
 
-    public static MainEmptyFragment newInstance(){
-        return new MainEmptyFragment();
+    public static MainEmptyFragment newInstance(@Nullable String cityName){
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_WEATHER_CITY_NAME, cityName);
+        MainEmptyFragment fragment = new MainEmptyFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new FetchWeather(city).execute();
+        doFetchWeather();
+    }
+
+    private void doFetchWeather() {
+        String cityName = (String) getArguments().getSerializable(ARG_WEATHER_CITY_NAME);
+        if (cityName != null){
+            new FetchWeather(cityName).execute();
+        } else {
+            List<WeatherInfo> weatherInfoList = WeatherLab.get(getActivity()).getWeatherInfoList();
+            for (int i = 0; i < weatherInfoList.size(); i++) {
+                new FetchWeather(weatherInfoList.get(i).getBasicCity()).execute();
+            }
+        }
     }
 
     @Nullable
@@ -76,42 +95,49 @@ public class MainEmptyFragment extends Fragment {
     }
 
     private class FetchWeather extends AsyncTask<Void, Void, WeatherBean> {
-
         String mCityName;
+
         public FetchWeather(String cityName) {
             this.mCityName = cityName;
         }
 
         @Override
         protected WeatherBean doInBackground(Void... params) {
-            return new HeWeatherFetch().fetchWeatherBean(mCityName);
+            WeatherBean weatherBean = new HeWeatherFetch().fetchWeatherBean(mCityName);
+            storeData(weatherBean);
+            return weatherBean;
+        }
+
+        private void storeData(WeatherBean weatherBean) {
+            if (weatherBean != null){
+                if (WeatherLab.get(MyApplication.getContext()).getWeatherInfoWithCityName(mCityName) == null) {
+                    //有网、成功、无存储
+                    WeatherLab.get(MyApplication.getContext()).addWeatherBean(weatherBean);
+                    WeatherLab.get(MyApplication.getContext()).addDailyForecastList(weatherBean);
+                } else {
+                    //有网、成功、有存储
+                    WeatherLab.get(MyApplication.getContext()).updateWeatherInfo(weatherBean);
+                    WeatherLab.get(MyApplication.getContext()).updateDailyForecastList(weatherBean);
+                }
+            }
         }
 
         @Override
         protected void onPostExecute(WeatherBean weatherBean) {
             //无网、无存储
-            if (!isNetworkAvailableAndConnected() && WeatherLab.get(getActivity()).getWeatherInfoWithCityName(city) == null){
+            if (!isNetworkAvailableAndConnected() && WeatherLab.get(getActivity()).getWeatherInfoWithCityName(mCityName) == null){
                 showSnackbarAlert(getResources().getString(R.string.network_is_not_available));
                 return;
             }
             if (weatherBean == null){
                 //有网、不成功、有存储
-                if (WeatherLab.get(getActivity()).getWeatherInfoWithCityName(city) != null){
-                    mCallbacks.onFetchWeatherComplete(WeatherLab.get(getActivity()).getWeatherInfoWithCityName(city).getBasicCityId(), false);
+                if (WeatherLab.get(getActivity()).getWeatherInfoWithCityName(mCityName) != null){
+                    mCallbacks.onFetchWeatherComplete(WeatherLab.get(getActivity()).getWeatherInfoWithCityName(mCityName).getBasicCityId(), false);
                     return;
                 }
                 //有网、不成功，无存储
                 showSnackbarAlert(getResources().getString(R.string.update_failed));
                 return;
-            }
-            if (WeatherLab.get(getActivity()).getWeatherInfoWithCityName(city) == null) {
-                //有网、成功、无存储
-                WeatherLab.get(getActivity()).addWeatherBean(weatherBean);
-                WeatherLab.get(getActivity()).addDailyForecastList(weatherBean);
-            } else {
-                //有网、成功、有存储
-                WeatherLab.get(getActivity()).updateWeatherInfo(weatherBean);
-                WeatherLab.get(getActivity()).updateDailyForecastList(weatherBean);
             }
             mCallbacks.onFetchWeatherComplete(weatherBean.getBasic().getId(), true);
         }
@@ -131,7 +157,7 @@ public class MainEmptyFragment extends Fragment {
                 .setAction(getResources().getString(R.string.retry_to_connect), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new FetchWeather(city).execute();
+                        doFetchWeather();
                     }
                 }).setActionTextColor(getResources().getColor(R.color.colorWhite));
         ColoredSnackbar.alert(snackbar).show();

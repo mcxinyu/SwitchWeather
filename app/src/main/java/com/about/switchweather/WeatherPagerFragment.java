@@ -18,8 +18,8 @@ import java.util.List;
  * Created by 跃峰 on 2016/8/30.
  */
 public class WeatherPagerFragment extends Fragment implements WeatherActivity.Callbacks {
-    private static final String ARG_WEATHER_BEAN_ID = "WeatherFragment";
-    private static final String ARG_WEATHER_UPDATED = "Weather_updated";
+    private static final String ARG_WEATHER_CITY_ID = "weather_fragment_city_id";
+    private static final String ARG_WEATHER_UPDATED = "weather_updated";
 
     private ViewPager mViewPager;
     private List<WeatherInfo> mWeatherInfoList;
@@ -27,10 +27,10 @@ public class WeatherPagerFragment extends Fragment implements WeatherActivity.Ca
     private String mCityId;
     private boolean mWeatherUpdated;
 
-    public static WeatherPagerFragment newInstance(String id, boolean updated) {
+    public static WeatherPagerFragment newInstance(String cityId, boolean updated) {
 
         Bundle args = new Bundle();
-        args.putSerializable(ARG_WEATHER_BEAN_ID, id);
+        args.putSerializable(ARG_WEATHER_CITY_ID, cityId);
         args.putBoolean(ARG_WEATHER_UPDATED, updated);
 
         WeatherPagerFragment fragment = new WeatherPagerFragment();
@@ -42,7 +42,7 @@ public class WeatherPagerFragment extends Fragment implements WeatherActivity.Ca
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mCityId = (String) getArguments().getSerializable(ARG_WEATHER_BEAN_ID);
+        mCityId = (String) getArguments().getSerializable(ARG_WEATHER_CITY_ID);
         mWeatherUpdated = getArguments().getBoolean(ARG_WEATHER_UPDATED);
         fragmentManager = getActivity().getSupportFragmentManager();
         mWeatherInfoList = WeatherLab.get(MyApplication.getContext()).getWeatherInfoList();

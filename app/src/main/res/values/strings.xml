@@ -35,4 +35,5 @@
     <string name="feedback_text">Feedback</string>
     <string name="communicate_text">Communicate</string>
     <string name="search_city">Search City</string>
+    <string name="add_successful">Add successful</string>
 </resources>

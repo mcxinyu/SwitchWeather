@@ -1,6 +1,7 @@
 package com.about.switchweather;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 import com.about.switchweather.Model.City;
 import com.about.switchweather.Util.SortedListAdapter;
 import com.about.switchweather.Util.WeatherLab;
@@ -106,18 +106,17 @@ public class SearchCityFragment extends Fragment implements SearchCityActivity.C
 
         @Override
         public void onClick(View v) {
-            //WeatherLab.get(getActivity())
-
-            Toast.makeText(MyApplication.getContext(), mBinding.getCity().getId() + mBinding.getCity().getCity(), Toast.LENGTH_SHORT).show();
+            Intent intent = MainActivity.newIntent(getActivity(), mBinding.getCity().getCity());
+            startActivity(intent);
         }
     }
 
-    private static List<City> filter(List<City> cityList, String query){
+    private List<City> filter(List<City> cityList, String query){
         List<City> filteredList = new ArrayList<>();
         for (City city : cityList) {
-            String cityName = city.getCity();
-            String cntyName = city.getCnty();
-            if (cityName.contains(query) | cntyName.contains(query)){
+            final String cityName = city.getCity();
+            final String cntyName = city.getCnty();
+            if (cityName.contains(query) || cntyName.contains(query)){
                 filteredList.add(city);
             }
         }
