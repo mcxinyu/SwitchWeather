@@ -10,12 +10,10 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.*;
-import android.widget.TextView;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 import com.about.switchweather.Model.WeatherInfo;
 import com.about.switchweather.Util.WeatherLab;
 
@@ -32,11 +30,8 @@ public class WeatherActivity extends SingleFragmentActivity {
     private boolean mWeatherInfoIsUpdated;
 
     private Toolbar mToolbar;
-    private SearchView mSearchView;
     private DrawerLayout mDrawer;
     private ActionBarDrawerToggle mDrawerToggle;
-    private RecyclerView mDrawerRecyclerView;
-    private SlidingTabAdapter mSlidingTabAdapter;
     private NavigationView mNavigationView;
     private String mCityId;
 
@@ -123,6 +118,9 @@ public class WeatherActivity extends SingleFragmentActivity {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
                 switch (item.getItemId()){
+                    case R.id.edit_city_list:
+                        Toast.makeText(MyApplication.getContext(), "click", Toast.LENGTH_SHORT).show();
+                        break;
                     case R.id.nav_settings:
                         break;
                     case R.id.nav_feedback:
@@ -134,12 +132,18 @@ public class WeatherActivity extends SingleFragmentActivity {
             }
         });
 
-        View headerView = mNavigationView.getHeaderView(0);
-        mDrawerRecyclerView = (RecyclerView) headerView.findViewById(R.id.drawer_city_recycler_view);
-        mDrawerRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        mSlidingTabAdapter = new SlidingTabAdapter();
-        mDrawerRecyclerView.setAdapter(mSlidingTabAdapter);
+        for (int i = 0; i < mWeatherInfoList.size(); i++) {
+            final int position = i;
+            mNavigationView.getMenu().add(R.id.menu_group_city_list, i, i+100, mWeatherInfoList.get(i).getBasicCity()).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    if (mCallbacks != null) {
+                        mCallbacks.onCurrentPagerItemChange(mWeatherInfoList.get(position).getBasicCityId(), mWeatherInfoIsUpdated);
+                    }
+                    return false;
+                }
+            });
+        }
     }
 
     @Override
@@ -159,51 +163,5 @@ public class WeatherActivity extends SingleFragmentActivity {
                 break;
         }
         return true;
-    }
-
-    private class SlidingTabAdapter extends RecyclerView.Adapter<SlidingTabHolder> {
-
-        @Override
-        public SlidingTabHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater inflater = LayoutInflater.from(MyApplication.getContext());
-            View view = inflater.inflate(R.layout.item_city_sliding_tab, parent, false);
-            return new SlidingTabHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(SlidingTabHolder holder, int position) {
-            WeatherInfo weatherInfo = mWeatherInfoList.get(position);
-            holder.bindCity(weatherInfo);
-        }
-
-        @Override
-        public int getItemCount() {
-            return mWeatherInfoList.size();
-        }
-    }
-
-    private class SlidingTabHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        private WeatherInfo mWeatherInfo;
-        private TextView mCityTextView;
-
-        public SlidingTabHolder(View itemView) {
-            super(itemView);
-            mCityTextView = (TextView) itemView.findViewById(R.id.sliding_site_name_text_view);
-            itemView.setOnClickListener(this);
-        }
-
-        public void bindCity(WeatherInfo weatherInfo){
-            mWeatherInfo = weatherInfo;
-            mCityTextView.setText(mWeatherInfo.getBasicCity());
-        }
-
-        @Override
-        public void onClick(View v) {
-            mCityId = mWeatherInfo.getBasicCityId();
-            if (mCallbacks != null) {
-                mCallbacks.onCurrentPagerItemChange(mCityId, mWeatherInfoIsUpdated);
-            }
-            mDrawer.closeDrawers();
-        }
     }
 }

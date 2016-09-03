@@ -29,7 +29,7 @@
     <string name="minutes_text">minutes ago</string>
     <string name="update_in_progress">Update in progress</string>
     <string name="setting_text">Settings</string>
-    <string name="edit_text">Edit Site</string>
+    <string name="edit_text">Edit City</string>
     <string name="search_view_hint_text">Input a city name</string>
     <string name="comma">,</string>
     <string name="feedback_text">Feedback</string>
@@ -37,4 +37,5 @@
     <string name="search_city">Search City</string>
     <string name="add_successful">Add successful</string>
     <string name="no_city_notice">Don\'t have a city, Please add.</string>
+    <string name="city_text">Own City</string>
 </resources>
