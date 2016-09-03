@@ -303,13 +303,19 @@ public class WeatherLab {
     }
 
     public void updateDailyForecastList(WeatherBean weatherBean){
-        List<DailyForecastBean> dailyForecastBeanList = weatherBean.getDaily_forecast();
         String cityId = weatherBean.getBasic().getId();
 
         List<ContentValues> valuesList = getDailyForecastListValues(weatherBean);
         for (int i = 0; i < valuesList.size(); i++) {
-            String date = dailyForecastBeanList.get(i).getDate();
-            mDatabase.update(DailyForecastTable.NAME, valuesList.get(i), DailyForecastTable.Columns.CITY_ID + "=? and " + DailyForecastTable.Columns.DATE + "=?", new String[]{cityId, date});
+            String date = valuesList.get(i).getAsString(DailyForecastTable.Columns.DATE);
+            MyCursorWrapper cursor = queryAllRows(DailyForecastTable.NAME, DailyForecastTable.Columns.CITY_ID + "=? and " + DailyForecastTable.Columns.DATE + "=?", new String[]{cityId, date});
+
+            if (cursor.getCount() != 0){
+                mDatabase.update(DailyForecastTable.NAME, valuesList.get(i), DailyForecastTable.Columns.CITY_ID + "=? and " + DailyForecastTable.Columns.DATE + "=?", new String[]{cityId, date});
+            } else {
+                mDatabase.insert(DailyForecastTable.NAME, null, valuesList.get(i));
+            }
+
         }
     }
 
