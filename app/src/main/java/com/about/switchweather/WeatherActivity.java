@@ -78,6 +78,8 @@ public class WeatherActivity extends SingleFragmentActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppManager.getAppManager().addActivity(this);
+
         mWeatherInfoList = WeatherLab.get(MyApplication.getContext()).getWeatherInfoList();
 
         initToolbar();
@@ -89,6 +91,7 @@ public class WeatherActivity extends SingleFragmentActivity {
         if (mDrawer.isDrawerOpen(GravityCompat.START)) {
             mDrawer.closeDrawer(GravityCompat.START);
         } else {
+            AppManager.getAppManager().AppExit(MyApplication.getContext());
             super.onBackPressed();
         }
     }

@@ -2,6 +2,7 @@ package com.about.switchweather;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.about.switchweather.Model.WeatherBean;
 import com.about.switchweather.Model.WeatherInfo;
@@ -27,6 +30,11 @@ public class MainEmptyFragment extends Fragment {
     private static final String ARG_WEATHER_CITY_NAME = "WeatherFragment";
     private TextView mLoadingTextView;
     private Callbacks mCallbacks;
+    private List<WeatherInfo> mWeatherInfoList;
+    private ImageView mImageView;
+    private Button mButton;
+    private TextView mEmptyTextView;
+
     /**
      * Required interface for hosting activities.
      */
@@ -49,7 +57,7 @@ public class MainEmptyFragment extends Fragment {
         }
     }
 
-    public static MainEmptyFragment newInstance(@Nullable String cityName){
+    public static MainEmptyFragment newInstance(@Nullable String cityName){ //可以空是因为可能是程序打开而不是增加城市后被调用
         Bundle args = new Bundle();
         args.putSerializable(ARG_WEATHER_CITY_NAME, cityName);
         MainEmptyFragment fragment = new MainEmptyFragment();
@@ -60,6 +68,8 @@ public class MainEmptyFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mWeatherInfoList = WeatherLab.get(MyApplication.getContext()).getWeatherInfoList();
         doFetchWeather();
     }
 
@@ -68,9 +78,9 @@ public class MainEmptyFragment extends Fragment {
         if (cityName != null){
             new FetchWeather(cityName).execute();
         } else {
-            List<WeatherInfo> weatherInfoList = WeatherLab.get(getActivity()).getWeatherInfoList();
-            for (int i = 0; i < weatherInfoList.size(); i++) {
-                new FetchWeather(weatherInfoList.get(i).getBasicCity()).execute();
+            for (int i = 0; i < mWeatherInfoList.size(); i++) {
+                //如果数量太多会不会出错？导致线程不同步？
+                new FetchWeather(mWeatherInfoList.get(i).getBasicCity()).execute();
             }
         }
     }
@@ -80,6 +90,28 @@ public class MainEmptyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_no_info, container,false);
         mLoadingTextView = (TextView) view.findViewById(R.id.loading_text_view);
+        mImageView = (ImageView) view.findViewById(R.id.no_info_image_view);
+        mButton = (Button) view.findViewById(R.id.add_city_button);
+        mEmptyTextView = (TextView) view.findViewById(R.id.empty_text_view);
+        if (mWeatherInfoList.size() == 0){
+            mLoadingTextView.setVisibility(View.GONE);
+            mImageView.setVisibility(View.GONE);
+            mButton.setVisibility(View.VISIBLE);
+            mEmptyTextView.setVisibility(View.VISIBLE);
+        } else {
+            mLoadingTextView.setVisibility(View.VISIBLE);
+            mImageView.setVisibility(View.VISIBLE);
+            mButton.setVisibility(View.GONE);
+            mEmptyTextView.setVisibility(View.GONE);
+        }
+
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = SearchCityActivity.newIntent(getActivity());
+                startActivity(intent);
+            }
+        });
         return view;
     }
 
@@ -111,11 +143,11 @@ public class MainEmptyFragment extends Fragment {
         private void storeData(WeatherBean weatherBean) {
             if (weatherBean != null){
                 if (WeatherLab.get(MyApplication.getContext()).getWeatherInfoWithCityName(mCityName) == null) {
-                    //有网、成功、无存储
+                    //有网、成功、无存储即增加
                     WeatherLab.get(MyApplication.getContext()).addWeatherBean(weatherBean);
                     WeatherLab.get(MyApplication.getContext()).addDailyForecastList(weatherBean);
                 } else {
-                    //有网、成功、有存储
+                    //有网、成功、有存储即更新
                     WeatherLab.get(MyApplication.getContext()).updateWeatherInfo(weatherBean);
                     WeatherLab.get(MyApplication.getContext()).updateDailyForecastList(weatherBean);
                 }
@@ -125,27 +157,28 @@ public class MainEmptyFragment extends Fragment {
         @Override
         protected void onPostExecute(WeatherBean weatherBean) {
             //无网、无存储
-            if (!isNetworkAvailableAndConnected() && WeatherLab.get(getActivity()).getWeatherInfoWithCityName(mCityName) == null){
+            if (!isNetworkAvailableAndConnected() && WeatherLab.get(MyApplication.getContext()).getWeatherInfoWithCityName(mCityName) == null){
                 showSnackbarAlert(getResources().getString(R.string.network_is_not_available));
                 return;
             }
             if (weatherBean == null){
                 //有网、不成功、有存储
-                if (WeatherLab.get(getActivity()).getWeatherInfoWithCityName(mCityName) != null){
-                    mCallbacks.onFetchWeatherComplete(WeatherLab.get(getActivity()).getWeatherInfoWithCityName(mCityName).getBasicCityId(), false);
+                if (WeatherLab.get(MyApplication.getContext()).getWeatherInfoWithCityName(mCityName) != null){
+                    mCallbacks.onFetchWeatherComplete(WeatherLab.get(MyApplication.getContext()).getWeatherInfoWithCityName(mCityName).getBasicCityId(), false);
                     return;
                 }
                 //有网、不成功，无存储
                 showSnackbarAlert(getResources().getString(R.string.update_failed));
                 return;
             }
+            //如果 activity 不在了怎么办？会出错！
             mCallbacks.onFetchWeatherComplete(weatherBean.getBasic().getId(), true);
         }
 
     }
 
     private boolean isNetworkAvailableAndConnected(){
-        ConnectivityManager manager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager manager = (ConnectivityManager) MyApplication.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         boolean isNetworkAvailable = manager.getActiveNetworkInfo() != null;
         boolean isNetworkConnected = isNetworkAvailable && manager.getActiveNetworkInfo().isConnected();
         return isNetworkConnected;

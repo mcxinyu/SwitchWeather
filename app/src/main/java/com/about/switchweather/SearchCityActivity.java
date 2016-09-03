@@ -51,6 +51,8 @@ public class SearchCityActivity  extends SingleFragmentActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppManager.getAppManager().addActivity(this);
+
         initToolbar();
     }
 
@@ -95,6 +97,7 @@ public class SearchCityActivity  extends SingleFragmentActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
+                // Toolbar 的返回按钮
                 finish();
                 break;
             default:
