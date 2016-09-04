@@ -42,6 +42,8 @@ public class EditCityActivity extends SingleFragmentActivity implements EditCity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppManager.getAppManager().addActivity(this);
+
         resultIntent = new Intent();
     }
 

@@ -77,10 +77,24 @@ public class WeatherActivity extends SingleFragmentActivity {
         super.onCreate(savedInstanceState);
         AppManager.getAppManager().addActivity(this);
 
-        mWeatherInfoList = WeatherLab.get(MyApplication.getContext()).getWeatherInfoList();
-
+        checkDataValidity();
         initToolbar();
         initDrawer();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkDataValidity();
+    }
+
+    private void checkDataValidity() {
+        mWeatherInfoList = WeatherLab.get(MyApplication.getContext()).getWeatherInfoList();
+
+        if (mWeatherInfoList.size() == 0){
+            startActivity(MainActivity.newIntent(this, null));
+            finish();
+        }
     }
 
     @Override
