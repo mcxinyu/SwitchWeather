@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
-    <data>
-        <variable name="city" type="com.about.switchweather.Model.City"/>
+    <data class="SearchCityBinding">
+        <variable
+                name="city"
+                type="com.about.switchweather.Model.City"/>
     </data>
 
     <RelativeLayout

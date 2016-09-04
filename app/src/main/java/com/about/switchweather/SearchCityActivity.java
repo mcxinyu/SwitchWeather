@@ -14,7 +14,7 @@ import android.view.MenuItem;
 /**
  * Created by 跃峰 on 2016/9/2.
  */
-public class SearchCityActivity  extends SingleFragmentActivity{
+public class SearchCityActivity  extends SingleFragmentActivity {
     private Callbacks mCallbacks;
     private SearchView mSearchView;
     private SearchCityFragment searchCityFragment;

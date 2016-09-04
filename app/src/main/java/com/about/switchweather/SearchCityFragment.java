@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.about.switchweather.Model.City;
 import com.about.switchweather.Util.SortedListAdapter;
 import com.about.switchweather.Util.WeatherLab;
+import com.about.switchweather.databinding.SearchCityBinding;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -73,8 +74,7 @@ public class SearchCityFragment extends Fragment implements SearchCityActivity.C
 
         @Override
         protected ViewHolder<? extends City> onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
-            com.about.switchweather.databinding.ItemSearchCityBinding binding =
-                    com.about.switchweather.databinding.ItemSearchCityBinding.inflate(inflater, parent, false);
+            SearchCityBinding binding = SearchCityBinding.inflate(inflater, parent, false);
             return new SearchHolder(binding);
         }
 
@@ -92,9 +92,10 @@ public class SearchCityFragment extends Fragment implements SearchCityActivity.C
     private class SearchHolder extends SortedListAdapter.ViewHolder<City> implements View.OnClickListener{
 
         //数据绑定，嘿嘿。这个类是 item_search_city.xml 使用了数据绑定后自动生成的。
-        private final com.about.switchweather.databinding.ItemSearchCityBinding mBinding;
+        //private final com.about.switchweather.databinding.ItemSearchCityBinding mBinding;
+        private SearchCityBinding mBinding;
 
-        public SearchHolder(com.about.switchweather.databinding.ItemSearchCityBinding binding) {
+        public SearchHolder(SearchCityBinding binding) {
             super(binding.getRoot());
             mBinding = binding;
             mBinding.getRoot().setOnClickListener(this);
@@ -110,6 +111,7 @@ public class SearchCityFragment extends Fragment implements SearchCityActivity.C
             // 选择城市后直接调用 MainActivity 可以执行加载天气信息并保存。是不是可以改成直接使用 MainEmptyFragment 呢？麻烦！
             Intent intent = MainActivity.newIntent(getActivity(), mBinding.getCity().getCity());
             startActivity(intent);
+            getActivity().finish();
         }
     }
 
@@ -117,11 +119,8 @@ public class SearchCityFragment extends Fragment implements SearchCityActivity.C
         List<City> filteredList = new ArrayList<>();
         for (City city : cityList) {
             final String cityName = city.getCity();
-            final String cntyName = city.getCnty();
-            if (cityName.contains(query)){
-                filteredList.add(city);
-            }
-            if (cntyName.contains(query)){
+            final String provName = city.getProv();
+            if (cityName.contains(query) || provName.contains(query)){
                 filteredList.add(city);
             }
         }

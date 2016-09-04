@@ -15,7 +15,7 @@
     <string name="placeholder_text">占位符</string>
     <string name="update_time">刚刚更新</string>
 
-    <string name="loading">正在加载...</string>
+    <string name="loading">正在加载&#8230;</string>
     <string name="city_name">深圳</string>
     <string name="network_is_not_available">网络不可用</string>
     <string name="retry_to_connect">重试</string>
@@ -38,4 +38,6 @@
     <string name="add_successful">添加成功</string>
     <string name="no_city_notice">请先添加城市</string>
     <string name="city_text">我的城市</string>
+    <string name="location_city">当前城市</string>
+    <string name="delete_text">删除</string>
 </resources>

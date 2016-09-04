@@ -40,8 +40,9 @@ public class WeatherLab {
         mDatabase.insert(WeatherInfoTable.NAME, null, getWeatherBeanValues(weatherBean));
     }
 
-    public void deleteWeatherInfo(WeatherInfo weatherInfo){
-        mDatabase.delete(WeatherInfoTable.NAME, WeatherInfoTable.Columns.Basic.ID, new String[]{weatherInfo.getBasicCityId()});
+    public void deleteWeatherInfo(String cityId){
+        mDatabase.delete(WeatherInfoTable.NAME, WeatherInfoTable.Columns.Basic.ID + "=?", new String[]{cityId});
+        deleteDailyForecast(cityId);
     }
 
     public List<WeatherInfo> getWeatherInfoList() {
@@ -336,5 +337,9 @@ public class WeatherLab {
 
     public void deleteDailyForecastOldDate(String cityId){
         mDatabase.delete(DailyForecastTable.NAME, DailyForecastTable.Columns.CITY_ID + "=? and " + DailyForecastTable.Columns.DATE + "<DATE('now','-20 day','localtime')", new String[]{cityId});
+    }
+
+    private void deleteDailyForecast(String cityId) {
+        mDatabase.delete(DailyForecastTable.NAME, DailyForecastTable.Columns.CITY_ID + "=?", new String[]{cityId});
     }
 }

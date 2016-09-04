@@ -26,20 +26,22 @@ public class WeatherActivity extends SingleFragmentActivity {
     private static final String EXTRA_WEATHER_CITY_ID = "WeatherActivity.Weather_City_id";
     private static final String EXTRA_WEATHER_INFO_UPDATED = "WeatherActivity.Weather_Info_Updated";
     private static final String TAG = WeatherActivity.class.getSimpleName();
+    private static final int REQUEST_CODE_START_EDIT_CITY = 0;
+
     private List<WeatherInfo> mWeatherInfoList;
     private boolean mWeatherInfoIsUpdated;
-
     private Toolbar mToolbar;
     private DrawerLayout mDrawer;
     private ActionBarDrawerToggle mDrawerToggle;
     private NavigationView mNavigationView;
-    private String mCityId;
 
+    private String mCityId;
     private Callbacks mCallbacks;
     private ActionBar mActionBar;
 
     public interface Callbacks{
         void onCurrentPagerItemChange(String cityId, boolean updated);
+        void notifySetChange();
     }
 
     public static Intent newIntent(Context context, String cityId, boolean updated) {
@@ -119,11 +121,17 @@ public class WeatherActivity extends SingleFragmentActivity {
             public boolean onNavigationItemSelected(MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.edit_city_list:
-                        Toast.makeText(MyApplication.getContext(), "click", Toast.LENGTH_SHORT).show();
+                        // 编辑城市的入口
+                        Intent intent = EditCityActivity.newIntent(WeatherActivity.this);
+                        startActivityForResult(intent, REQUEST_CODE_START_EDIT_CITY);
                         break;
                     case R.id.nav_settings:
+                        // 设置项的入口
+                        Toast.makeText(MyApplication.getContext(), "设置", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.nav_feedback:
+                        // 反馈项的入口
+                        Toast.makeText(MyApplication.getContext(), "反馈", Toast.LENGTH_SHORT).show();
                         break;
                 }
                 // 点击 item 后关闭 DrawerLayout
@@ -132,9 +140,19 @@ public class WeatherActivity extends SingleFragmentActivity {
             }
         });
 
+        updateNavCityList();
+    }
+
+    private void updateNavCityList() {
+        for (int i = 0; i < mWeatherInfoList.size(); i++) {
+            mNavigationView.getMenu().removeItem(R.id.menu_group_city_list + i);
+        }
+
+        mWeatherInfoList = WeatherLab.get(MyApplication.getContext()).getWeatherInfoList();
+
         for (int i = 0; i < mWeatherInfoList.size(); i++) {
             final int position = i;
-            mNavigationView.getMenu().add(R.id.menu_group_city_list, i, i+100, mWeatherInfoList.get(i).getBasicCity()).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            mNavigationView.getMenu().add(R.id.menu_group_city_list, R.id.menu_group_city_list + i, i+100, mWeatherInfoList.get(i).getBasicCity()).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     if (mCallbacks != null) {
@@ -156,6 +174,7 @@ public class WeatherActivity extends SingleFragmentActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.add_menu_item:
+                // 添加城市的入口
                 Intent intent = SearchCityActivity.newIntent(this);
                 startActivity(intent);
                 break;
@@ -163,5 +182,22 @@ public class WeatherActivity extends SingleFragmentActivity {
                 break;
         }
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case REQUEST_CODE_START_EDIT_CITY:
+                if (resultCode == RESULT_OK){
+                    boolean isDeleteSome = data.getExtras().getBoolean(EditCityActivity.IS_DELETE_SOME);
+                    if (isDeleteSome){
+                        updateNavCityList();
+                        mCallbacks.notifySetChange();
+                    }
+                    String cityId = data.getExtras().getString(EditCityActivity.SELECT_CITY_ID, null);
+                    mCallbacks.onCurrentPagerItemChange(cityId, mWeatherInfoIsUpdated);
+                }
+                break;
+        }
     }
 }

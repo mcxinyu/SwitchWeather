@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data class="SlidingButtonBinding">
+        <variable
+                name="weatherInfo"
+                type="com.about.switchweather.Model.WeatherInfo"/>
+    </data>
+
+    <com.about.switchweather.SlidingButtonView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_marginBottom="1dp"
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            <TextView
+                    android:id="@+id/delete_text_view"
+                    android:gravity="center"
+                    android:layout_toRightOf="@+id/layout_content"
+                    android:text="@string/delete_text"
+                    android:textColor="@color/colorWhite"
+                    android:background="@drawable/button_click_red_havebackground"
+                    android:layout_width="60dp"
+                    android:layout_height="59dp"/>
+            <RelativeLayout
+                    android:id="@+id/layout_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                <TextView
+                        android:layout_alignParentLeft="true"
+                        android:id="@+id/item_text_view"
+                        android:gravity="center"
+                        android:text="@{weatherInfo.basicCity}"
+                        android:textSize="30sp"
+                        android:textColor="@color/colorText"
+                        android:background="@drawable/button_click_black_havebackground"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+            </RelativeLayout>
+        </RelativeLayout>
+    </com.about.switchweather.SlidingButtonView>
+</layout>

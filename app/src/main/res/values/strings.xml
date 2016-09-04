@@ -26,11 +26,11 @@
     <string name="today_text">Today</string>
     <string name="tomorrow_text">Tomorrow</string>
     <string name="just_text">Just</string>
-    <string name="minutes_text">minutes ago</string>
+    <string name="minutes_text">minutes ago </string>
     <string name="update_in_progress">Update in progress</string>
     <string name="setting_text">Settings</string>
     <string name="edit_text">Edit City</string>
-    <string name="search_view_hint_text">Input a city name</string>
+    <string name="search_view_hint_text">Enter the city name</string>
     <string name="comma">,</string>
     <string name="feedback_text">Feedback</string>
     <string name="communicate_text">Communicate</string>
@@ -38,4 +38,6 @@
     <string name="add_successful">Add successful</string>
     <string name="no_city_notice">Don\'t have a city, Please add.</string>
     <string name="city_text">Own City</string>
+    <string name="location_city">Current Location</string>
+    <string name="delete_text">Delete</string>
 </resources>

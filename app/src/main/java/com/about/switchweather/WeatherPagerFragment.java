@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.about.switchweather.Model.WeatherInfo;
 import com.about.switchweather.Util.WeatherLab;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -54,19 +55,9 @@ public class WeatherPagerFragment extends Fragment implements WeatherActivity.Ca
         View view = inflater.inflate(R.layout.fragment_view_pager, container, false);
 
         mViewPager = (ViewPager) view.findViewById(R.id.weather_view_pager_container);
-        mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
-            
-            @Override
-            public Fragment getItem(int position) {
-                WeatherInfo weatherInfo = mWeatherInfoList.get(position);
-                return WeatherFragment.newInstance(weatherInfo.getBasicCityId(), mWeatherUpdated);
-            }
-
-            @Override
-            public int getCount() {
-                return mWeatherInfoList.size();
-            }
-        });
+        fragmentManager = getActivity().getSupportFragmentManager();
+        WeatherPagerAdapter adapter = new WeatherPagerAdapter(fragmentManager, mWeatherInfoList);
+        mViewPager.setAdapter(adapter);
 
         for (int i = 0; i < mWeatherInfoList.size(); i++) {
             if (mWeatherInfoList.get(i).getBasicCityId().equals(mCityId)){
@@ -78,8 +69,65 @@ public class WeatherPagerFragment extends Fragment implements WeatherActivity.Ca
         return view;
     }
 
+    private class WeatherPagerAdapter extends FragmentStatePagerAdapter{
+        //使用一个 List 将数据源对应的 Fragment 都缓存起来
+        private ArrayList<Fragment> mFragmentList;
+
+        public WeatherPagerAdapter(FragmentManager fragmentManager, List<WeatherInfo> weatherInfoList) {
+            super(fragmentManager);
+            updateDate(weatherInfoList);
+        }
+
+        /**
+         * 当有数据源更新的时候，从 List 中取出相应的 Fragment，然后刷新 Adapter
+         * @param dataList
+         */
+        public void updateDate(List<WeatherInfo> dataList) {
+            ArrayList<Fragment> fragments = new ArrayList<>();
+            for (int i = 0; i < dataList.size(); i++) {
+                fragments.add(WeatherFragment.newInstance(dataList.get(i).getBasicCityId(), mWeatherUpdated));
+            }
+            setFragmentList(fragments);
+        }
+
+        /**
+         * 当数据源中删除某项时，将 List 中对应的 Fragment 也删除，然后刷新 Adapter
+         * @param fragmentList
+         */
+        private void setFragmentList(ArrayList<Fragment> fragmentList) {
+            if (this.mFragmentList != null){
+                //这个是不是有必要？？
+                for (int i = 0; i < mFragmentList.size(); i++) {
+                    mFragmentList.get(i).onDestroy();
+                }
+                mFragmentList.clear();
+            }
+            this.mFragmentList = fragmentList;
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            // 最简单解决 notifyDataSetChanged() 页面不刷新问题的方法
+            return POSITION_NONE;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return this.mFragmentList.size();
+        }
+    }
+
     @Override
     public void onCurrentPagerItemChange(String cityId, boolean updated) {
+        if (cityId == null){
+            return;
+        }
         mCityId = cityId;
         mWeatherUpdated = updated;
         for (int i = 0; i < mWeatherInfoList.size(); i++) {
@@ -87,5 +135,11 @@ public class WeatherPagerFragment extends Fragment implements WeatherActivity.Ca
                 mViewPager.setCurrentItem(i);
             }
         }
+    }
+
+    @Override
+    public void notifySetChange() {
+        mWeatherInfoList = WeatherLab.get(MyApplication.getContext()).getWeatherInfoList();
+        ((WeatherPagerAdapter) mViewPager.getAdapter()).updateDate(mWeatherInfoList);
     }
 }
