@@ -1,5 +1,6 @@
 package com.about.switchweather;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -53,6 +54,14 @@ public class EditCityFragment extends Fragment implements EditCityActivity.Callb
 
         mEditCityAdapter = new EditCityAdapter(getActivity());
         mRecyclerView.setAdapter(mEditCityAdapter);
+
+        mAddCityImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = SearchCityActivity.newIntent(MyApplication.getContext());
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

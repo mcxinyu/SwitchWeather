@@ -27,12 +27,15 @@
         </activity>
 
         <activity android:name=".SearchCityActivity"
+                  android:label="@string/add_city"
                   android:configChanges="orientation|keyboard|keyboardHidden|navigation"
                   android:windowSoftInputMode="adjustPan|adjustResize"
                   android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
-        <activity android:name=".EditCityActivity">
+        <activity android:name=".EditCityActivity"
+                  android:label="@string/edit_text"
+                  android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 

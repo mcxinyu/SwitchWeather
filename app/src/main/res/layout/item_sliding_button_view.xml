@@ -22,19 +22,20 @@
                     android:textColor="@color/colorWhite"
                     android:background="@drawable/button_click_red_havebackground"
                     android:layout_width="60dp"
-                    android:layout_height="59dp"/>
+                    android:layout_height="60dp"/>
             <RelativeLayout
                     android:id="@+id/layout_content"
+                    android:gravity="center_vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                 <TextView
-                        android:layout_alignParentLeft="true"
                         android:id="@+id/item_text_view"
-                        android:gravity="center"
+                        android:gravity="center_vertical"
                         android:text="@{weatherInfo.basicCity}"
                         android:textSize="30sp"
                         android:textColor="@color/colorText"
                         android:background="@drawable/button_click_black_havebackground"
+                        android:layout_marginLeft="16dp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"/>
             </RelativeLayout>

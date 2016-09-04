@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 
 /**
@@ -16,10 +19,16 @@ public class EditCityActivity extends SingleFragmentActivity implements EditCity
 
     private Callbacks mCallbacks;
     private Intent resultIntent;
+    private ActionBar mActionBar;
 
     public interface Callbacks{
         String onItemClick(View view, int position);
         boolean onDeleteButtonClick(View view, int position);
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.app_bar_weather;
     }
 
     @Override
@@ -44,7 +53,35 @@ public class EditCityActivity extends SingleFragmentActivity implements EditCity
         super.onCreate(savedInstanceState);
         AppManager.getAppManager().addActivity(this);
 
+        initToolbar();
         resultIntent = new Intent();
+    }
+
+    private void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+        }
+        setSupportActionBar(toolbar);
+        mActionBar = getSupportActionBar();
+        // 给左上角图标的左边加上一个返回的图标
+        if (mActionBar != null) {
+            mActionBar.setDisplayHomeAsUpEnabled(true);
+            mActionBar.setHomeButtonEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                // Toolbar 的返回按钮
+                finish();
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 
     @Override
