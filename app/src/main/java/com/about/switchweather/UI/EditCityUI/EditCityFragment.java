@@ -130,7 +130,6 @@ public class EditCityFragment extends Fragment implements EditCityActivity.Callb
         public void onReceiveLocation(BDLocation location) {
             if (null != location && location.getLocType() != BDLocation.TypeServerError) {
                 locationCity = location.getCity().substring(0, location.getCity().lastIndexOf("市"));
-                System.out.println(locationCity);
                 QueryPreferences.setStoreLocationCityId(MyApplication.getContext(), WeatherLab.get(MyApplication.getContext()).getCityWithCityName(locationCity).getId());
 
                 /**
