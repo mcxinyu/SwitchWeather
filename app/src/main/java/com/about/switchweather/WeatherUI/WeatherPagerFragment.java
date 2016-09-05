@@ -1,4 +1,4 @@
-package com.about.switchweather;
+package com.about.switchweather.WeatherUI;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.about.switchweather.Model.WeatherInfo;
+import com.about.switchweather.UI.MyApplication;
+import com.about.switchweather.R;
 import com.about.switchweather.Util.WeatherLab;
 
 import java.util.ArrayList;

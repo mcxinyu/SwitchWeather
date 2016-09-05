@@ -1,4 +1,4 @@
-package com.about.switchweather;
+package com.about.switchweather.WeatherUI;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -18,6 +18,8 @@ import android.widget.TextView;
 import com.about.switchweather.Model.DailyForecast;
 import com.about.switchweather.Model.WeatherBean;
 import com.about.switchweather.Model.WeatherInfo;
+import com.about.switchweather.UI.MyApplication;
+import com.about.switchweather.R;
 import com.about.switchweather.Util.*;
 
 import java.text.SimpleDateFormat;

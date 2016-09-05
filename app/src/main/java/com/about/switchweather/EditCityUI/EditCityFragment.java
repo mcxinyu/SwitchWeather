@@ -1,4 +1,4 @@
-package com.about.switchweather;
+package com.about.switchweather.EditCityUI;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ToggleButton;
+import com.about.switchweather.UI.MyApplication;
+import com.about.switchweather.R;
+import com.about.switchweather.SearchCityUI.SearchCityActivity;
 
 /**
  * Created by 跃峰 on 2016/9/3.

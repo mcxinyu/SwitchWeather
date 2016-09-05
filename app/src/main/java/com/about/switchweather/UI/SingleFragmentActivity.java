@@ -1,4 +1,4 @@
-package com.about.switchweather;
+package com.about.switchweather.UI;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import com.about.switchweather.R;
 
 /**
  * Created by 跃峰 on 2016/8/20.

@@ -1,4 +1,4 @@
-package com.about.switchweather;
+package com.about.switchweather.MainUI;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,10 +6,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import com.about.switchweather.UI.AppManager;
 import com.about.switchweather.Model.City;
 import com.about.switchweather.Model.Condition;
+import com.about.switchweather.UI.MyApplication;
+import com.about.switchweather.UI.SingleFragmentActivity;
 import com.about.switchweather.Util.HeWeatherFetch;
 import com.about.switchweather.Util.WeatherLab;
+import com.about.switchweather.WeatherUI.WeatherActivity;
 
 import java.util.List;
 

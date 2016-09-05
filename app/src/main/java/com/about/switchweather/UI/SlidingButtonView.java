@@ -1,4 +1,4 @@
-package com.about.switchweather;
+package com.about.switchweather.UI;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
+import com.about.switchweather.R;
 
 /**
  * Created by 跃峰 on 2016/9/3.

@@ -1,4 +1,4 @@
-package com.about.switchweather;
+package com.about.switchweather.EditCityUI;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -6,7 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.about.switchweather.Model.WeatherInfo;
-import com.about.switchweather.SlidingButtonView.OnButtonSlidingListener;
+import com.about.switchweather.UI.MyApplication;
+import com.about.switchweather.UI.SlidingButtonView;
+import com.about.switchweather.UI.SlidingButtonView.OnButtonSlidingListener;
 import com.about.switchweather.Util.SlidingButtonUtils;
 import com.about.switchweather.Util.WeatherLab;
 import com.about.switchweather.databinding.SlidingButtonBinding;

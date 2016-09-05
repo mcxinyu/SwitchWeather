@@ -1,4 +1,4 @@
-package com.about.switchweather;
+package com.about.switchweather.EditCityUI;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +9,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import com.about.switchweather.UI.AppManager;
+import com.about.switchweather.R;
+import com.about.switchweather.UI.SingleFragmentActivity;
 
 /**
  * Created by 跃峰 on 2016/9/3.

@@ -1,4 +1,4 @@
-package com.about.switchweather;
+package com.about.switchweather.SearchCityUI;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +10,9 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import com.about.switchweather.UI.AppManager;
+import com.about.switchweather.R;
+import com.about.switchweather.UI.SingleFragmentActivity;
 
 /**
  * Created by 跃峰 on 2016/9/2.

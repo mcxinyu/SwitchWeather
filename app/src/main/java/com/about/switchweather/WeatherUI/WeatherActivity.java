@@ -1,4 +1,4 @@
-package com.about.switchweather;
+package com.about.switchweather.WeatherUI;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +14,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+import com.about.switchweather.*;
+import com.about.switchweather.EditCityUI.EditCityActivity;
+import com.about.switchweather.MainUI.MainActivity;
 import com.about.switchweather.Model.WeatherInfo;
+import com.about.switchweather.SearchCityUI.SearchCityActivity;
+import com.about.switchweather.UI.AppManager;
+import com.about.switchweather.UI.MyApplication;
+import com.about.switchweather.UI.SingleFragmentActivity;
 import com.about.switchweather.Util.WeatherLab;
 
 import java.util.List;

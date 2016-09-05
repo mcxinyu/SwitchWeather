@@ -6,7 +6,7 @@
                 type="com.about.switchweather.Model.WeatherInfo"/>
     </data>
 
-    <com.about.switchweather.SlidingButtonView
+    <com.about.switchweather.UI.SlidingButtonView
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_marginBottom="1dp"
             android:layout_width="match_parent"
@@ -40,5 +40,5 @@
                         android:layout_height="match_parent"/>
             </RelativeLayout>
         </RelativeLayout>
-    </com.about.switchweather.SlidingButtonView>
+    </com.about.switchweather.UI.SlidingButtonView>
 </layout>
