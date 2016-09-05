@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.about.switchweather.Model.WeatherInfo;
 import com.about.switchweather.UI.MyApplication;
 import com.about.switchweather.R;
+import com.about.switchweather.Util.QueryPreferences;
 import com.about.switchweather.Util.WeatherLab;
 
 import java.util.ArrayList;
@@ -85,11 +86,40 @@ public class WeatherPagerFragment extends Fragment implements WeatherActivity.Ca
          * @param dataList
          */
         public void updateDate(List<WeatherInfo> dataList) {
+            dataList = getLocationCity2ListFirst(dataList);
             ArrayList<Fragment> fragments = new ArrayList<>();
             for (int i = 0; i < dataList.size(); i++) {
                 fragments.add(WeatherFragment.newInstance(dataList.get(i).getBasicCityId(), mWeatherUpdated));
             }
             setFragmentList(fragments);
+        }
+
+        /**
+         * 将定位到的城市在 list 中的位置移到第一位
+         * @param weatherInfoList
+         * @return
+         */
+        private List<WeatherInfo> getLocationCity2ListFirst(List<WeatherInfo> weatherInfoList) {
+            if (!QueryPreferences.getStoreLocationEnable(MyApplication.getContext())){
+                return weatherInfoList;
+            }
+            String cityId = QueryPreferences.getStoreLocationCityId(MyApplication.getContext());
+            if (cityId != null) {
+                List<WeatherInfo> list = new ArrayList<>();
+                for (int i = 0; i < weatherInfoList.size(); i++) {
+                    if (weatherInfoList.get(i).getBasicCityId().equals(cityId)) {
+                        list.add(0, weatherInfoList.get(i));
+                        break;
+                    }
+                }
+                for (int i = 0; i < weatherInfoList.size(); i++) {
+                    if (!weatherInfoList.get(i).getBasicCityId().equals(cityId)) {
+                        list.add(weatherInfoList.get(i));
+                    }
+                }
+                weatherInfoList = list;
+            }
+            return weatherInfoList;
         }
 
         /**
@@ -102,7 +132,6 @@ public class WeatherPagerFragment extends Fragment implements WeatherActivity.Ca
                 for (int i = 0; i < mFragmentList.size(); i++) {
                     mFragmentList.get(i).onDestroy();
                 }
-                mFragmentList.clear();
             }
             this.mFragmentList = fragmentList;
             notifyDataSetChanged();
