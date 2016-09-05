@@ -1,4 +1,4 @@
-package com.about.switchweather.WeatherUI;
+package com.about.switchweather.UI.WeatherUI;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

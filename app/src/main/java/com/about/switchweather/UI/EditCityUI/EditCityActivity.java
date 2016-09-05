@@ -1,4 +1,4 @@
-package com.about.switchweather.SearchCityUI;
+package com.about.switchweather.UI.EditCityUI;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,31 +6,27 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import com.about.switchweather.UI.AppManager;
 import com.about.switchweather.R;
 import com.about.switchweather.UI.SingleFragmentActivity;
 
 /**
- * Created by 跃峰 on 2016/9/2.
+ * Created by 跃峰 on 2016/9/3.
  */
-public class SearchCityActivity  extends SingleFragmentActivity {
+public class EditCityActivity extends SingleFragmentActivity implements EditCityAdapter.OnSlidingViewClickListener{
+    public static final String IS_DELETE_SOME = "edit_city_activity_is_delete_some";
+    public static final String SELECT_CITY_ID = "edit_city_activity_select_city_id";
+
     private Callbacks mCallbacks;
-    private SearchView mSearchView;
-    private SearchCityFragment searchCityFragment;
+    private Intent resultIntent;
     private ActionBar mActionBar;
 
     public interface Callbacks{
-        boolean onQueryTextChange(String query);
-    }
-
-    public static Intent newIntent(Context context) {
-        Intent intent = new Intent(context, SearchCityActivity.class);
-        //intent.putExtra();
-        return intent;
+        String onItemClick(View view, int position);
+        boolean onDeleteButtonClick(View view, int position);
     }
 
     @Override
@@ -40,15 +36,19 @@ public class SearchCityActivity  extends SingleFragmentActivity {
 
     @Override
     public Fragment createFragment() {
-
-        searchCityFragment = SearchCityFragment.newInstance();
+        EditCityFragment editCityFragment = EditCityFragment.newInstance();
         try {
-            mCallbacks = searchCityFragment;
+            mCallbacks = editCityFragment;
         } catch (ClassCastException e) {
             throw new ClassCastException("Child fragment must implement BackHandledInterface");
         }
+        return editCityFragment;
+    }
 
-        return searchCityFragment;
+    public static Intent newIntent(Context context) {
+        Intent intent = new Intent(context, EditCityActivity.class);
+        //intent.putExtra();
+        return intent;
     }
 
     @Override
@@ -57,6 +57,7 @@ public class SearchCityActivity  extends SingleFragmentActivity {
         AppManager.getAppManager().addActivity(this);
 
         initToolbar();
+        resultIntent = new Intent();
     }
 
     private void initToolbar() {
@@ -74,29 +75,6 @@ public class SearchCityActivity  extends SingleFragmentActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_list_search_city_activity, menu);
-        final MenuItem searchItem = menu.findItem(R.id.add_menu_item);
-        mSearchView = (SearchView) searchItem.getActionView();
-        mSearchView.setQueryHint(getString(R.string.search_view_hint_text));
-
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                // 在这里实现数据的过滤
-                mCallbacks.onQueryTextChange(newText);
-                return true;
-            }
-        });
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
@@ -107,5 +85,24 @@ public class SearchCityActivity  extends SingleFragmentActivity {
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        String cityId = mCallbacks.onItemClick(view, position);
+        resultIntent.putExtra(SELECT_CITY_ID, cityId);
+        sendResult();
+        finish();
+    }
+
+    @Override
+    public void onDeleteButtonClick(View view, int position) {
+        boolean b = mCallbacks.onDeleteButtonClick(view, position);
+        resultIntent.putExtra(IS_DELETE_SOME, b);
+        sendResult();
+    }
+
+    private void sendResult() {
+        this.setResult(RESULT_OK, resultIntent);
     }
 }

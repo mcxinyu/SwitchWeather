@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         android:clipChildren="false"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        tools:context=".MainUI.MainActivity">
+        tools:context=".UI.MainUI.MainActivity">
     <LinearLayout
             android:orientation="horizontal"
             android:gravity="center"

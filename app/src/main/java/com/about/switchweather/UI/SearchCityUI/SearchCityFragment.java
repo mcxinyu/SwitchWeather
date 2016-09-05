@@ -1,4 +1,4 @@
-package com.about.switchweather.SearchCityUI;
+package com.about.switchweather.UI.SearchCityUI;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.about.switchweather.MainUI.MainActivity;
+import com.about.switchweather.UI.MainUI.MainActivity;
 import com.about.switchweather.Model.City;
 import com.about.switchweather.UI.MyApplication;
 import com.about.switchweather.R;

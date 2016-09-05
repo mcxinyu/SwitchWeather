@@ -1,4 +1,4 @@
-package com.about.switchweather.MainUI;
+package com.about.switchweather.UI.MainUI;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,7 +19,7 @@ import com.about.switchweather.Model.WeatherBean;
 import com.about.switchweather.Model.WeatherInfo;
 import com.about.switchweather.UI.MyApplication;
 import com.about.switchweather.R;
-import com.about.switchweather.SearchCityUI.SearchCityActivity;
+import com.about.switchweather.UI.SearchCityUI.SearchCityActivity;
 import com.about.switchweather.Util.ColoredSnackbar;
 import com.about.switchweather.Util.HeWeatherFetch;
 import com.about.switchweather.Util.WeatherLab;

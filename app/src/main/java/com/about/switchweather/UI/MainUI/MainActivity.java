@@ -1,4 +1,4 @@
-package com.about.switchweather.MainUI;
+package com.about.switchweather.UI.MainUI;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +13,7 @@ import com.about.switchweather.UI.MyApplication;
 import com.about.switchweather.UI.SingleFragmentActivity;
 import com.about.switchweather.Util.HeWeatherFetch;
 import com.about.switchweather.Util.WeatherLab;
-import com.about.switchweather.WeatherUI.WeatherActivity;
+import com.about.switchweather.UI.WeatherUI.WeatherActivity;
 
 import java.util.List;
 

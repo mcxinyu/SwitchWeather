@@ -1,4 +1,4 @@
-package com.about.switchweather.EditCityUI;
+package com.about.switchweather.UI.EditCityUI;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

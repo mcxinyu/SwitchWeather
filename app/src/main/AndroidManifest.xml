@@ -14,7 +14,7 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
 
-        <activity android:name=".MainUI.MainActivity"
+        <activity android:name=".UI.MainUI.MainActivity"
                   android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -22,18 +22,18 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".WeatherUI.WeatherActivity"
+        <activity android:name=".UI.WeatherUI.WeatherActivity"
                   android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
-        <activity android:name=".SearchCityUI.SearchCityActivity"
+        <activity android:name=".UI.SearchCityUI.SearchCityActivity"
                   android:label="@string/add_city"
                   android:configChanges="orientation|keyboard|keyboardHidden|navigation"
                   android:windowSoftInputMode="adjustPan|adjustResize"
                   android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
-        <activity android:name=".EditCityUI.EditCityActivity"
+        <activity android:name=".UI.EditCityUI.EditCityActivity"
                   android:label="@string/edit_text"
                   android:theme="@style/AppTheme.NoActionBar">
         </activity>

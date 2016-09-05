@@ -1,4 +1,4 @@
-package com.about.switchweather.WeatherUI;
+package com.about.switchweather.UI.WeatherUI;
 
 import android.content.Context;
 import android.content.res.Configuration;
