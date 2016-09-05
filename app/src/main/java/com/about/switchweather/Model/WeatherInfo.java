@@ -2,6 +2,7 @@ package com.about.switchweather.Model;
 
 /**
  * Created by 跃峰 on 2016/8/23.
+ * 不需要符合 GSON 格式
  */
 public class WeatherInfo {
     private String status;

@@ -1,12 +1,19 @@
 package com.about.switchweather.Model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by 跃峰 on 2016/8/21.
+ * GSON 格式
  */
 public class Condition {
+    @SerializedName("code")
     private String code;
+    @SerializedName("txt")
     private String txt;
+    @SerializedName("txt_en")
     private String txtEn;
+    @SerializedName("icon")
     private String icon;
 
     public String getCode() {

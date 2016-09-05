@@ -4,6 +4,7 @@ import java.util.List;
 
 /**
  * Created by 跃峰 on 2016/8/20.
+ * GSON 格式
  */
 public class WeatherBean {
     /**

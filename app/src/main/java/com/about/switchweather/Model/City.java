@@ -5,6 +5,7 @@ import com.about.switchweather.Util.SortedListAdapter;
 
 /**
  * Created by 跃峰 on 2016/8/24.
+ * GSON 格式
  */
 public class City implements SortedListAdapter.ViewModel{
     /**
