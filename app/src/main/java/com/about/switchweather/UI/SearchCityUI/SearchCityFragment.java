@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * Created by 跃峰 on 2016/8/30.
  */
-public class SearchCityFragment extends Fragment implements SearchCityActivity.Callbacks{
+public class SearchCityFragment extends Fragment {
     public static final String TAG = SearchCityFragment.class.getSimpleName();
     private static final Comparator<City> ALPHABETICAL_COMPARATOR = new Comparator<City>() {
         @Override
@@ -130,7 +130,6 @@ public class SearchCityFragment extends Fragment implements SearchCityActivity.C
         return filteredList;
     }
 
-    @Override
     public boolean onQueryTextChange(String query) {
         List<City> filteredList = filter(mCityList, query);
         mSearchAdapter.edit()

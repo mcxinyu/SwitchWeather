@@ -9,25 +9,24 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import com.about.switchweather.UI.AppManager;
 import com.about.switchweather.R;
+import com.about.switchweather.UI.MyApplication;
 import com.about.switchweather.UI.SingleFragmentActivity;
+import com.about.switchweather.Util.QueryPreferences;
 
 /**
  * Created by 跃峰 on 2016/9/3.
  */
-public class EditCityActivity extends SingleFragmentActivity implements EditCityAdapter.OnSlidingViewClickListener{
+public class EditCityActivity extends SingleFragmentActivity implements EditCityAdapter.OnSlidingViewClickListener, EditCityFragment.Callbacks{
     public static final String IS_DELETE_SOME = "edit_city_activity_is_delete_some";
     public static final String SELECT_CITY_ID = "edit_city_activity_select_city_id";
+    public static final String LOCATION_ENABLE_STATE_CHANGE = "edit_city_activity_location_enable_state_change";
 
-    private Callbacks mCallbacks;
+    private static final boolean locationEnableInitialState = QueryPreferences.getStoreLocationEnable(MyApplication.getContext());
+
     private Intent resultIntent;
     private ActionBar mActionBar;
-
-    public interface Callbacks{
-        String onItemClick(View view, int position);
-        boolean onDeleteButtonClick(View view, int position);
-    }
+    private EditCityFragment editCityFragment;
 
     @Override
     protected int getLayoutResId() {
@@ -36,12 +35,7 @@ public class EditCityActivity extends SingleFragmentActivity implements EditCity
 
     @Override
     public Fragment createFragment() {
-        EditCityFragment editCityFragment = EditCityFragment.newInstance();
-        try {
-            mCallbacks = editCityFragment;
-        } catch (ClassCastException e) {
-            throw new ClassCastException("Child fragment must implement BackHandledInterface");
-        }
+        editCityFragment = EditCityFragment.newInstance();
         return editCityFragment;
     }
 
@@ -54,7 +48,6 @@ public class EditCityActivity extends SingleFragmentActivity implements EditCity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AppManager.getAppManager().addActivity(this);
 
         initToolbar();
         resultIntent = new Intent();
@@ -89,20 +82,26 @@ public class EditCityActivity extends SingleFragmentActivity implements EditCity
 
     @Override
     public void onItemClick(View view, int position) {
-        String cityId = mCallbacks.onItemClick(view, position);
+        String cityId = editCityFragment.onItemClick(view, position);
         resultIntent.putExtra(SELECT_CITY_ID, cityId);
-        sendResult();
+        setResult(RESULT_OK, resultIntent);
         finish();
     }
 
     @Override
     public void onDeleteButtonClick(View view, int position) {
-        boolean b = mCallbacks.onDeleteButtonClick(view, position);
+        boolean b = editCityFragment.onDeleteButtonClick(view, position);
         resultIntent.putExtra(IS_DELETE_SOME, b);
-        sendResult();
+        setResult(RESULT_OK, resultIntent);
     }
 
-    private void sendResult() {
-        this.setResult(RESULT_OK, resultIntent);
+    @Override
+    public void onLocationEnableChange(boolean isChecked) {
+        if (locationEnableInitialState != isChecked){
+            resultIntent.putExtra(LOCATION_ENABLE_STATE_CHANGE, true);
+        } else {
+            resultIntent.putExtra(LOCATION_ENABLE_STATE_CHANGE, false);
+        }
+        setResult(RESULT_OK, resultIntent);
     }
 }

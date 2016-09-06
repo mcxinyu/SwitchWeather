@@ -10,7 +10,6 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import com.about.switchweather.UI.AppManager;
 import com.about.switchweather.R;
 import com.about.switchweather.UI.SingleFragmentActivity;
 
@@ -18,14 +17,9 @@ import com.about.switchweather.UI.SingleFragmentActivity;
  * Created by 跃峰 on 2016/9/2.
  */
 public class SearchCityActivity  extends SingleFragmentActivity {
-    private Callbacks mCallbacks;
     private SearchView mSearchView;
     private SearchCityFragment searchCityFragment;
     private ActionBar mActionBar;
-
-    public interface Callbacks{
-        boolean onQueryTextChange(String query);
-    }
 
     public static Intent newIntent(Context context) {
         Intent intent = new Intent(context, SearchCityActivity.class);
@@ -40,21 +34,13 @@ public class SearchCityActivity  extends SingleFragmentActivity {
 
     @Override
     public Fragment createFragment() {
-
         searchCityFragment = SearchCityFragment.newInstance();
-        try {
-            mCallbacks = searchCityFragment;
-        } catch (ClassCastException e) {
-            throw new ClassCastException("Child fragment must implement BackHandledInterface");
-        }
-
         return searchCityFragment;
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AppManager.getAppManager().addActivity(this);
 
         initToolbar();
     }
@@ -89,7 +75,7 @@ public class SearchCityActivity  extends SingleFragmentActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 // 在这里实现数据的过滤
-                mCallbacks.onQueryTextChange(newText);
+                searchCityFragment.onQueryTextChange(newText);
                 return true;
             }
         });

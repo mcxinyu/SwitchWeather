@@ -8,7 +8,7 @@ import android.preference.PreferenceManager;
  */
 public class QueryPreferences {
     private static final String PREF_LOCATION_ENABLE = "location_enable";
-    private static final String PREF_LOCATION_CITY_ID = "location_city_id";
+    private static final String PREF_LOCATION_CITY_NAME = "location_city_name";
 
     public static boolean getStoreLocationEnable(Context context){
         return PreferenceManager.getDefaultSharedPreferences(context)
@@ -22,15 +22,15 @@ public class QueryPreferences {
                 .apply();
     }
 
-    public static String getStoreLocationCityId(Context context){
+    public static String getStoreLocationCityName(Context context){
         return PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(PREF_LOCATION_CITY_ID, null);
+                .getString(PREF_LOCATION_CITY_NAME, null);
     }
 
-    public static void setStoreLocationCityId(Context context, String cityName){
+    public static void setStoreLocationCityName(Context context, String cityName){
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
-                .putString(PREF_LOCATION_CITY_ID, cityName)
+                .putString(PREF_LOCATION_CITY_NAME, cityName)
                 .apply();
     }
 }

@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Created by 跃峰 on 2016/8/30.
  */
-public class WeatherPagerFragment extends Fragment implements WeatherActivity.Callbacks {
+public class WeatherPagerFragment extends Fragment {
     private static final String ARG_WEATHER_CITY_ID = "weather_fragment_city_id";
     private static final String ARG_WEATHER_UPDATED = "weather_updated";
 
@@ -103,7 +103,7 @@ public class WeatherPagerFragment extends Fragment implements WeatherActivity.Ca
             if (!QueryPreferences.getStoreLocationEnable(MyApplication.getContext())){
                 return weatherInfoList;
             }
-            String cityId = QueryPreferences.getStoreLocationCityId(MyApplication.getContext());
+            String cityId = QueryPreferences.getStoreLocationCityName(MyApplication.getContext());
             if (cityId != null) {
                 List<WeatherInfo> list = new ArrayList<>();
                 for (int i = 0; i < weatherInfoList.size(); i++) {
@@ -129,9 +129,10 @@ public class WeatherPagerFragment extends Fragment implements WeatherActivity.Ca
         private void setFragmentList(ArrayList<Fragment> fragmentList) {
             if (this.mFragmentList != null){
                 //这个是不是有必要？？
-                for (int i = 0; i < mFragmentList.size(); i++) {
-                    mFragmentList.get(i).onDestroy();
-                }
+                //for (int i = 0; i < mFragmentList.size(); i++) {
+                //    mFragmentList.get(i).onDestroy();
+                //}
+                mFragmentList.clear();
             }
             this.mFragmentList = fragmentList;
             notifyDataSetChanged();
@@ -154,7 +155,6 @@ public class WeatherPagerFragment extends Fragment implements WeatherActivity.Ca
         }
     }
 
-    @Override
     public void onCurrentPagerItemChange(String cityId, boolean updated) {
         if (cityId == null){
             return;
@@ -168,7 +168,6 @@ public class WeatherPagerFragment extends Fragment implements WeatherActivity.Ca
         }
     }
 
-    @Override
     public void notifySetChange() {
         mWeatherInfoList = WeatherLab.get(MyApplication.getContext()).getWeatherInfoList();
         ((WeatherPagerAdapter) mViewPager.getAdapter()).updateDate(mWeatherInfoList);

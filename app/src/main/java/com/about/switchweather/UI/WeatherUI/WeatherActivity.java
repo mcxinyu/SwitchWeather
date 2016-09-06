@@ -19,7 +19,6 @@ import com.about.switchweather.UI.EditCityUI.EditCityActivity;
 import com.about.switchweather.UI.MainUI.MainActivity;
 import com.about.switchweather.Model.WeatherInfo;
 import com.about.switchweather.UI.SearchCityUI.SearchCityActivity;
-import com.about.switchweather.UI.AppManager;
 import com.about.switchweather.UI.MyApplication;
 import com.about.switchweather.UI.SingleFragmentActivity;
 import com.about.switchweather.Util.WeatherLab;
@@ -43,13 +42,9 @@ public class WeatherActivity extends SingleFragmentActivity {
     private NavigationView mNavigationView;
 
     private String mCityId;
-    private Callbacks mCallbacks;
     private ActionBar mActionBar;
 
-    public interface Callbacks{
-        void onCurrentPagerItemChange(String cityId, boolean updated);
-        void notifySetChange();
-    }
+    private WeatherPagerFragment weatherPagerFragment;
 
     public static Intent newIntent(Context context, String cityId, boolean updated) {
         Intent intent = new Intent(context, WeatherActivity.class);
@@ -67,22 +62,13 @@ public class WeatherActivity extends SingleFragmentActivity {
     public Fragment createFragment() {
         mCityId = getIntent().getStringExtra(EXTRA_WEATHER_CITY_ID);
         mWeatherInfoIsUpdated = getIntent().getBooleanExtra(EXTRA_WEATHER_INFO_UPDATED, false);
-
-        WeatherPagerFragment weatherPagerFragment = WeatherPagerFragment.newInstance(mCityId, mWeatherInfoIsUpdated);
-
-        try {
-            mCallbacks = weatherPagerFragment;
-        } catch (ClassCastException e) {
-            throw new ClassCastException("Child fragment must implement BackHandledInterface");
-        }
-
+        weatherPagerFragment = WeatherPagerFragment.newInstance(mCityId, mWeatherInfoIsUpdated);
         return weatherPagerFragment;
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AppManager.getAppManager().addActivity(this);
 
         checkDataValidity();
         initToolbar();
@@ -109,7 +95,7 @@ public class WeatherActivity extends SingleFragmentActivity {
         if (mDrawer.isDrawerOpen(GravityCompat.START)) {
             mDrawer.closeDrawer(GravityCompat.START);
         } else {
-            AppManager.getAppManager().AppExit(MyApplication.getContext());
+            exitApp();
             super.onBackPressed();
         }
     }
@@ -176,9 +162,7 @@ public class WeatherActivity extends SingleFragmentActivity {
             mNavigationView.getMenu().add(R.id.menu_group_city_list, R.id.menu_group_city_list + i, i+100, mWeatherInfoList.get(i).getBasicCity()).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    if (mCallbacks != null) {
-                        mCallbacks.onCurrentPagerItemChange(mWeatherInfoList.get(position).getBasicCityId(), mWeatherInfoIsUpdated);
-                    }
+                    weatherPagerFragment.onCurrentPagerItemChange(mWeatherInfoList.get(position).getBasicCityId(), mWeatherInfoIsUpdated);
                     return false;
                 }
             });
@@ -210,13 +194,22 @@ public class WeatherActivity extends SingleFragmentActivity {
         switch (requestCode){
             case REQUEST_CODE_START_EDIT_CITY:
                 if (resultCode == RESULT_OK){
-                    boolean isDeleteSome = data.getExtras().getBoolean(EditCityActivity.IS_DELETE_SOME);
+                    // 是否有城市被删除
+                    boolean isDeleteSome = data.getExtras().getBoolean(EditCityActivity.IS_DELETE_SOME, false);
                     if (isDeleteSome){
                         updateNavCityList();
-                        mCallbacks.notifySetChange();
+                        weatherPagerFragment.notifySetChange();
                     }
+
+                    // 是否点击了某个城市
                     String cityId = data.getExtras().getString(EditCityActivity.SELECT_CITY_ID, null);
-                    mCallbacks.onCurrentPagerItemChange(cityId, mWeatherInfoIsUpdated);
+                    weatherPagerFragment.onCurrentPagerItemChange(cityId, mWeatherInfoIsUpdated);
+
+                    // 是不是定位的需求改变了
+                    boolean isChange = data.getExtras().getBoolean(EditCityActivity.LOCATION_ENABLE_STATE_CHANGE, false);
+                    System.out.println("isDeleteSome " + isDeleteSome);
+                    System.out.println("cityId " + cityId);
+                    System.out.println("isChange " + isChange);
                 }
                 break;
         }

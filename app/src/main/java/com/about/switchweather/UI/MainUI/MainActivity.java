@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import com.about.switchweather.UI.AppManager;
+import android.util.Log;
 import com.about.switchweather.Model.City;
 import com.about.switchweather.Model.Condition;
 import com.about.switchweather.UI.MyApplication;
@@ -20,6 +20,7 @@ import java.util.List;
 public class MainActivity extends SingleFragmentActivity implements MainEmptyFragment.Callbacks {
     private static final String EXTRA_WEATHER_CITY_NAME = "MainActivity.Weather_City_id";
     private static boolean fragmentHasBeenRunning = false;
+    private String TAG = "MainActivity";
 
     @Override
     public Fragment createFragment() {
@@ -38,7 +39,6 @@ public class MainActivity extends SingleFragmentActivity implements MainEmptyFra
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AppManager.getAppManager().addActivity(this);
         fragmentHasBeenRunning = false;
 
         // 如果数据库中没有数据就在网络获取，是不是应该改成对比结果后更新呢？（例如在第一次获取数据的时候被用户取消了）
@@ -87,6 +87,7 @@ public class MainActivity extends SingleFragmentActivity implements MainEmptyFra
             return;
         }
         WeatherLab.get(this).addConditionBean(conditions);
+        Log.i(TAG, "storeCondition: OK");
     }
 
     private void storeCityList(List<City> cityList) {
@@ -94,5 +95,6 @@ public class MainActivity extends SingleFragmentActivity implements MainEmptyFra
             return;
         }
         WeatherLab.get(this).addCityList(cityList);
+        Log.i(TAG, "storeCityList: OK");
     }
 }

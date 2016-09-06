@@ -1,6 +1,7 @@
 package com.about.switchweather.UI.EditCityUI;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -15,13 +16,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 import com.about.switchweather.R;
 import com.about.switchweather.UI.MyApplication;
 import com.about.switchweather.UI.SearchCityUI.SearchCityActivity;
 import com.about.switchweather.Util.BaiduLocationService.LocationService;
 import com.about.switchweather.Util.QueryPreferences;
-import com.about.switchweather.Util.WeatherLab;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 
@@ -30,15 +31,21 @@ import java.util.ArrayList;
 /**
  * Created by 跃峰 on 2016/9/3.
  */
-public class EditCityFragment extends Fragment implements EditCityActivity.Callbacks{
+public class EditCityFragment extends Fragment {
     private final int SDK_PERMISSION_REQUEST = 127;
 
+    private Callbacks mCallbacks;
     private RecyclerView mRecyclerView;
     private ToggleButton mLocationToggleButton;
+    private TextView mTextView;
     private ImageButton mAddCityImageButton;
     private EditCityAdapter mEditCityAdapter;
     private LocationService mLocationService;
     private String locationCity;
+
+    public interface Callbacks{
+        void onLocationEnableChange(boolean isChecked);
+    }
 
     public static EditCityFragment newInstance() {
         Bundle args = new Bundle();
@@ -48,9 +55,23 @@ public class EditCityFragment extends Fragment implements EditCityActivity.Callb
         return fragment;
     }
 
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mCallbacks = (Callbacks) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Hosting Activity must implement Interface");
+        }
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mLocationService = new LocationService(MyApplication.getContext());
+        mLocationService.registerListener(mListener);
+        mLocationService.setLocationOption(mLocationService.getDefaultLocationClientOption());
     }
 
     @Nullable
@@ -63,23 +84,22 @@ public class EditCityFragment extends Fragment implements EditCityActivity.Callb
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        mLocationService = new LocationService(MyApplication.getContext());
-        mLocationService.registerListener(mListener);
-        mLocationService.setLocationOption(mLocationService.getDefaultLocationClientOption());
+    public void onDestroy() {
+        mLocationService.unregisterListener(mListener);
+        mLocationService.stop();
+        super.onDestroy();
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        mLocationService.unregisterListener(mListener);
-        mLocationService.stop();
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
     }
 
     private void intiView(View view) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.edit_city_list_recycler_view);
         mLocationToggleButton = (ToggleButton) view.findViewById(R.id.location_toggle_button);
+        mTextView = (TextView) view.findViewById(R.id.current_city_text_view);
         mAddCityImageButton = (ImageButton) view.findViewById(R.id.add_city_image_button);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(MyApplication.getContext()));
@@ -98,11 +118,10 @@ public class EditCityFragment extends Fragment implements EditCityActivity.Callb
 
         mLocationToggleButton.setChecked(QueryPreferences.getStoreLocationEnable(MyApplication.getContext()));
         if (mLocationToggleButton.isChecked()) {
+            mTextView.setText(QueryPreferences.getStoreLocationCityName(MyApplication.getContext()));
             getPermissions();
-            mLocationService.start();
         } else {
-            mLocationService.stop();
-            QueryPreferences.setStoreLocationCityId(MyApplication.getContext(), null);
+            mTextView.setText("");
         }
 
         mLocationToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -113,9 +132,13 @@ public class EditCityFragment extends Fragment implements EditCityActivity.Callb
                     getPermissions();
                     mLocationService.start();
                 } else {
-                    mLocationService.stop();
-                    QueryPreferences.setStoreLocationCityId(MyApplication.getContext(), null);
+                    if (mLocationService!=null){
+                        mLocationService.stop();
+                    }
+                    QueryPreferences.setStoreLocationCityName(MyApplication.getContext(), null);
+                    mTextView.setText("");
                 }
+                mCallbacks.onLocationEnableChange(isChecked);
             }
         });
     }
@@ -125,12 +148,12 @@ public class EditCityFragment extends Fragment implements EditCityActivity.Callb
      *
      */
     private BDLocationListener mListener = new BDLocationListener() {
-
         @Override
         public void onReceiveLocation(BDLocation location) {
             if (null != location && location.getLocType() != BDLocation.TypeServerError) {
                 locationCity = location.getCity().substring(0, location.getCity().lastIndexOf("市"));
-                QueryPreferences.setStoreLocationCityId(MyApplication.getContext(), WeatherLab.get(MyApplication.getContext()).getCityWithCityName(locationCity).getId());
+                QueryPreferences.setStoreLocationCityName(MyApplication.getContext(), locationCity);
+                mTextView.setText(locationCity);
 
                 /**
                 StringBuffer sb = new StringBuffer(256);
@@ -215,12 +238,10 @@ public class EditCityFragment extends Fragment implements EditCityActivity.Callb
         }
     };
 
-    @Override
     public String onItemClick(View view, int position) {
         return mEditCityAdapter.getCurrentItem(position).getBasicCityId();
     }
 
-    @Override
     public boolean onDeleteButtonClick(View view, int position) {
         mEditCityAdapter.removeItem(position);
         return true;
@@ -256,12 +277,7 @@ public class EditCityFragment extends Fragment implements EditCityActivity.Callb
     }
 
     private boolean checkSelfPermission(String permission){
-        int selfPermission =  ContextCompat.checkSelfPermission(getActivity(), permission);
-        if (selfPermission != PackageManager.PERMISSION_GRANTED){
-            return false;
-        }else {
-            return true;
-        }
+        return ContextCompat.checkSelfPermission(getActivity(), permission) == PackageManager.PERMISSION_GRANTED;
     }
 
     private boolean addPermission(ArrayList<String> permissionsList, String permission) {
