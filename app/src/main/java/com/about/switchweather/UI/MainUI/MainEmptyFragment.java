@@ -1,14 +1,17 @@
 package com.about.switchweather.UI.MainUI;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,19 +20,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.about.switchweather.Model.WeatherBean;
 import com.about.switchweather.Model.WeatherInfo;
-import com.about.switchweather.UI.MyApplication;
 import com.about.switchweather.R;
+import com.about.switchweather.UI.MyApplication;
 import com.about.switchweather.UI.SearchCityUI.SearchCityActivity;
+import com.about.switchweather.Util.BaiduLocationService.LocationCurrentCity;
 import com.about.switchweather.Util.ColoredSnackbar;
 import com.about.switchweather.Util.HeWeatherFetch;
+import com.about.switchweather.Util.QueryPreferences;
 import com.about.switchweather.Util.WeatherLab;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by 跃峰 on 2016/8/21.
  */
-public class MainEmptyFragment extends Fragment {
+public class MainEmptyFragment extends Fragment implements LocationCurrentCity.Callbacks{
     private static final String ARG_WEATHER_CITY_NAME = "WeatherFragment";
     private TextView mLoadingTextView;
     private Callbacks mCallbacks;
@@ -37,6 +43,8 @@ public class MainEmptyFragment extends Fragment {
     private ImageView mImageView;
     private Button mButton;
     private TextView mEmptyTextView;
+    private int SDK_PERMISSION_REQUEST = 127;
+    private LocationCurrentCity locationCurrentCity;
 
     /**
      * Required interface for hosting activities.
@@ -71,13 +79,43 @@ public class MainEmptyFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mWeatherInfoList = WeatherLab.get(MyApplication.getContext()).getWeatherInfoList();
-        doFetchWeather();
+
+        String cityName = (String) getArguments().getSerializable(ARG_WEATHER_CITY_NAME);
+
+        if (cityName == null) { //如果 cityName 是空的，尝试查看有没有定位城市
+            boolean locationButtonState = QueryPreferences.getStoreLocationButtonState(MyApplication.getContext());
+            if (locationButtonState) {   // locationButtonState 是打开的时候执行
+                getPermissions();
+                locationCurrentCity = new LocationCurrentCity(MainEmptyFragment.this, MyApplication.getContext());
+                locationCurrentCity.start();
+            } else {
+                doFetchWeather(null);
+            }
+        } else {
+            doFetchWeather(cityName);
+        }
     }
 
-    private void doFetchWeather() {
-        String cityName = (String) getArguments().getSerializable(ARG_WEATHER_CITY_NAME);
+    @Override
+    public void onLocationCityChange(boolean isLocationCityChange, String oldCity, String newCity) {
+        locationCurrentCity.destroy();
+        if (isLocationCityChange){
+            WeatherLab.get(MyApplication.getContext())
+                    .deleteWeatherInfo(WeatherLab.get(MyApplication.getContext()).getCityWithCityName(oldCity).getId());
+            // 因为城市改变的话说明 onLocationComplete 不用回调了
+            doFetchWeather(newCity);
+        }
+    }
+
+    @Override
+    public void onLocationComplete(boolean isSuccess, String currentCityName) {
+        locationCurrentCity.destroy();
+        // 定位失败的话 currentCityName = null
+        doFetchWeather(currentCityName);
+    }
+
+    private void doFetchWeather(String cityName) {
         if (cityName != null){
             new FetchWeather(cityName).execute();
         } else {
@@ -193,9 +231,54 @@ public class MainEmptyFragment extends Fragment {
                 .setAction(getResources().getString(R.string.retry_to_connect), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        doFetchWeather();
+                        doFetchWeather(null);
                     }
                 }).setActionTextColor(getResources().getColor(R.color.colorWhite));
         ColoredSnackbar.alert(snackbar).show();
+    }
+
+    private void getPermissions() {
+        ArrayList<String> permissions = new ArrayList<>();
+        /***
+         * 定位权限为必须权限，用户如果禁止，则每次进入都会申请
+         */
+        // 定位精确位置
+        if(!checkSelfPermissions(Manifest.permission.ACCESS_FINE_LOCATION)){
+            permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+        if(!checkSelfPermissions(Manifest.permission.ACCESS_COARSE_LOCATION)){
+            permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+        }
+
+        if (permissions.size() > 0) {
+            requestPermissions(permissions.toArray(new String[permissions.size()]), SDK_PERMISSION_REQUEST);
+        }
+    }
+
+    private boolean checkSelfPermissions(String permission){
+        return ContextCompat.checkSelfPermission(MyApplication.getContext(), permission) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private boolean addPermission(ArrayList<String> permissionsList, String permission) {
+        if (!checkSelfPermissions(permission)) { // 如果应用没有获得对应权限,则添加到列表中,准备批量申请
+            if (shouldShowRequestPermissionRationale(permission)){
+                return true;
+            }else{
+                permissionsList.add(permission);
+                return false;
+            }
+        }else{
+            return true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == SDK_PERMISSION_REQUEST){
+            if (checkSelfPermissions(permissions[0])){
+                locationCurrentCity.start();
+            }
+        }
     }
 }

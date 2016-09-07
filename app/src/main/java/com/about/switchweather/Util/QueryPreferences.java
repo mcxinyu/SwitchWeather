@@ -7,18 +7,18 @@ import android.preference.PreferenceManager;
  * Created by 跃峰 on 2016/9/5.
  */
 public class QueryPreferences {
-    private static final String PREF_LOCATION_ENABLE = "location_enable";
+    private static final String PREF_LOCATION_BUTTON_STATE = "location_button_state";
     private static final String PREF_LOCATION_CITY_NAME = "location_city_name";
 
-    public static boolean getStoreLocationEnable(Context context){
+    public static boolean getStoreLocationButtonState(Context context){
         return PreferenceManager.getDefaultSharedPreferences(context)
-                .getBoolean(PREF_LOCATION_ENABLE, false);
+                .getBoolean(PREF_LOCATION_BUTTON_STATE, false);
     }
 
-    public static void setStoreLocationEnable(Context context, boolean enable){
+    public static void setStoreLocationButtonState(Context context, boolean enable){
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
-                .putBoolean(PREF_LOCATION_ENABLE, enable)
+                .putBoolean(PREF_LOCATION_BUTTON_STATE, enable)
                 .apply();
     }
 

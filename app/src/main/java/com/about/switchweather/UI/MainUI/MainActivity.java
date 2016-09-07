@@ -6,14 +6,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import com.about.switchweather.Model.City;
 import com.about.switchweather.Model.Condition;
 import com.about.switchweather.UI.MyApplication;
 import com.about.switchweather.UI.SingleFragmentActivity;
-import com.about.switchweather.Util.HeWeatherFetch;
-import com.about.switchweather.Util.WeatherLab;
 import com.about.switchweather.UI.WeatherUI.WeatherActivity;
+import com.about.switchweather.Util.HeWeatherFetch;
+import com.about.switchweather.Util.LogUtils;
+import com.about.switchweather.Util.WeatherLab;
 
 import java.util.List;
 
@@ -87,7 +87,7 @@ public class MainActivity extends SingleFragmentActivity implements MainEmptyFra
             return;
         }
         WeatherLab.get(this).addConditionBean(conditions);
-        Log.i(TAG, "storeCondition: OK");
+        LogUtils.i(TAG, "storeCondition: OK");
     }
 
     private void storeCityList(List<City> cityList) {
@@ -95,6 +95,6 @@ public class MainActivity extends SingleFragmentActivity implements MainEmptyFra
             return;
         }
         WeatherLab.get(this).addCityList(cityList);
-        Log.i(TAG, "storeCityList: OK");
+        LogUtils.i(TAG, "storeCityList: OK");
     }
 }

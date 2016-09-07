@@ -101,7 +101,7 @@ public class WeatherLab {
 
     private static ContentValues getWeatherBeanValues(WeatherBean weatherBean){
         ContentValues values = new ContentValues();
-        values.put(WeatherInfoTable.Columns.Basic.ID, weatherBean.getBasic().getId().toString());
+        values.put(WeatherInfoTable.Columns.Basic.ID, weatherBean.getBasic().getId());
         values.put(WeatherInfoTable.Columns.Basic.CITY, weatherBean.getBasic().getCity());
         values.put(WeatherInfoTable.Columns.Basic.Update.LOC, weatherBean.getBasic().getUpdate().getLoc());
         values.put(WeatherInfoTable.Columns.Now.TMP, weatherBean.getNow().getTmp());

@@ -14,13 +14,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-import com.about.switchweather.*;
+import com.about.switchweather.Model.WeatherInfo;
+import com.about.switchweather.R;
 import com.about.switchweather.UI.EditCityUI.EditCityActivity;
 import com.about.switchweather.UI.MainUI.MainActivity;
-import com.about.switchweather.Model.WeatherInfo;
-import com.about.switchweather.UI.SearchCityUI.SearchCityActivity;
 import com.about.switchweather.UI.MyApplication;
+import com.about.switchweather.UI.SearchCityUI.SearchCityActivity;
 import com.about.switchweather.UI.SingleFragmentActivity;
+import com.about.switchweather.Util.QueryPreferences;
 import com.about.switchweather.Util.WeatherLab;
 
 import java.util.List;
@@ -194,22 +195,52 @@ public class WeatherActivity extends SingleFragmentActivity {
         switch (requestCode){
             case REQUEST_CODE_START_EDIT_CITY:
                 if (resultCode == RESULT_OK){
-                    // 是否有城市被删除
+                    // 定位的需求改变了，优先级1，跳转到其他页面，本页面接下来的改变不用处理
+                    boolean isLocationButtonStateChange = data.getExtras().getBoolean(EditCityActivity.LOCATION_BUTTON_STATE_CHANGE, false);
+                    if (isLocationButtonStateChange){
+                        boolean locationButtonState = QueryPreferences.getStoreLocationButtonState(MyApplication.getContext());
+                        String locationCityName = QueryPreferences.getStoreLocationCityName(MyApplication.getContext());
+                        if (locationButtonState){
+                            //如果现在是“打开”，说明原来“关闭”，那么没有 oldCity，直接加载 locationCity，有没有城市改变了呢？
+                            Intent intent = MainActivity.newIntent(MyApplication.getContext(), locationCityName);
+                            startActivity(intent);
+                            finish();
+                            return;
+                        } else {
+                            //如果现在是“关闭”，说明原来“打开”，那么有 oldCity 需要删除
+                            WeatherLab.get(MyApplication.getContext()).deleteWeatherInfo(WeatherLab.get(MyApplication.getContext()).getCityWithCityName(locationCityName).getId());
+                            Intent intent = MainActivity.newIntent(MyApplication.getContext(), null);
+                            startActivity(intent);
+                            finish();
+                            return;
+                        }
+                    }
+
+                    // 定位的城市改变了，优先级2，跳转到其他页面，本页面接下来的改变不用处理
+                    boolean isLocationCityChange = data.getExtras().getBoolean(EditCityActivity.LOCATION_CITY_CHANGE, false);
+                    String newCity = data.getStringExtra(EditCityActivity.LOCATION_CITY_NEW);
+                    String oldCity = data.getStringExtra(EditCityActivity.LOCATION_CITY_OLD);
+                    if (isLocationCityChange){
+                        //删除 oldCity
+                        WeatherLab.get(MyApplication.getContext()).
+                                deleteWeatherInfo(WeatherLab.get(MyApplication.getContext()).getCityWithCityName(oldCity).getId());
+                        //加载 newCity
+                        Intent intent = MainActivity.newIntent(MyApplication.getContext(), newCity);
+                        startActivity(intent);
+                        finish();
+                        return;
+                    }
+
+                    // 有城市被删除，优先级3
                     boolean isDeleteSome = data.getExtras().getBoolean(EditCityActivity.IS_DELETE_SOME, false);
                     if (isDeleteSome){
                         updateNavCityList();
                         weatherPagerFragment.notifySetChange();
                     }
 
-                    // 是否点击了某个城市
-                    String cityId = data.getExtras().getString(EditCityActivity.SELECT_CITY_ID, null);
-                    weatherPagerFragment.onCurrentPagerItemChange(cityId, mWeatherInfoIsUpdated);
-
-                    // 是不是定位的需求改变了
-                    boolean isChange = data.getExtras().getBoolean(EditCityActivity.LOCATION_ENABLE_STATE_CHANGE, false);
-                    System.out.println("isDeleteSome " + isDeleteSome);
-                    System.out.println("cityId " + cityId);
-                    System.out.println("isChange " + isChange);
+                    // 点击了某个城市，优先级4
+                    String clickCityId = data.getExtras().getString(EditCityActivity.SELECT_CITY_ID, null);
+                    weatherPagerFragment.onCurrentPagerItemChange(clickCityId, mWeatherInfoIsUpdated);
                 }
                 break;
         }

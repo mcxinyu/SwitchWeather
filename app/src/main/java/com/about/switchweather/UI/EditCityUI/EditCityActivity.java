@@ -20,13 +20,17 @@ import com.about.switchweather.Util.QueryPreferences;
 public class EditCityActivity extends SingleFragmentActivity implements EditCityAdapter.OnSlidingViewClickListener, EditCityFragment.Callbacks{
     public static final String IS_DELETE_SOME = "edit_city_activity_is_delete_some";
     public static final String SELECT_CITY_ID = "edit_city_activity_select_city_id";
-    public static final String LOCATION_ENABLE_STATE_CHANGE = "edit_city_activity_location_enable_state_change";
+    public static final String LOCATION_BUTTON_STATE_CHANGE = "edit_city_activity_location_enable_state_change";
+    public static final String LOCATION_CITY_CHANGE = "edit_city_activity_location_city_change";
+    public static final String LOCATION_CITY_OLD = "edit_city_activity_location_city_old";
+    public static final String LOCATION_CITY_NEW = "edit_city_activity_location_city_new";
 
-    private static final boolean locationEnableInitialState = QueryPreferences.getStoreLocationEnable(MyApplication.getContext());
+    private boolean locationButtonInitialState = QueryPreferences.getStoreLocationButtonState(MyApplication.getContext());
 
     private Intent resultIntent;
     private ActionBar mActionBar;
     private EditCityFragment editCityFragment;
+    private String TAG = "EditCityActivity";
 
     @Override
     protected int getLayoutResId() {
@@ -96,12 +100,20 @@ public class EditCityActivity extends SingleFragmentActivity implements EditCity
     }
 
     @Override
-    public void onLocationEnableChange(boolean isChecked) {
-        if (locationEnableInitialState != isChecked){
-            resultIntent.putExtra(LOCATION_ENABLE_STATE_CHANGE, true);
+    public void onLocationButtonChange(boolean isChecked) {
+        if (locationButtonInitialState != isChecked){
+            resultIntent.putExtra(LOCATION_BUTTON_STATE_CHANGE, true);
         } else {
-            resultIntent.putExtra(LOCATION_ENABLE_STATE_CHANGE, false);
+            resultIntent.putExtra(LOCATION_BUTTON_STATE_CHANGE, false);
         }
+        setResult(RESULT_OK, resultIntent);
+    }
+
+    @Override
+    public void onLocationCityChange(boolean isLocationCityChange, String oldCity, String newCity) {
+        resultIntent.putExtra(LOCATION_CITY_CHANGE, isLocationCityChange);
+        resultIntent.putExtra(LOCATION_CITY_OLD, oldCity);
+        resultIntent.putExtra(LOCATION_CITY_NEW, newCity);
         setResult(RESULT_OK, resultIntent);
     }
 }

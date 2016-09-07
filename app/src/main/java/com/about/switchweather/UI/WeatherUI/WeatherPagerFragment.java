@@ -100,7 +100,7 @@ public class WeatherPagerFragment extends Fragment {
          * @return
          */
         private List<WeatherInfo> getLocationCity2ListFirst(List<WeatherInfo> weatherInfoList) {
-            if (!QueryPreferences.getStoreLocationEnable(MyApplication.getContext())){
+            if (!QueryPreferences.getStoreLocationButtonState(MyApplication.getContext())){
                 return weatherInfoList;
             }
             String cityId = QueryPreferences.getStoreLocationCityName(MyApplication.getContext());

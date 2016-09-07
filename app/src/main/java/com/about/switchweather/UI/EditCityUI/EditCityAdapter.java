@@ -18,6 +18,7 @@ import java.util.List;
 
 /**
  * Created by 跃峰 on 2016/9/4.
+ * 因为自定义了一个 SlidingButtonView 所以把 Adapter 抽取出来做一个类
  */
 public class EditCityAdapter extends RecyclerView.Adapter<EditCityAdapter.EditCityHolder> implements OnButtonSlidingListener {
     private final LayoutInflater mInflater;

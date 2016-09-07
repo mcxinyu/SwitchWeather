@@ -1,7 +1,6 @@
 package com.about.switchweather.Util;
 
 import android.net.Uri;
-import android.util.Log;
 import com.about.switchweather.Model.City;
 import com.about.switchweather.Model.Condition;
 import com.about.switchweather.Model.WeatherBean;
@@ -109,7 +108,7 @@ public class HeWeatherFetch {
             }
             Gson gson = new Gson();
             weatherBean = gson.fromJson(jsonBody, WeatherBean.class);
-            Log.i(TAG, "downloadWeather: STATUS OK");
+            LogUtils.i(TAG, "downloadWeather: STATUS OK");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -129,7 +128,7 @@ public class HeWeatherFetch {
             result = "[" + jsonBody + "]";
             Gson gson = new Gson();
             conditionBeanList = gson.fromJson(result, new TypeToken<List<Condition>>(){}.getType());
-            Log.i(TAG, "downloadConditionList: STATUS OK");
+            LogUtils.i(TAG, "downloadConditionList: STATUS OK");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -149,7 +148,7 @@ public class HeWeatherFetch {
             result = "[" + jsonBody + "]";
             Gson gson = new Gson();
             cityListList = gson.fromJson(result, new TypeToken<List<City>>(){}.getType());
-            Log.i(TAG, "downloadCityList: STATUS OK");
+            LogUtils.i(TAG, "downloadCityList: STATUS OK");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -160,7 +159,7 @@ public class HeWeatherFetch {
         if (result.contains("\"status\":\"ok\"")) {
             result = result.substring(result.indexOf("[") + 1, result.lastIndexOf("]"));
         } else {
-            Log.e(TAG, "dealHeWeatherJson: not found he weather info : with " + result);
+            LogUtils.e(TAG, "dealHeWeatherJson: not found he weather info : with " + result);
             return "not found";
         }
         return result;
