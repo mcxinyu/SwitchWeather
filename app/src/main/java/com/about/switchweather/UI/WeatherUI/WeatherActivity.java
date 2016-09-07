@@ -153,14 +153,14 @@ public class WeatherActivity extends SingleFragmentActivity {
 
     private void updateNavCityList() {
         for (int i = 0; i < mWeatherInfoList.size(); i++) {
-            mNavigationView.getMenu().removeItem(R.id.menu_group_city_list + i);
+            mNavigationView.getMenu().removeItem(R.id.menu_group_city_list + i + 123);
         }
 
         mWeatherInfoList = WeatherLab.get(MyApplication.getContext()).getWeatherInfoList();
 
         for (int i = 0; i < mWeatherInfoList.size(); i++) {
             final int position = i;
-            mNavigationView.getMenu().add(R.id.menu_group_city_list, R.id.menu_group_city_list + i, i+100, mWeatherInfoList.get(i).getBasicCity()).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            mNavigationView.getMenu().add(R.id.menu_group_city_list, R.id.menu_group_city_list + i + 123, i+100, mWeatherInfoList.get(i).getBasicCity()).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     weatherPagerFragment.onCurrentPagerItemChange(mWeatherInfoList.get(position).getBasicCityId(), mWeatherInfoIsUpdated);
