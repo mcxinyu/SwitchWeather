@@ -43,13 +43,12 @@ public class EditCityFragment extends Fragment implements LocationCurrentCity.Ca
     @Override
     public void onLocationCityChange(boolean isLocationCityChange, String oldCity, String newCity) {
         mCallbacks.onLocationCityChange(isLocationCityChange, oldCity, newCity);
+        mTextView.setText(newCity);
     }
 
     @Override
     public void onLocationComplete(boolean isSuccess, String currentCityName) {
-        if (isSuccess) {
-            mTextView.setText(currentCityName);
-        }
+        mTextView.setText(currentCityName);
     }
 
     public interface Callbacks{
@@ -163,35 +162,35 @@ public class EditCityFragment extends Fragment implements LocationCurrentCity.Ca
          * 定位权限为必须权限，用户如果禁止，则每次进入都会申请
          */
         // 定位精确位置
-        if(!checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)){
+        if(!checkSelfPermissions(Manifest.permission.ACCESS_FINE_LOCATION)){
             permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
         }
-        if(!checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)){
+        if(!checkSelfPermissions(Manifest.permission.ACCESS_COARSE_LOCATION)){
             permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
         }
         /*
          * 读写权限和电话状态权限非必要权限(建议授予)只会申请一次，用户同意或者禁止，只会弹一次
          */
         // 读写权限
-        if (addPermission(permissions, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+        //if (addPermission(permissions, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             //permissionInfo += "Manifest.permission.WRITE_EXTERNAL_STORAGE Deny \n";
-        }
+        //}
         // 读取电话状态权限
-        if (addPermission(permissions, Manifest.permission.READ_PHONE_STATE)) {
-            //permissionInfo += "Manifest.permission.READ_PHONE_STATE Deny \n";
-        }
+        //if (addPermission(permissions, Manifest.permission.READ_PHONE_STATE)) {
+        //    permissionInfo += "Manifest.permission.READ_PHONE_STATE Deny \n";
+        //}
 
         if (permissions.size() > 0) {
             requestPermissions(permissions.toArray(new String[permissions.size()]), SDK_PERMISSION_REQUEST);
         }
     }
 
-    private boolean checkSelfPermission(String permission){
+    private boolean checkSelfPermissions(String permission){
         return ContextCompat.checkSelfPermission(getActivity(), permission) == PackageManager.PERMISSION_GRANTED;
     }
 
     private boolean addPermission(ArrayList<String> permissionsList, String permission) {
-        if (!checkSelfPermission(permission)) { // 如果应用没有获得对应权限,则添加到列表中,准备批量申请
+        if (!checkSelfPermissions(permission)) { // 如果应用没有获得对应权限,则添加到列表中,准备批量申请
             if (shouldShowRequestPermissionRationale(permission)){
                 return true;
             }else{
@@ -206,6 +205,19 @@ public class EditCityFragment extends Fragment implements LocationCurrentCity.Ca
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        // TODO: 2016/9/7 请求成功后应该做点啥，重新定位
+        if (requestCode == SDK_PERMISSION_REQUEST){
+            boolean isGrant = false;
+            for (int i = 0; i < permissions.length; i++) {
+                if (checkSelfPermissions(permissions[i])){
+                    isGrant = true;
+                }
+            }
+            if (isGrant){
+                mLocationCurrentCity.start();
+            }else {
+                mLocationToggleButton.setChecked(false);
+                mTextView.setText("");
+            }
+        }
     }
 }
