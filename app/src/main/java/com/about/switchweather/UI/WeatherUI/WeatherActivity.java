@@ -13,6 +13,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.about.switchweather.Model.WeatherInfo;
 import com.about.switchweather.R;
@@ -145,6 +147,18 @@ public class WeatherActivity extends SingleFragmentActivity {
                 // 点击 item 后关闭 DrawerLayout
                 mDrawer.closeDrawer(GravityCompat.START);
                 return true;
+            }
+        });
+
+        View headerView = mNavigationView.getHeaderView(0);
+        final TextView emailTextView = (TextView) headerView.findViewById(R.id.textView);
+        emailTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{emailTextView.getText().toString()});
+                startActivity(intent);
             }
         });
 
