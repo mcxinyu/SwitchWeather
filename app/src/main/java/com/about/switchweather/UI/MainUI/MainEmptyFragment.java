@@ -15,9 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.*;
 import com.about.switchweather.Model.WeatherBean;
 import com.about.switchweather.Model.WeatherInfo;
 import com.about.switchweather.R;
@@ -45,6 +43,8 @@ public class MainEmptyFragment extends Fragment implements LocationProvider.Call
     private TextView mEmptyTextView;
     private int SDK_PERMISSION_REQUEST = 127;
     private LocationProvider mLocationProvider;
+    private ToggleButton mLocationToggleButton;
+    private TextView mCurrentCityTextView;
 
     /**
      * Required interface for hosting activities.
@@ -80,6 +80,7 @@ public class MainEmptyFragment extends Fragment implements LocationProvider.Call
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mWeatherInfoList = WeatherLab.get(MyApplication.getContext()).getWeatherInfoList();
+        mLocationProvider = new LocationProvider(MainEmptyFragment.this, MyApplication.getContext());
 
         String cityName = (String) getArguments().getSerializable(ARG_WEATHER_CITY_NAME);
 
@@ -92,7 +93,6 @@ public class MainEmptyFragment extends Fragment implements LocationProvider.Call
                     // 所以不会调用 doFetchWeather()，只能自己判断是不是定位出错了。
                     doFetchWeather(null);
                 } else {
-                    mLocationProvider = new LocationProvider(MainEmptyFragment.this, MyApplication.getContext());
                     mLocationProvider.start();
                 }
             } else {
@@ -107,11 +107,14 @@ public class MainEmptyFragment extends Fragment implements LocationProvider.Call
     public void onLocationCityChange(boolean isLocationCityChange, String oldCity, String newCity) {
         mLocationProvider.destroy();
         if (isLocationCityChange){
-            WeatherLab.get(MyApplication.getContext())
-                    .deleteWeatherInfo(WeatherLab.get(MyApplication.getContext()).getCityWithCityName(oldCity).getId());
+            if (oldCity != null) {
+                WeatherLab.get(MyApplication.getContext())
+                        .deleteWeatherInfo(WeatherLab.get(MyApplication.getContext()).getCityWithCityName(oldCity).getId());
+            }
             // 因为城市改变的话说明 onLocationComplete 不用回调了
             // 先更新 newCity 是为了让 WeatherActivity 先打开定位的城市
             if (newCity != null) {
+                mCurrentCityTextView.setText(newCity);
                 doFetchWeather(newCity);
             }
             // 后台还要继续更新其他城市
@@ -125,6 +128,7 @@ public class MainEmptyFragment extends Fragment implements LocationProvider.Call
         // 定位失败的话 currentCityName = null
         // 先更新 currentCityName 是为了让 WeatherActivity 先打开定位的城市
         if (currentCityName != null) {
+            mCurrentCityTextView.setText(currentCityName);
             doFetchWeather(currentCityName);
         }
         // 后台还要继续更新其他城市
@@ -150,16 +154,25 @@ public class MainEmptyFragment extends Fragment implements LocationProvider.Call
         mImageView = (ImageView) view.findViewById(R.id.no_info_image_view);
         mButton = (Button) view.findViewById(R.id.add_city_button);
         mEmptyTextView = (TextView) view.findViewById(R.id.empty_text_view);
+        mLocationToggleButton = (ToggleButton) view.findViewById(R.id.no_info_location_toggle_button);
+        mCurrentCityTextView = (TextView) view.findViewById(R.id.no_info_current_city_text_view);
+
         if (mWeatherInfoList.size() == 0){
             mLoadingTextView.setVisibility(View.GONE);
             mImageView.setVisibility(View.GONE);
             mButton.setVisibility(View.VISIBLE);
             mEmptyTextView.setVisibility(View.VISIBLE);
+            if (!QueryPreferences.getStoreLocationButtonState(MyApplication.getContext())) {
+                mLocationToggleButton.setVisibility(View.VISIBLE);
+                mCurrentCityTextView.setVisibility(View.VISIBLE);
+            }
         } else {
             mLoadingTextView.setVisibility(View.VISIBLE);
             mImageView.setVisibility(View.VISIBLE);
             mButton.setVisibility(View.GONE);
             mEmptyTextView.setVisibility(View.GONE);
+            mLocationToggleButton.setVisibility(View.GONE);
+            mCurrentCityTextView.setVisibility(View.GONE);
         }
 
         mButton.setOnClickListener(new View.OnClickListener() {
@@ -169,6 +182,21 @@ public class MainEmptyFragment extends Fragment implements LocationProvider.Call
                 startActivity(intent);
             }
         });
+
+        mLocationToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                QueryPreferences.setStoreLocationButtonState(MyApplication.getContext(), isChecked);
+                if (isChecked){
+                    getPermissions();
+                    mLocationProvider.start();
+                } else {
+                    mLocationProvider.stop();
+                    mCurrentCityTextView.setText("");
+                }
+            }
+        });
+
         return view;
     }
 

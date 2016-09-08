@@ -59,6 +59,8 @@ public class LocationProvider {
             if (null != location && location.getLocType() != BDLocation.TypeServerError) {
                 locationCity = location.getCity().substring(0, location.getCity().lastIndexOf("市"));
                 if (!locationCity.equals(QueryPreferences.getStoreLocationCityName(mContext))){
+                    System.out.println("1111111111 " + QueryPreferences.getStoreLocationCityName(mContext));
+                    System.out.println("2222222222 " + locationCity);
                     mCallbacks.onLocationCityChange(true, QueryPreferences.getStoreLocationCityName(mContext), locationCity);
                     QueryPreferences.setStoreLocationCityName(mContext, locationCity);
                     return; // 调用 onLocationCityChange 就不调用 onLocationComplete

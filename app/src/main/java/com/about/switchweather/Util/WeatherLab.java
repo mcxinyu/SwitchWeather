@@ -61,6 +61,9 @@ public class WeatherLab {
     }
 
     public WeatherInfo getWeatherInfoWithCityId(String cityId) {
+        if (cityId == null){
+            return null;
+        }
         MyCursorWrapper cursor = queryAllRows(WeatherInfoTable.NAME, WeatherInfoTable.Columns.Basic.ID + "=?", new String[]{cityId});
         try {
             if (cursor.getCount() == 0){
@@ -74,6 +77,9 @@ public class WeatherLab {
     }
 
     public WeatherInfo getWeatherInfoWithCityName(String cityName) {
+        if (cityName == null){
+            return null;
+        }
         MyCursorWrapper cursor = queryAllRows(WeatherInfoTable.NAME, WeatherInfoTable.Columns.Basic.CITY + "=?", new String[]{cityName});
         try {
             if (cursor.getCount() == 0){
@@ -202,6 +208,9 @@ public class WeatherLab {
     }
 
     public List<City> getCityListLikeName(String cityName){
+        if (cityName == null){
+            return null;
+        }
         List<City> cityList = new ArrayList<>();
         MyCursorWrapper cursor = queryAllRows(CityTable.NAME, CityTable.Columns.CITY + " like '%?%'", new String[]{cityName});
         try {
@@ -218,6 +227,9 @@ public class WeatherLab {
 
     //老出问题，可能是数据库里面的格式不对？？？查一查
     public City getCityWithCityId(String cityId){
+        if (cityId == null){
+            return null;
+        }
         MyCursorWrapper cursor = queryAllRows(CityTable.NAME, CityTable.Columns.ID + "=?", new String[]{cityId});
         try {
             if (cursor.getCount() == 0){
@@ -231,6 +243,9 @@ public class WeatherLab {
     }
 
     public City getCityWithCityName(String cityName){
+        if (cityName == null){
+            return null;
+        }
         MyCursorWrapper cursor = queryAllRows(CityTable.NAME, CityTable.Columns.CITY + "=?", new String[]{cityName});
         try {
             if (cursor.getCount() == 0){
@@ -321,6 +336,9 @@ public class WeatherLab {
     }
 
     public List<DailyForecast> getDailyForecastList(String cityId){
+        if (cityId == null){
+            return null;
+        }
         List<DailyForecast> dailyForecastList = new ArrayList<>();
         MyCursorWrapper cursor = queryAllRows(DailyForecastTable.NAME, DailyForecastTable.Columns.CITY_ID + "=? and " + DailyForecastTable.Columns.DATE + ">DATE('now','-2 day','localtime')", new String[]{cityId});
         try {
@@ -336,10 +354,16 @@ public class WeatherLab {
     }
 
     public void deleteDailyForecastOldDate(String cityId){
+        if (cityId == null){
+            return;
+        }
         mDatabase.delete(DailyForecastTable.NAME, DailyForecastTable.Columns.CITY_ID + "=? and " + DailyForecastTable.Columns.DATE + "<DATE('now','-20 day','localtime')", new String[]{cityId});
     }
 
     private void deleteDailyForecast(String cityId) {
+        if (cityId == null){
+            return;
+        }
         mDatabase.delete(DailyForecastTable.NAME, DailyForecastTable.Columns.CITY_ID + "=?", new String[]{cityId});
     }
 }
