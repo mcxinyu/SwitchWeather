@@ -40,4 +40,5 @@
     <string name="city_text">我的城市</string>
     <string name="location_city">当前城市</string>
     <string name="delete_text">删除</string>
+    <string name="not_use_network">不使用网络</string>
 </resources>

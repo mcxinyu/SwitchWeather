@@ -51,6 +51,7 @@ public class MainActivity extends SingleFragmentActivity implements MainEmptyFra
     public void onFetchWeatherComplete(String cityId, boolean updated) {
         if (!fragmentHasBeenRunning) {
             if (WeatherLab.get(MyApplication.getContext()).getWeatherInfoWithCityId(cityId) == null) {
+                // 如果数据库中没有数据， return
                 return;
             }
             Intent intent = WeatherActivity.newIntent(MyApplication.getContext(), cityId, updated);

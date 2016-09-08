@@ -23,7 +23,7 @@ import com.about.switchweather.Model.WeatherInfo;
 import com.about.switchweather.R;
 import com.about.switchweather.UI.MyApplication;
 import com.about.switchweather.UI.SearchCityUI.SearchCityActivity;
-import com.about.switchweather.Util.BaiduLocationService.LocationCurrentCity;
+import com.about.switchweather.Util.BaiduLocationService.LocationProvider;
 import com.about.switchweather.Util.ColoredSnackbar;
 import com.about.switchweather.Util.HeWeatherFetch;
 import com.about.switchweather.Util.QueryPreferences;
@@ -35,7 +35,7 @@ import java.util.List;
 /**
  * Created by 跃峰 on 2016/8/21.
  */
-public class MainEmptyFragment extends Fragment implements LocationCurrentCity.Callbacks{
+public class MainEmptyFragment extends Fragment implements LocationProvider.Callbacks{
     private static final String ARG_WEATHER_CITY_NAME = "WeatherFragment";
     private TextView mLoadingTextView;
     private Callbacks mCallbacks;
@@ -44,7 +44,7 @@ public class MainEmptyFragment extends Fragment implements LocationCurrentCity.C
     private Button mButton;
     private TextView mEmptyTextView;
     private int SDK_PERMISSION_REQUEST = 127;
-    private LocationCurrentCity locationCurrentCity;
+    private LocationProvider mLocationProvider;
 
     /**
      * Required interface for hosting activities.
@@ -87,8 +87,14 @@ public class MainEmptyFragment extends Fragment implements LocationCurrentCity.C
             boolean locationButtonState = QueryPreferences.getStoreLocationButtonState(MyApplication.getContext());
             if (locationButtonState) {   // locationButtonState 是打开的时候执行
                 getPermissions();
-                locationCurrentCity = new LocationCurrentCity(MainEmptyFragment.this, MyApplication.getContext());
-                locationCurrentCity.start();
+                if (!isNetworkAvailableAndConnected()){
+                    // 因为百度地图 com.about.switchweather:remote D/baidu_location_service: NetworkCommunicationException! 之后并没有回调
+                    // 所以不会调用 doFetchWeather()，只能自己判断是不是定位出错了。
+                    doFetchWeather(null);
+                } else {
+                    mLocationProvider = new LocationProvider(MainEmptyFragment.this, MyApplication.getContext());
+                    mLocationProvider.start();
+                }
             } else {
                 doFetchWeather(null);
             }
@@ -99,20 +105,30 @@ public class MainEmptyFragment extends Fragment implements LocationCurrentCity.C
 
     @Override
     public void onLocationCityChange(boolean isLocationCityChange, String oldCity, String newCity) {
-        locationCurrentCity.destroy();
+        mLocationProvider.destroy();
         if (isLocationCityChange){
             WeatherLab.get(MyApplication.getContext())
                     .deleteWeatherInfo(WeatherLab.get(MyApplication.getContext()).getCityWithCityName(oldCity).getId());
             // 因为城市改变的话说明 onLocationComplete 不用回调了
-            doFetchWeather(newCity);
+            // 先更新 newCity 是为了让 WeatherActivity 先打开定位的城市
+            if (newCity != null) {
+                doFetchWeather(newCity);
+            }
+            // 后台还要继续更新其他城市
+            doFetchWeather(null);
         }
     }
 
     @Override
     public void onLocationComplete(boolean isSuccess, String currentCityName) {
-        locationCurrentCity.destroy();
+        mLocationProvider.destroy();
         // 定位失败的话 currentCityName = null
-        doFetchWeather(currentCityName);
+        // 先更新 currentCityName 是为了让 WeatherActivity 先打开定位的城市
+        if (currentCityName != null) {
+            doFetchWeather(currentCityName);
+        }
+        // 后台还要继续更新其他城市
+        doFetchWeather(null);
     }
 
     private void doFetchWeather(String cityName) {
@@ -221,8 +237,7 @@ public class MainEmptyFragment extends Fragment implements LocationCurrentCity.C
     private boolean isNetworkAvailableAndConnected(){
         ConnectivityManager manager = (ConnectivityManager) MyApplication.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         boolean isNetworkAvailable = manager.getActiveNetworkInfo() != null;
-        boolean isNetworkConnected = isNetworkAvailable && manager.getActiveNetworkInfo().isConnected();
-        return isNetworkConnected;
+        return isNetworkAvailable && manager.getActiveNetworkInfo().isConnected();
     }
 
     private void showSnackbarAlert(String text) {
@@ -277,7 +292,7 @@ public class MainEmptyFragment extends Fragment implements LocationCurrentCity.C
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == SDK_PERMISSION_REQUEST){
             if (checkSelfPermissions(permissions[0])){
-                locationCurrentCity.start();
+                mLocationProvider.start();
             }
         }
     }

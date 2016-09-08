@@ -57,7 +57,7 @@ public class WeatherLab {
         } finally {
             cursor.close();
         }
-        return weatherInfoList;
+        return WeatherUtil.adjustLocationCity2ListFirst(weatherInfoList);
     }
 
     public WeatherInfo getWeatherInfoWithCityId(String cityId) {

@@ -21,7 +21,7 @@ import android.widget.ToggleButton;
 import com.about.switchweather.R;
 import com.about.switchweather.UI.MyApplication;
 import com.about.switchweather.UI.SearchCityUI.SearchCityActivity;
-import com.about.switchweather.Util.BaiduLocationService.LocationCurrentCity;
+import com.about.switchweather.Util.BaiduLocationService.LocationProvider;
 import com.about.switchweather.Util.QueryPreferences;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ import java.util.ArrayList;
 /**
  * Created by 跃峰 on 2016/9/3.
  */
-public class EditCityFragment extends Fragment implements LocationCurrentCity.Callbacks{
+public class EditCityFragment extends Fragment implements LocationProvider.Callbacks{
     private final int SDK_PERMISSION_REQUEST = 127;
 
     private Callbacks mCallbacks;
@@ -38,7 +38,7 @@ public class EditCityFragment extends Fragment implements LocationCurrentCity.Ca
     private TextView mTextView;
     private ImageButton mAddCityImageButton;
     private EditCityAdapter mEditCityAdapter;
-    private LocationCurrentCity mLocationCurrentCity;
+    private LocationProvider mLocationProvider;
 
     @Override
     public void onLocationCityChange(boolean isLocationCityChange, String oldCity, String newCity) {
@@ -78,7 +78,7 @@ public class EditCityFragment extends Fragment implements LocationCurrentCity.Ca
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mLocationCurrentCity = new LocationCurrentCity(this, MyApplication.getContext());
+        mLocationProvider = new LocationProvider(this, MyApplication.getContext());
     }
 
     @Nullable
@@ -92,7 +92,7 @@ public class EditCityFragment extends Fragment implements LocationCurrentCity.Ca
 
     @Override
     public void onDestroy() {
-        mLocationCurrentCity.destroy();
+        mLocationProvider.destroy();
         super.onDestroy();
     }
 
@@ -136,10 +136,10 @@ public class EditCityFragment extends Fragment implements LocationCurrentCity.Ca
                 QueryPreferences.setStoreLocationButtonState(MyApplication.getContext(), isChecked);
                 if (isChecked){
                     getPermissions();
-                    mLocationCurrentCity.start();
-                    //mTextView.setText(mLocationCurrentCity.getLocationCity());
+                    mLocationProvider.start();
+                    //mTextView.setText(mLocationProvider.getLocationCity());
                 } else {
-                    mLocationCurrentCity.stop();
+                    mLocationProvider.stop();
                     mTextView.setText("");
                 }
                 mCallbacks.onLocationButtonChange(isChecked);
@@ -213,7 +213,7 @@ public class EditCityFragment extends Fragment implements LocationCurrentCity.Ca
                 }
             }
             if (isGrant){
-                mLocationCurrentCity.start();
+                mLocationProvider.start();
             }else {
                 mLocationToggleButton.setChecked(false);
                 mTextView.setText("");

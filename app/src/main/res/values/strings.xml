@@ -40,4 +40,5 @@
     <string name="city_text">Own City</string>
     <string name="location_city">Current Location</string>
     <string name="delete_text">Delete</string>
+    <string name="not_use_network">Do not use the network</string>
 </resources>

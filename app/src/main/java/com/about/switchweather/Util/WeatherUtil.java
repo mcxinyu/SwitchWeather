@@ -2,7 +2,12 @@ package com.about.switchweather.Util;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import com.about.switchweather.Model.WeatherInfo;
 import com.about.switchweather.R;
+import com.about.switchweather.UI.MyApplication;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by 跃峰 on 2016/8/27.
@@ -118,5 +123,33 @@ public class WeatherUtil {
             default:
                 return context.getResources().getDrawable(R.drawable.weather_icon_999);
         }
+    }
+
+    /**
+     * 将定位到的城市在 list 中的位置移到第一位
+     * @param weatherInfoList
+     * @return
+     */
+    public static List<WeatherInfo> adjustLocationCity2ListFirst(List<WeatherInfo> weatherInfoList) {
+        if (!QueryPreferences.getStoreLocationButtonState(MyApplication.getContext())){
+            return weatherInfoList;
+        }
+        String cityName = QueryPreferences.getStoreLocationCityName(MyApplication.getContext());
+        if (cityName != null) {
+            List<WeatherInfo> list = new ArrayList<>();
+            for (int i = 0; i < weatherInfoList.size(); i++) {
+                if (weatherInfoList.get(i).getBasicCity().equals(cityName)) {
+                    list.add(0, weatherInfoList.get(i));
+                    break;
+                }
+            }
+            for (int i = 0; i < weatherInfoList.size(); i++) {
+                if (!weatherInfoList.get(i).getBasicCity().equals(cityName)) {
+                    list.add(weatherInfoList.get(i));
+                }
+            }
+            weatherInfoList = list;
+        }
+        return weatherInfoList;
     }
 }

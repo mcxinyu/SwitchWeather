@@ -8,7 +8,7 @@ import com.baidu.location.BDLocationListener;
 /**
  * Created by 跃峰 on 2016/9/7.
  */
-public class LocationCurrentCity {
+public class LocationProvider {
     private Context mContext;
     private final LocationService mLocationService;
     private String locationCity;
@@ -20,7 +20,7 @@ public class LocationCurrentCity {
         void onLocationComplete(boolean isSuccess, String currentCityName);
     }
 
-    public LocationCurrentCity(Object hostObject, Context context) {
+    public LocationProvider(Object hostObject, Context context) {
         try {
             mCallbacks = (Callbacks) hostObject;
         } catch (ClassCastException e) {
