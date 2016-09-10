@@ -29,7 +29,7 @@ public class SearchCityActivity  extends SingleFragmentActivity {
 
     @Override
     protected int getLayoutResId() {
-        return R.layout.app_bar_weather;
+        return R.layout.app_bar_other;
     }
 
     @Override

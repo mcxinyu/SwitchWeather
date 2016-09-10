@@ -56,6 +56,11 @@
                   android:label="@string/edit_text"
                   android:theme="@style/AppTheme.NoActionBar">
         </activity>
+
+        <activity android:name=".UI.SettingUI.SettingActivity"
+                  android:label="@string/setting_text"
+                  android:theme="@style/AppTheme.NoActionBar">
+        </activity>
         
         <service android:name="com.baidu.location.f"
                  android:enabled="true"
@@ -64,6 +69,8 @@
         <meta-data
                 android:name="com.baidu.lbsapi.API_KEY"
                 android:value="LFVRMeUDec40MWfKDcg0jKQ6GinMb6tG"/>
+
+        <service android:name=".Service.UpdateWeatherService"></service>
     </application>
 
 </manifest>

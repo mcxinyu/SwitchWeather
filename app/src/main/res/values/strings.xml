@@ -41,4 +41,17 @@
     <string name="location_city">Current Location</string>
     <string name="delete_text">Delete</string>
     <string name="not_use_network">Do not use the network</string>
+    <string name="push_setting_text">Push Setting</string>
+    <string name="auto_update_text">Update Push City in Background</string>
+    <string name="auto_update_summary_text">Update every 6 hours, specially recommended to business travellers.</string>
+    <string name="general_setting_text">General Settings</string>
+    <string name="sunrise_notification_text">Sunrise Notification</string>
+    <string name="sunset_notification_text">Sunset Notification</string>
+    <string name="poor_air_text">Poor Air Quality Notification</string>
+    <string name="c_f_city">°C/°F</string>
+    <string name="notification_widget">Notification Widget</string>
+    <string name="celsius">Celsius °C</string>
+    <string name="fahrenheit">Fahrenheit °F</string>
+    <string name="other_setting">Others</string>
+    <string name="about_text">About</string>
 </resources>

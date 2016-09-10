@@ -1,8 +1,6 @@
 package com.about.switchweather.UI.WeatherUI;
 
-import android.content.Context;
 import android.content.res.Configuration;
-import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,8 +16,8 @@ import android.widget.TextView;
 import com.about.switchweather.Model.DailyForecast;
 import com.about.switchweather.Model.WeatherBean;
 import com.about.switchweather.Model.WeatherInfo;
-import com.about.switchweather.UI.MyApplication;
 import com.about.switchweather.R;
+import com.about.switchweather.UI.MyApplication;
 import com.about.switchweather.Util.*;
 
 import java.text.SimpleDateFormat;
@@ -202,7 +200,7 @@ public class WeatherFragment extends Fragment {
 
         @Override
         protected void onPostExecute(WeatherBean weatherBean) {
-            if (!isNetworkAvailableAndConnected()){
+            if (!WeatherUtil.isNetworkAvailableAndConnected()){
                 showSnackbarAlert(getResources().getString(R.string.network_is_not_available));
                 return;
             }
@@ -232,13 +230,6 @@ public class WeatherFragment extends Fragment {
             return false;
         }
         return false;
-    }
-
-    private boolean isNetworkAvailableAndConnected(){
-        ConnectivityManager manager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        boolean isNetworkAvailable = manager.getActiveNetworkInfo() != null;
-        boolean isNetworkConnected = isNetworkAvailable && manager.getActiveNetworkInfo().isConnected();
-        return isNetworkConnected;
     }
 
     private void showSnackbarAlert(String text) {

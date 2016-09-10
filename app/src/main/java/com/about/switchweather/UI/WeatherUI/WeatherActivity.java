@@ -22,9 +22,11 @@ import com.about.switchweather.UI.EditCityUI.EditCityActivity;
 import com.about.switchweather.UI.MainUI.MainActivity;
 import com.about.switchweather.UI.MyApplication;
 import com.about.switchweather.UI.SearchCityUI.SearchCityActivity;
+import com.about.switchweather.UI.SettingUI.SettingActivity;
 import com.about.switchweather.UI.SingleFragmentActivity;
 import com.about.switchweather.Util.QueryPreferences;
 import com.about.switchweather.Util.WeatherLab;
+import com.jaeger.library.StatusBarUtil;
 
 import java.util.List;
 
@@ -76,6 +78,13 @@ public class WeatherActivity extends SingleFragmentActivity {
         checkDataValidity();
         initToolbar();
         initDrawer();
+
+        //UpdateWeatherService.setServiceAlarm(MyApplication.getContext(), true);
+    }
+
+    @Override
+    protected void setStatusBar() {
+        StatusBarUtil.setColorForDrawerLayout(this, (DrawerLayout) findViewById(R.id.drawer_layout), getResources().getColor(R.color.colorPrimary), 100);
     }
 
     @Override
@@ -132,12 +141,13 @@ public class WeatherActivity extends SingleFragmentActivity {
                 switch (item.getItemId()){
                     case R.id.edit_city_list:
                         // 编辑城市的入口
-                        Intent intent = EditCityActivity.newIntent(WeatherActivity.this);
-                        startActivityForResult(intent, REQUEST_CODE_START_EDIT_CITY);
+                        Intent editCityIntent = EditCityActivity.newIntent(WeatherActivity.this);
+                        startActivityForResult(editCityIntent, REQUEST_CODE_START_EDIT_CITY);
                         break;
                     case R.id.nav_settings:
                         // 设置项的入口
-                        Toast.makeText(MyApplication.getContext(), "设置", Toast.LENGTH_SHORT).show();
+                        Intent settingIntent = SettingActivity.newIntent(WeatherActivity.this);
+                        startActivity(settingIntent);
                         break;
                     case R.id.nav_feedback:
                         // 反馈项的入口

@@ -2,6 +2,7 @@ package com.about.switchweather.Util;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
 import com.about.switchweather.Model.WeatherInfo;
 import com.about.switchweather.R;
 import com.about.switchweather.UI.MyApplication;
@@ -151,5 +152,11 @@ public class WeatherUtil {
             weatherInfoList = list;
         }
         return weatherInfoList;
+    }
+
+    public static boolean isNetworkAvailableAndConnected(){
+        ConnectivityManager manager = (ConnectivityManager) MyApplication.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean isNetworkAvailable = manager.getActiveNetworkInfo() != null;
+        return isNetworkAvailable && manager.getActiveNetworkInfo().isConnected();
     }
 }

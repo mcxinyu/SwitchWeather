@@ -22,7 +22,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
             <ImageView
-                    android:background="@color/colorPrimaryDark"
+                    android:src="@drawable/background"
+                    android:scaleType="centerCrop"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
         </RelativeLayout>

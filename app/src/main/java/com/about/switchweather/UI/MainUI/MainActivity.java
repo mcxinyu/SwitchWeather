@@ -8,12 +8,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import com.about.switchweather.Model.City;
 import com.about.switchweather.Model.Condition;
+import com.about.switchweather.R;
 import com.about.switchweather.UI.MyApplication;
 import com.about.switchweather.UI.SingleFragmentActivity;
 import com.about.switchweather.UI.WeatherUI.WeatherActivity;
 import com.about.switchweather.Util.HeWeatherFetch;
 import com.about.switchweather.Util.LogUtils;
 import com.about.switchweather.Util.WeatherLab;
+import com.jaeger.library.StatusBarUtil;
 
 import java.util.List;
 
@@ -48,6 +50,11 @@ public class MainActivity extends SingleFragmentActivity implements MainEmptyFra
     }
 
     @Override
+    protected void setStatusBar() {
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorWhite), 50);
+    }
+
+    @Override
     public void onFetchWeatherComplete(String cityId, boolean updated) {
         if (!fragmentHasBeenRunning) {
             if (WeatherLab.get(MyApplication.getContext()).getWeatherInfoWithCityId(cityId) == null) {
@@ -60,11 +67,17 @@ public class MainActivity extends SingleFragmentActivity implements MainEmptyFra
         }
     }
 
-    private class FetchCondition extends AsyncTask<Void, Void, Void> {
+    private class FetchCondition extends AsyncTask<Void, Integer, Void> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            // TODO: 2016/9/2 应该显示一个进度条，以避免 city list 还没有加载完就进入 city search
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
             // TODO: 2016/9/2 应该显示一个进度条，以避免 city list 还没有加载完就进入 city search
         }
 

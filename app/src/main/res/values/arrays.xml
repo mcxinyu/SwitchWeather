@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="settings_entry_values_auto_update">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="settings_entries_auto_update">
+        <item>@string/celsius</item>
+        <item>@string/fahrenheit</item>
+    </string-array>
+</resources>

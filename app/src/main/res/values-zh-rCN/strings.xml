@@ -38,7 +38,20 @@
     <string name="add_successful">添加成功</string>
     <string name="no_city_notice">请先添加城市</string>
     <string name="city_text">我的城市</string>
-    <string name="location_city">当前城市</string>
+    <string name="location_city">当前位置</string>
     <string name="delete_text">删除</string>
     <string name="not_use_network">不使用网络</string>
+    <string name="push_setting_text">推送设置</string>
+    <string name="auto_update_text">后台更新推送城市</string>
+    <string name="auto_update_summary_text">每 6 个小时更新一次，推荐商旅人士启用。</string>
+    <string name="general_setting_text">常规设置</string>
+    <string name="sunrise_notification_text">日出推送</string>
+    <string name="sunset_notification_text">日落推送</string>
+    <string name="poor_air_text">空气质量恶化推送</string>
+    <string name="c_f_city">温度单位</string>
+    <string name="celsius">摄氏度 °C</string>
+    <string name="fahrenheit">华氏度 °F</string>
+    <string name="notification_widget">通知中心挂件</string>
+    <string name="other_setting">其他</string>
+    <string name="about_text">关于</string>
 </resources>

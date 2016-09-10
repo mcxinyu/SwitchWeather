@@ -2,14 +2,16 @@
 <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context=".UI.WeatherUI.WeatherActivity">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <!-- 主视图 -->
-    <include layout="@layout/fragment_content_weather"/>
+    <!--<include layout="@layout/fragment_content_weather"/>-->
+    <FrameLayout android:id="@+id/fragment_container"
+                 android:layout_marginTop="?attr/actionBarSize"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"/>
 
     <!-- Toolbar 视图 -->
     <android.support.design.widget.AppBarLayout
@@ -19,12 +21,10 @@
             android:layout_width="match_parent">
 
         <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/translucent_background"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:theme="@style/AppTheme.AppBarOverlay"/>
+            android:id="@+id/toolbar"
+            android:layout_width="110dp"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay"/>
     </android.support.design.widget.AppBarLayout>
 
 </FrameLayout>

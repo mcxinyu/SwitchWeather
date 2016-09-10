@@ -2,10 +2,8 @@ package com.about.switchweather.UI.MainUI;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,10 +20,7 @@ import com.about.switchweather.R;
 import com.about.switchweather.UI.MyApplication;
 import com.about.switchweather.UI.SearchCityUI.SearchCityActivity;
 import com.about.switchweather.Util.BaiduLocationService.LocationProvider;
-import com.about.switchweather.Util.ColoredSnackbar;
-import com.about.switchweather.Util.HeWeatherFetch;
-import com.about.switchweather.Util.QueryPreferences;
-import com.about.switchweather.Util.WeatherLab;
+import com.about.switchweather.Util.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +83,7 @@ public class MainEmptyFragment extends Fragment implements LocationProvider.Call
             boolean locationButtonState = QueryPreferences.getStoreLocationButtonState(MyApplication.getContext());
             if (locationButtonState) {   // locationButtonState 是打开的时候执行
                 getPermissions();
-                if (!isNetworkAvailableAndConnected()){
+                if (!WeatherUtil.isNetworkAvailableAndConnected()){
                     // 因为百度地图 com.about.switchweather:remote D/baidu_location_service: NetworkCommunicationException! 之后并没有回调
                     // 所以不会调用 doFetchWeather()，只能自己判断是不是定位出错了。
                     doFetchWeather(null);
@@ -242,7 +237,7 @@ public class MainEmptyFragment extends Fragment implements LocationProvider.Call
         @Override
         protected void onPostExecute(WeatherBean weatherBean) {
             //无网、无存储
-            if (!isNetworkAvailableAndConnected() && WeatherLab.get(MyApplication.getContext()).getWeatherInfoWithCityName(mCityName) == null){
+            if (!WeatherUtil.isNetworkAvailableAndConnected() && WeatherLab.get(MyApplication.getContext()).getWeatherInfoWithCityName(mCityName) == null){
                 showSnackbarAlert(getResources().getString(R.string.network_is_not_available));
                 return;
             }
@@ -259,13 +254,6 @@ public class MainEmptyFragment extends Fragment implements LocationProvider.Call
             //如果 activity 不在了怎么办？会出错！
             mCallbacks.onFetchWeatherComplete(weatherBean.getBasic().getId(), true);
         }
-
-    }
-
-    private boolean isNetworkAvailableAndConnected(){
-        ConnectivityManager manager = (ConnectivityManager) MyApplication.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        boolean isNetworkAvailable = manager.getActiveNetworkInfo() != null;
-        return isNetworkAvailable && manager.getActiveNetworkInfo().isConnected();
     }
 
     private void showSnackbarAlert(String text) {
