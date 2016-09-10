@@ -54,4 +54,9 @@
     <string name="fahrenheit">Fahrenheit °F</string>
     <string name="other_setting">Others</string>
     <string name="about_text">About</string>
+
+    <string name="aboutLibraries_description_name">Switch Weather</string>
+    <string name="aboutLibraries_description_showIcon">true</string>
+    <string name="aboutLibraries_description_showVersion">true</string>
+    <string name="aboutLibraries_description_text"><![CDATA[This is a weather information app in Material Design. <br /><br /><b>You can fork me on <a href="https://github.com/mcxinyu/SwitchWeather">GitHub</a> </b>]]></string>
 </resources>

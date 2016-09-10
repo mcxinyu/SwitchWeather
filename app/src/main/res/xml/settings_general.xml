@@ -41,11 +41,10 @@
 
     <PreferenceCategory android:title="@string/other_setting">
         <PreferenceScreen
-                android:title="@string/about_text">
-            <intent
-                    android:action="android.intent.action.VIEW"
-                    android:data="http://www.baidu.com"/>
+                android:title="@string/about_text"
+                android:key="setting_about">
         </PreferenceScreen>
+        <Preference android:summary="没有工作室 No own a house"/>
     </PreferenceCategory>
 
 </PreferenceScreen>
