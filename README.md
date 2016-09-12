@@ -3,7 +3,9 @@ This is a weather information app in Material Design.
 [Download SwitchWeather](http://fir.im/al9n).
 
 ### Screenshot
-![Home](SwitchWeather/images/Screenshot_20160912-144009.png)![Home](SwitchWeather/images/Screenshot_20160912-144016.png)![Home](SwitchWeather/images/Screenshot_20160912-144023.png)![Home](SwitchWeather/images/Screenshot_20160912-144911.png)![Home](SwitchWeather/images/Screenshot_20160912-144924.png)
+![Home Land](https://1drv.ms/i/s!AuwfAOWfVHmXtycnX8eGDYL4RYkC)
+![Home](https://1drv.ms/i/s!AuwfAOWfVHmXtyV6WvKAd8uZTikU)![Screenshot1](https://1drv.ms/i/s!AuwfAOWfVHmXtyMkmszldyaAOH2i)
+![Screenshot2](https://1drv.ms/i/s!AuwfAOWfVHmXtyT-Gweu8rvU8Saa)![Screenshot3](https://1drv.ms/i/s!AuwfAOWfVHmXtyaNKTjqg6UQ9Wsc)
 
 ### Authors and Contributors
 @mcxinyu 
