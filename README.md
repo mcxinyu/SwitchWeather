@@ -3,9 +3,9 @@ This is a weather information app in Material Design.
 [Download SwitchWeather](http://fir.im/al9n).
 
 ### Screenshot
-![Home Land](https://1drv.ms/i/s!AuwfAOWfVHmXtycnX8eGDYL4RYkC)
-![Home](https://1drv.ms/i/s!AuwfAOWfVHmXtyV6WvKAd8uZTikU)![Screenshot1](https://1drv.ms/i/s!AuwfAOWfVHmXtyMkmszldyaAOH2i)
-![Screenshot2](https://1drv.ms/i/s!AuwfAOWfVHmXtyT-Gweu8rvU8Saa)![Screenshot3](https://1drv.ms/i/s!AuwfAOWfVHmXtyaNKTjqg6UQ9Wsc)
+![Home Land](https://raw.githubusercontent.com/mcxinyu/SwitchWeather/gh-pages/images/Screenshot_20160912-144924.png)
+![Home](https://raw.githubusercontent.com/mcxinyu/SwitchWeather/gh-pages/images/Screenshot_20160912-144009.png)![Screenshot1](https://raw.githubusercontent.com/mcxinyu/SwitchWeather/gh-pages/images/Screenshot_20160912-144016.png)
+![Screenshot2](https://raw.githubusercontent.com/mcxinyu/SwitchWeather/gh-pages/images/Screenshot_20160912-144911.png)![Screenshot3](https://raw.githubusercontent.com/mcxinyu/SwitchWeather/gh-pages/images/Screenshot_20160912-144023.png)
 
 ### Authors and Contributors
 @mcxinyu 
