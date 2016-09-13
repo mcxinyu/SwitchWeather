@@ -1,5 +1,7 @@
 package com.about.switchweather.UI.WeatherUI;
 
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,6 +15,7 @@ import com.about.switchweather.Model.WeatherInfo;
 import com.about.switchweather.R;
 import com.about.switchweather.UI.MyApplication;
 import com.about.switchweather.Util.WeatherLab;
+import com.jaeger.library.StatusBarUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +47,7 @@ public class WeatherPagerFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusBarUtil.setTranslucentForImageViewInFragment(getActivity(), null);
 
         mCityId = (String) getArguments().getSerializable(ARG_WEATHER_CITY_ID);
         mWeatherUpdated = getArguments().getBoolean(ARG_WEATHER_UPDATED);
@@ -87,7 +91,9 @@ public class WeatherPagerFragment extends Fragment {
         public void updateDate(List<WeatherInfo> dataList) {
             ArrayList<Fragment> fragments = new ArrayList<>();
             for (int i = 0; i < dataList.size(); i++) {
-                fragments.add(WeatherFragment.newInstance(dataList.get(i).getBasicCityId(), mWeatherUpdated));
+                WeatherFragment weatherFragment = WeatherFragment.newInstance(dataList.get(i).getBasicCityId(), mWeatherUpdated);
+                //resetFragmentView(weatherFragment);
+                fragments.add(weatherFragment);
             }
             setFragmentList(fragments);
         }
@@ -123,6 +129,26 @@ public class WeatherPagerFragment extends Fragment {
         public int getCount() {
             return this.mFragmentList.size();
         }
+    }
+
+    public void resetFragmentView(Fragment fragment) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            View contentView = getActivity().findViewById(android.R.id.content);
+            if (contentView != null) {
+                ViewGroup rootView;
+                rootView = (ViewGroup) ((ViewGroup) contentView).getChildAt(0);
+                if (rootView.getPaddingTop() != 0) {
+                    rootView.setPadding(0, 0, 0, 0);
+                }
+            }
+            if (fragment.getView() != null) fragment.getView().setPadding(0, getStatusBarHeight(MyApplication.getContext()), 0, 0);
+        }
+    }
+
+    private static int getStatusBarHeight(Context context) {
+        // 获得状态栏高度
+        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        return context.getResources().getDimensionPixelSize(resourceId);
     }
 
     public void onCurrentPagerItemChange(String cityId, boolean updated) {

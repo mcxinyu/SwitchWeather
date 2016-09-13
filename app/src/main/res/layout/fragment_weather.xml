@@ -8,6 +8,12 @@
         android:clipChildren="false"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         tools:context=".UI.MainUI.MainActivity">
+    <ImageView
+            android:src="@drawable/background"
+            android:alpha="50"
+            android:scaleType="centerCrop"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"/>
     <LinearLayout
             android:orientation="vertical"
             android:gravity="center"
@@ -20,12 +26,6 @@
                 android:layout_weight="0.6"
                 android:layout_width="match_parent"
                 android:layout_height="0dp">
-            <ImageView
-                    android:src="@drawable/background"
-                    android:alpha="50"
-                    android:scaleType="centerCrop"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
             <LinearLayout
                     android:id="@+id/today_linear_view"
                     android:orientation="horizontal"

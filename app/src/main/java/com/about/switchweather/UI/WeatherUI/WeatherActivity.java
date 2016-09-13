@@ -82,7 +82,7 @@ public class WeatherActivity extends SingleFragmentActivity {
 
     @Override
     protected void setStatusBar() {
-        StatusBarUtil.setColorForDrawerLayout(this, (DrawerLayout) findViewById(R.id.drawer_layout), getResources().getColor(R.color.colorPrimary), 100);
+        StatusBarUtil.setTranslucentForDrawerLayout(WeatherActivity.this, (DrawerLayout) findViewById(R.id.drawer_layout));
     }
 
     @Override

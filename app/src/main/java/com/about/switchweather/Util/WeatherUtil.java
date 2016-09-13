@@ -160,6 +160,6 @@ public class WeatherUtil {
     }
 
     public static String convertCelsius2Fahrenheit(String temperature){
-        return "" + (Integer.parseInt(temperature) * 1.8 + 32);
+        return "" + Math.round(Integer.parseInt(temperature) * 1.8 + 32);
     }
 }
