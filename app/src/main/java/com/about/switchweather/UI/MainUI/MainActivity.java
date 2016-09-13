@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import com.about.switchweather.Model.City;
 import com.about.switchweather.Model.Condition;
 import com.about.switchweather.R;
+import com.about.switchweather.Service.UpdateWeatherService;
 import com.about.switchweather.UI.MyApplication;
 import com.about.switchweather.UI.SingleFragmentActivity;
 import com.about.switchweather.UI.WeatherUI.WeatherActivity;
@@ -41,11 +43,22 @@ public class MainActivity extends SingleFragmentActivity implements MainEmptyFra
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // 初始化 Preference
+        PreferenceManager.setDefaultValues(this, R.xml.settings_general, false);
         fragmentHasBeenRunning = false;
 
         // 如果数据库中没有数据就在网络获取，是不是应该改成对比结果后更新呢？（例如在第一次获取数据的时候被用户取消了）
         if (WeatherLab.get(this).getCityList().size() == 0 || WeatherLab.get(this).getConditionBeanList().size() == 0){
             new FetchCondition().execute();
+        }
+
+        initBackground();
+    }
+
+    private void initBackground() {
+        // 开启每天凌晨 1 点更新一次天气
+        if (!MyApplication.isServiceRunning(UpdateWeatherService.class)) {
+            UpdateWeatherService.setServiceDailyAlarm(MyApplication.getContext(), true);
         }
     }
 

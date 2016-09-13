@@ -47,6 +47,7 @@ public class WeatherFragment extends Fragment {
 
     private boolean isUpdate;
     private boolean weatherUpdated;
+    private boolean isFahrenheit = false;   //是否是华氏度
 
     public static WeatherFragment newInstance(String cityId, boolean updated){
         //Log.i(TAG, "newInstance: is start now!");
@@ -63,6 +64,7 @@ public class WeatherFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        isFahrenheit = QueryPreferences.getSettingCFCity(MyApplication.getContext()).equals("F");
         String cityId = (String) getArguments().getSerializable(ARG_WEATHER_CITY_ID);
         weatherUpdated = getArguments().getBoolean(ARG_WEATHER_UPDATED);
         mWeatherInfo = WeatherLab.get(getActivity()).getWeatherInfoWithCityId(cityId);
@@ -125,12 +127,18 @@ public class WeatherFragment extends Fragment {
         }
 
         mCityNameTextView.setText(mWeatherInfo.getBasicCity());
-        mTemperatureTextView.setText(mWeatherInfo.getNowTmp() + "°");
+        if (isFahrenheit) {
+            mTemperatureTextView.setText(WeatherUtil.convertCelsius2Fahrenheit(mWeatherInfo.getNowTmp()) + "°");
+            mMaxTemperatureTextView.setText(WeatherUtil.convertCelsius2Fahrenheit(mWeatherInfo.getDfTmpMax()) + "°");
+            mMinTemperatureTextView.setText(WeatherUtil.convertCelsius2Fahrenheit(mWeatherInfo.getDfTmpMin()) + "°");
+        } else {
+            mTemperatureTextView.setText(mWeatherInfo.getNowTmp() + "°");
+            mMaxTemperatureTextView.setText(mWeatherInfo.getDfTmpMax() + "°");
+            mMinTemperatureTextView.setText(mWeatherInfo.getDfTmpMin() + "°");
+        }
         mUpdateTimeTextView.setText(TimeUtil.getDIYTime(MyApplication.getContext(), mWeatherInfo.getBasicUpdateLoc(), new SimpleDateFormat("yyyy-MM-dd HH:mm")) + getResources().getString(R.string.update_text));
-        mMaxTemperatureTextView.setText(mWeatherInfo.getDfTmpMax() + "°");
-        mMinTemperatureTextView.setText(mWeatherInfo.getDfTmpMin() + "°");
         mWeatherDescribeTextView.setText(mWeatherInfo.getNowCondTxt());
-        mWeatherIconImageView.setImageDrawable(WeatherUtil.convertIconToRes(getActivity(), mWeatherInfo.getNowCondCode()));
+        mWeatherIconImageView.setImageDrawable(getResources().getDrawable(WeatherUtil.convertIconToRes(mWeatherInfo.getNowCondCode())));
 
         mAdapter = new DailyForecastAdapter();
         mRecyclerView.setAdapter(mAdapter);
@@ -180,8 +188,12 @@ public class WeatherFragment extends Fragment {
             mDailyForecast = dailyForecast;
             mDailyForecastWeeklyTextView.setText(TimeUtil.getNear3Weekday(MyApplication.getContext(), mDailyForecast.getDate(), new SimpleDateFormat("yyyy-MM-dd")));
             mDailyForecastDateTextView.setText(TimeUtil.getDate(mDailyForecast.getDate(), new SimpleDateFormat("yyyy-MM-dd")));
-            mDailyForecastIconImageView.setImageDrawable(WeatherUtil.convertIconToRes(getActivity(), mDailyForecast.getCondCodeD()));
-            mDailyForecastTemperatureTextView.setText(mDailyForecast.getTmpMin() + "°-" + mDailyForecast.getTmpMax() + "°");
+            mDailyForecastIconImageView.setImageDrawable(getResources().getDrawable(WeatherUtil.convertIconToRes(mDailyForecast.getCondCodeD())));
+            if (isFahrenheit) {
+                mDailyForecastTemperatureTextView.setText(WeatherUtil.convertCelsius2Fahrenheit(mDailyForecast.getTmpMin()) + "°-" + WeatherUtil.convertCelsius2Fahrenheit(mDailyForecast.getTmpMax()) + "°");
+            } else {
+                mDailyForecastTemperatureTextView.setText(mDailyForecast.getTmpMin() + "°-" + mDailyForecast.getTmpMax() + "°");
+            }
             mDailyForecastWindTextView.setText(mDailyForecast.getCondTxtD());
         }
     }

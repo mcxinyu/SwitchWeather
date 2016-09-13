@@ -78,8 +78,6 @@ public class WeatherActivity extends SingleFragmentActivity {
         checkDataValidity();
         initToolbar();
         initDrawer();
-
-        //UpdateWeatherService.setServiceAlarm(MyApplication.getContext(), true);
     }
 
     @Override

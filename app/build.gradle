@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 23
     buildToolsVersion "24.0.1"
-    dataBinding{
+    dataBinding {
         enabled = true
     }
     defaultConfig {
@@ -14,7 +14,7 @@ android {
         versionName "1.0"
     }
     buildTypes {
-        debug{
+        debug {
             buildConfigField "boolean", "LOG_CALLS", "true"
         }
         release {
@@ -35,11 +35,12 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
+    compile('com.mikepenz:aboutlibraries:5.8.1@aar') {
+        transitive = true
+    }
     compile 'com.android.support:recyclerview-v7:23.4.0'
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
     compile 'com.jaeger.statusbaruitl:library:1.2.4'
-    compile('com.mikepenz:aboutlibraries:5.8.1@aar') {
-        transitive = true
-    }
+    compile 'com.android.support:support-v4:23.4.0'
 }
