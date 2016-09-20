@@ -1,5 +1,6 @@
 package com.about.switchweather.UI.MainUI;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -49,7 +50,7 @@ public class MainActivity extends SingleFragmentActivity implements MainEmptyFra
 
         // 如果数据库中没有数据就在网络获取，是不是应该改成对比结果后更新呢？（例如在第一次获取数据的时候被用户取消了）
         if (WeatherLab.get(this).getCityList().size() == 0 || WeatherLab.get(this).getConditionBeanList().size() == 0){
-            new FetchCondition().execute();
+            new FetchCondition(this).execute();
         }
 
         initBackground();
@@ -81,31 +82,49 @@ public class MainActivity extends SingleFragmentActivity implements MainEmptyFra
     }
 
     private class FetchCondition extends AsyncTask<Void, Integer, Void> {
+        private Context mContext;
+        private ProgressDialog progressDialog;
+
+        public FetchCondition(Context context) {
+            mContext = context;
+        }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            // TODO: 2016/9/2 应该显示一个进度条，以避免 city list 还没有加载完就进入 city search
+            progressDialog = new ProgressDialog(mContext);
+            progressDialog.setTitle("Loading Data");
+            progressDialog.setCancelable(false);
+            progressDialog.setIndeterminate(false);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setMax(4);
+            progressDialog.show();
         }
 
         @Override
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
-            // TODO: 2016/9/2 应该显示一个进度条，以避免 city list 还没有加载完就进入 city search
+            progressDialog.setProgress(values[0]);
+            progressDialog.setMessage(values[0] * 25 + "%");
         }
 
         @Override
         protected Void doInBackground(Void... params) {
             List<City> cityList = new HeWeatherFetch().fetchCityList();
-            storeCityList(cityList);
+            publishProgress(1);
             List<Condition> conditions = new HeWeatherFetch().fetchConditionList();
+            publishProgress(2);
             storeCondition(conditions);
+            publishProgress(3);
+            storeCityList(cityList);
+            publishProgress(4);
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            progressDialog.cancel();
         }
     }
 
