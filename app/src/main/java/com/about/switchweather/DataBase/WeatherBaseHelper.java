@@ -50,11 +50,17 @@ public class WeatherBaseHelper extends SQLiteOpenHelper {
         db.execSQL("create table " + CityTable.NAME + "(" +
                 "_id integer primary key autoincrement," +
                 CityTable.Columns.ID + "," +
-                CityTable.Columns.CITY + "," +
-                CityTable.Columns.CNTY + "," +
+                CityTable.Columns.CITY_EN + "," +
+                CityTable.Columns.CITY_ZH + "," +
+                CityTable.Columns.COUNTRY_CODE + "," +
+                CityTable.Columns.COUNTRY_EN + "," +
+                CityTable.Columns.COUNTRY_ZH + "," +
+                CityTable.Columns.PROVINCE_EN + "," +
+                CityTable.Columns.PROVINCE_ZH + "," +
+                CityTable.Columns.LEADER_EN + "," +
+                CityTable.Columns.LEADER_ZH + "," +
                 CityTable.Columns.LAT + "," +
-                CityTable.Columns.LON + "," +
-                CityTable.Columns.PROV +
+                CityTable.Columns.LON +
                 ")");
 
         db.execSQL("create table " + DailyForecastTable.NAME + "(" +

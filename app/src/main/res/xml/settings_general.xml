@@ -7,10 +7,10 @@
                 android:key="setting_location_city"
                 android:defaultValue="true"/>
         <ListPreference
-                android:title="@string/c_f_city"
-                android:key="setting_c_f_city"
-                android:dialogTitle="@string/c_f_city"
-                android:defaultValue="0"
+                android:title="@string/temperature_unit"
+                android:key="setting_temperature_unit"
+                android:dialogTitle="@string/temperature_unit"
+                android:defaultValue="C"
                 android:entryValues="@array/settings_entry_values_auto_update"
                 android:entries="@array/settings_entries_auto_update"/>
     </PreferenceCategory>
@@ -24,6 +24,7 @@
         <SwitchPreference
                 android:title="@string/notification_widget"
                 android:key="setting_notification_widget"
+                android:summary="@string/notification_widget_summary"
                 android:defaultValue="false"/>
         <SwitchPreference
                 android:title="@string/poor_air_text"

@@ -7,10 +7,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.about.switchweather.Model.WeatherInfo;
 import com.about.switchweather.R;
 import com.about.switchweather.UI.MyApplication;
@@ -27,7 +27,7 @@ public class WeatherPagerFragment extends Fragment {
     private static final String ARG_WEATHER_CITY_ID = "weather_fragment_city_id";
     private static final String ARG_WEATHER_UPDATED = "weather_updated";
 
-    private ViewPager mViewPager;
+    private WeatherViewPaper mViewPager;
     private List<WeatherInfo> mWeatherInfoList;
     private FragmentManager fragmentManager;
     private String mCityId;
@@ -60,7 +60,7 @@ public class WeatherPagerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_view_pager, container, false);
 
-        mViewPager = (ViewPager) view.findViewById(R.id.weather_view_pager_container);
+        mViewPager = (WeatherViewPaper) view.findViewById(R.id.weather_view_pager_container);
         fragmentManager = getActivity().getSupportFragmentManager();
         WeatherPagerAdapter adapter = new WeatherPagerAdapter(fragmentManager, mWeatherInfoList);
         mViewPager.setAdapter(adapter);
@@ -73,6 +73,14 @@ public class WeatherPagerFragment extends Fragment {
         }
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mWeatherUpdated){
+            notifySetChange();
+        }
     }
 
     private class WeatherPagerAdapter extends FragmentStatePagerAdapter{

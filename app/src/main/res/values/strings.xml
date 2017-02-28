@@ -48,7 +48,7 @@
     <string name="sunrise_notification_text">Sunrise Notification</string>
     <string name="sunset_notification_text">Sunset Notification</string>
     <string name="poor_air_text">Poor Air Quality Notification</string>
-    <string name="c_f_city">°C/°F</string>
+    <string name="temperature_unit">Temperature Unit</string>
     <string name="notification_widget">Notification Widget</string>
     <string name="celsius">Celsius °C</string>
     <string name="fahrenheit">Fahrenheit °F</string>
@@ -74,4 +74,7 @@
     <string name="action_reply">Reply</string>
 
     <string name="next_take_effect">Take effect when you restart</string>
+    <string name="loading_data">Loading Data</string>
+    <string name="loading_success">Loading Success</string>
+    <string name="notification_widget_summary">Using The Location City</string>
 </resources>

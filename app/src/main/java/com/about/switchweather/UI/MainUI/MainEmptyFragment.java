@@ -14,7 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import com.about.switchweather.Model.WeatherBean;
+import com.about.switchweather.Model.WeatherModel;
 import com.about.switchweather.Model.WeatherInfo;
 import com.about.switchweather.R;
 import com.about.switchweather.UI.MyApplication;
@@ -75,7 +75,8 @@ public class MainEmptyFragment extends Fragment implements LocationProvider.Call
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mWeatherInfoList = WeatherLab.get(MyApplication.getContext()).getWeatherInfoList();
-        mLocationProvider = new LocationProvider(MainEmptyFragment.this, MyApplication.getContext());
+        mLocationProvider = new LocationProvider(MyApplication.getContext());
+        mLocationProvider.setCallbacks(this);
 
         String cityName = (String) getArguments().getSerializable(ARG_WEATHER_CITY_NAME);
 
@@ -96,38 +97,6 @@ public class MainEmptyFragment extends Fragment implements LocationProvider.Call
         } else {
             doFetchWeather(cityName);
         }
-    }
-
-    @Override
-    public void onLocationCityChange(boolean isLocationCityChange, String oldCity, String newCity) {
-        mLocationProvider.destroy();
-        if (isLocationCityChange){
-            if (oldCity != null) {
-                WeatherLab.get(MyApplication.getContext())
-                        .deleteWeatherInfo(WeatherLab.get(MyApplication.getContext()).getCityWithCityName(oldCity).getId());
-            }
-            // 因为城市改变的话说明 onLocationComplete 不用回调了
-            // 先更新 newCity 是为了让 WeatherActivity 先打开定位的城市
-            if (newCity != null) {
-                mCurrentCityTextView.setText(newCity);
-                doFetchWeather(newCity);
-            }
-            // 后台还要继续更新其他城市
-            doFetchWeather(null);
-        }
-    }
-
-    @Override
-    public void onLocationComplete(boolean isSuccess, String currentCityName) {
-        mLocationProvider.destroy();
-        // 定位失败的话 currentCityName = null
-        // 先更新 currentCityName 是为了让 WeatherActivity 先打开定位的城市
-        if (currentCityName != null) {
-            mCurrentCityTextView.setText(currentCityName);
-            doFetchWeather(currentCityName);
-        }
-        // 后台还要继续更新其他城市
-        doFetchWeather(null);
     }
 
     private void doFetchWeather(String cityName) {
@@ -206,7 +175,13 @@ public class MainEmptyFragment extends Fragment implements LocationProvider.Call
         mCallbacks = null;
     }
 
-    private class FetchWeather extends AsyncTask<Void, Void, WeatherBean> {
+    @Override
+    public void onDestroy() {
+        mLocationProvider.unSetCallbacks();
+        super.onDestroy();
+    }
+
+    private class FetchWeather extends AsyncTask<Void, Void, WeatherModel> {
         String mCityName;
 
         public FetchWeather(String cityName) {
@@ -214,58 +189,64 @@ public class MainEmptyFragment extends Fragment implements LocationProvider.Call
         }
 
         @Override
-        protected WeatherBean doInBackground(Void... params) {
-            WeatherBean weatherBean = new HeWeatherFetch().fetchWeatherBean(mCityName);
-            storeData(weatherBean);
-            return weatherBean;
+        protected WeatherModel doInBackground(Void... params) {
+            WeatherModel weatherModel = new HeWeatherFetch().fetchWeatherBean(mCityName);
+            storeData(weatherModel);
+            return weatherModel;
         }
 
-        private void storeData(WeatherBean weatherBean) {
-            if (weatherBean != null){
+        private void storeData(WeatherModel weatherModel) {
+            if (weatherModel != null){
                 if (WeatherLab.get(MyApplication.getContext()).getWeatherInfoWithCityName(mCityName) == null) {
                     //有网、成功、无存储即增加
-                    WeatherLab.get(MyApplication.getContext()).addWeatherBean(weatherBean);
-                    WeatherLab.get(MyApplication.getContext()).addDailyForecastList(weatherBean);
+                    WeatherLab.get(MyApplication.getContext()).addWeatherBean(weatherModel);
+                    WeatherLab.get(MyApplication.getContext()).addDailyForecastList(weatherModel);
                 } else {
                     //有网、成功、有存储即更新
-                    WeatherLab.get(MyApplication.getContext()).updateWeatherInfo(weatherBean);
-                    WeatherLab.get(MyApplication.getContext()).updateDailyForecastList(weatherBean);
+                    WeatherLab.get(MyApplication.getContext()).updateWeatherInfo(weatherModel);
+                    WeatherLab.get(MyApplication.getContext()).updateDailyForecastList(weatherModel);
                 }
             }
         }
 
         @Override
-        protected void onPostExecute(WeatherBean weatherBean) {
+        protected void onPostExecute(WeatherModel weatherModel) {
             //无网、无存储
             if (!WeatherUtil.isNetworkAvailableAndConnected() && WeatherLab.get(MyApplication.getContext()).getWeatherInfoWithCityName(mCityName) == null){
-                showSnackbarAlert(getResources().getString(R.string.network_is_not_available));
+                showSnackBarAlert(getResources().getString(R.string.network_is_not_available), true);
                 return;
             }
-            if (weatherBean == null){
+            if (weatherModel == null){
                 //有网、不成功、有存储
                 if (WeatherLab.get(MyApplication.getContext()).getWeatherInfoWithCityName(mCityName) != null){
                     mCallbacks.onFetchWeatherComplete(WeatherLab.get(MyApplication.getContext()).getWeatherInfoWithCityName(mCityName).getBasicCityId(), false);
                     return;
                 }
                 //有网、不成功，无存储
-                showSnackbarAlert(getResources().getString(R.string.update_failed));
+                showSnackBarAlert(getResources().getString(R.string.update_failed), true);
                 return;
             }
             //如果 activity 不在了怎么办？会出错！
-            mCallbacks.onFetchWeatherComplete(weatherBean.getBasic().getId(), true);
+            mCallbacks.onFetchWeatherComplete(weatherModel.getHeWeather5().get(0).getBasic().getId(), true);
         }
     }
 
-    private void showSnackbarAlert(String text) {
+    public void showSnackBarAlert(String text, boolean showAction) {
         mLoadingTextView.setText("");
-        Snackbar snackbar = Snackbar.make(getView(), text, Snackbar.LENGTH_INDEFINITE)
-                .setAction(getResources().getString(R.string.retry_to_connect), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        doFetchWeather(null);
-                    }
-                }).setActionTextColor(getResources().getColor(R.color.colorWhite));
-        ColoredSnackbar.alert(snackbar).show();
+        if (showAction) {
+            Snackbar snackbar = Snackbar.make(getView(), text, Snackbar.LENGTH_INDEFINITE)
+                    .setAction(getResources().getString(R.string.retry_to_connect), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            doFetchWeather(null);
+                        }
+                    }).setActionTextColor(getResources().getColor(R.color.colorWhite));
+            ColoredSnackbar.alert(snackbar).show();
+        } else {
+            Snackbar snackbar = Snackbar.make(getView(), text, Snackbar.LENGTH_INDEFINITE)
+                    .setActionTextColor(getResources().getColor(R.color.colorWhite));
+            ColoredSnackbar.alert(snackbar).show();
+        }
     }
 
     private void getPermissions() {
@@ -311,5 +292,52 @@ public class MainEmptyFragment extends Fragment implements LocationProvider.Call
                 mLocationProvider.start();
             }
         }
+    }
+
+    @Override
+    public void onLocationCityChange(boolean isLocationCityChange, String oldCity, String newCity) {
+        mLocationProvider.destroy();
+        if (isLocationCityChange){
+            if (oldCity != null) {
+                WeatherLab.get(MyApplication.getContext())
+                        .deleteWeatherInfo(WeatherLab.get(MyApplication.getContext()).getCityWithCityName(oldCity).getId());
+            }
+            // 因为城市改变的话说明 onLocationComplete 不用回调了
+            // 先更新 newCity 是为了让 WeatherActivity 先打开定位的城市
+            if (newCity != null) {
+                mCurrentCityTextView.setText(newCity);
+                doFetchWeather(newCity);
+            }
+            // 后台还要继续更新其他城市
+            doFetchWeather(null);
+        }
+    }
+
+    @Override
+    public void onLocationComplete(boolean isSuccess, String currentCityName) {
+        mLocationProvider.destroy();
+        // 定位失败的话 currentCityName = null
+        // 先更新 currentCityName 是为了让 WeatherActivity 先打开定位的城市
+        if (currentCityName != null) {
+            mCurrentCityTextView.setText(currentCityName);
+            doFetchWeather(currentCityName);
+        }
+        // 后台还要继续更新其他城市
+        doFetchWeather(null);
+    }
+
+    @Override
+    public void onLocationCriteriaException(String description) {
+        showSnackBarAlert(description, true);
+    }
+
+    @Override
+    public void onLocationNetWorkException(String description) {
+        showSnackBarAlert(description, true);
+    }
+
+    @Override
+    public void onLocationError(String description) {
+        showSnackBarAlert(description, true);
     }
 }

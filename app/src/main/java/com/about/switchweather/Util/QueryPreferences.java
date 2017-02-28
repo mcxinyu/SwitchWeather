@@ -12,7 +12,7 @@ public class QueryPreferences {
     private static final String PREF_NETWORK_STATE = "network_state";
 
     public static final String SETTING_LOCATION_CITY = "setting_location_city";
-    public static final String SETTING_C_F_CITY = "setting_c_f_city";
+    public static final String SETTING_TEMPERATURE_UNIT = "setting_temperature_unit";
     public static final String SETTING_AUTO_UPDATE_TEXT = "setting_auto_update_text";
     public static final String SETTING_NOTIFICATION_WIDGET = "setting_notification_widget";
     public static final String SETTING_POOR_AIR_TEXT = "setting_poor_air_text";
@@ -33,6 +33,7 @@ public class QueryPreferences {
     }
 
     public static String getStoreLocationCityName(Context context){
+        // TODO: 2017/2/26 使用改方法的时候应该检查是否为 null
         return PreferenceManager.getDefaultSharedPreferences(context)
                 .getString(PREF_LOCATION_CITY_NAME, null);
     }
@@ -68,8 +69,8 @@ public class QueryPreferences {
                 .apply();
     }
 
-    public static String getSettingCFCity(Context context){
+    public static String getSettingTemperatureUnit(Context context){
         return PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(SETTING_C_F_CITY, null);
+                .getString(SETTING_TEMPERATURE_UNIT, "C");
     }
 }

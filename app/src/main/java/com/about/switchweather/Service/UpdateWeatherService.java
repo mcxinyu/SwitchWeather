@@ -6,7 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
-import com.about.switchweather.Model.WeatherBean;
+import com.about.switchweather.Model.WeatherModel;
 import com.about.switchweather.Model.WeatherInfo;
 import com.about.switchweather.Util.*;
 
@@ -130,16 +130,16 @@ public class UpdateWeatherService extends IntentService {
         }
     }
 
-    private void storeData(WeatherBean weatherBean) {
-        if (weatherBean != null){
-            if (WeatherLab.get(this).getWeatherInfoWithCityName(weatherBean.getBasic().getCity()) == null) {
+    private void storeData(WeatherModel weatherModel) {
+        if (weatherModel != null){
+            if (WeatherLab.get(this).getWeatherInfoWithCityName(weatherModel.getHeWeather5().get(0).getBasic().getCity()) == null) {
                 //成功、无存储即增加
-                WeatherLab.get(this).addWeatherBean(weatherBean);
-                WeatherLab.get(this).addDailyForecastList(weatherBean);
+                WeatherLab.get(this).addWeatherBean(weatherModel);
+                WeatherLab.get(this).addDailyForecastList(weatherModel);
             } else {
                 //成功、有存储即更新
-                WeatherLab.get(this).updateWeatherInfo(weatherBean);
-                WeatherLab.get(this).updateDailyForecastList(weatherBean);
+                WeatherLab.get(this).updateWeatherInfo(weatherModel);
+                WeatherLab.get(this).updateDailyForecastList(weatherModel);
             }
         }
     }

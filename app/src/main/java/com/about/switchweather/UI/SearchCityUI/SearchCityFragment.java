@@ -33,9 +33,9 @@ public class SearchCityFragment extends Fragment {
             return city1.getId().compareTo(city2.getId());
         }
     };
-    private static SearchAdapter mSearchAdapter;
-    private static List<City> mCityList;
-    private static RecyclerView mSearchRecyclerView;
+    private SearchAdapter mSearchAdapter;
+    private List<City> mCityList;
+    private RecyclerView mSearchRecyclerView;
 
     public static SearchCityFragment newInstance() {
         Bundle args = new Bundle();
@@ -112,7 +112,7 @@ public class SearchCityFragment extends Fragment {
         @Override
         public void onClick(View v) {
             // 选择城市后直接调用 MainActivity 可以执行加载天气信息并保存。是不是可以改成直接使用 MainEmptyFragment 呢？麻烦！
-            Intent intent = MainActivity.newIntent(getActivity(), mBinding.getCity().getCity());
+            Intent intent = MainActivity.newIntent(getActivity(), mBinding.getCity().getCityZh());
             startActivity(intent);
             getActivity().finish();
         }
@@ -121,9 +121,14 @@ public class SearchCityFragment extends Fragment {
     private List<City> filter(List<City> cityList, String query){
         List<City> filteredList = new ArrayList<>();
         for (City city : cityList) {
-            final String cityName = city.getCity();
-            final String provName = city.getProv();
-            if (cityName.contains(query) || provName.contains(query)){
+            final String cityName = city.getCityZh();
+            final String cityNameEn = city.getCityEn();
+            final String provinceName = city.getProvinceZh();
+            final String provinceNameEn = city.getProvinceEn();
+            final String leaderName = city.getLeaderZh();
+            final String leaderNameEn = city.getLeaderEn();
+            if (cityName.contains(query) || provinceName.contains(query) || leaderName.contains(query)
+                    || cityNameEn.contains(query) || provinceNameEn.contains(query) || leaderNameEn.contains(query)){
                 filteredList.add(city);
             }
         }

@@ -36,6 +36,7 @@
             android:theme="@style/AppTheme">
         <activity
                 android:name=".UI.MainUI.MainActivity"
+                android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -45,11 +46,12 @@
         </activity>
         <activity
                 android:name=".UI.WeatherUI.WeatherActivity"
-                android:launchMode="singleTask"
+                android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
                 android:name=".UI.SearchCityUI.SearchCityActivity"
+                android:screenOrientation="portrait"
                 android:configChanges="orientation|keyboard|keyboardHidden|navigation"
                 android:label="@string/add_city"
                 android:theme="@style/AppTheme.NoActionBar"
@@ -57,11 +59,13 @@
         </activity>
         <activity
                 android:name=".UI.EditCityUI.EditCityActivity"
+                android:screenOrientation="portrait"
                 android:label="@string/edit_text"
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
                 android:name=".UI.SettingUI.SettingActivity"
+                android:screenOrientation="portrait"
                 android:label="@string/setting_text"
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>

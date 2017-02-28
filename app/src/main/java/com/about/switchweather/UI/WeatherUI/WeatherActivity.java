@@ -85,11 +85,20 @@ public class WeatherActivity extends SingleFragmentActivity {
         StatusBarUtil.setTranslucentForDrawerLayout(WeatherActivity.this, (DrawerLayout) findViewById(R.id.drawer_layout));
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        checkDataValidity();
-    }
+    /**
+     * 由于 WeatherActivity 设置为 SingleTask，当再次调用 WeatherActivity 的时候会调用该方法。
+     * 此时应该查看城市列表是否更新了，时候应该跳转到制定的城市去。
+     * @param intent
+     */
+    // @Override
+    // protected void onNewIntent(Intent intent) {
+    //     super.onNewIntent(intent);
+    //     checkDataValidity();
+    //     updateNavCityList();
+    //     mCityId = intent.getStringExtra(EXTRA_WEATHER_CITY_ID);
+    //     mWeatherInfoIsUpdated = getIntent().getBooleanExtra(EXTRA_WEATHER_INFO_UPDATED, false);
+    //     weatherPagerFragment.onCurrentPagerItemChange(mCityId, mWeatherInfoIsUpdated);
+    // }
 
     private void checkDataValidity() {
         mWeatherInfoList = WeatherLab.get(MyApplication.getContext()).getWeatherInfoList();
@@ -258,6 +267,7 @@ public class WeatherActivity extends SingleFragmentActivity {
                     if (isDeleteSome){
                         updateNavCityList();
                         weatherPagerFragment.notifySetChange();
+                        return;
                     }
 
                     // 点击了某个城市，优先级4

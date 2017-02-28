@@ -1,6 +1,7 @@
 package com.about.switchweather.DataBase;
 
 import android.database.Cursor;
+
 import com.about.switchweather.DataBase.WeatherDbSchema.CityTable;
 import com.about.switchweather.DataBase.WeatherDbSchema.ConditionTable;
 import com.about.switchweather.DataBase.WeatherDbSchema.DailyForecastTable;
@@ -74,22 +75,24 @@ public class MyCursorWrapper extends android.database.CursorWrapper {
     }
 
     public City getCity(){
-        String ID = getString(getColumnIndex(CityTable.Columns.ID));
-        String CITY = getString(getColumnIndex(CityTable.Columns.CITY));
-        String CNTY = getString(getColumnIndex(CityTable.Columns.CNTY));
-        String LAT = getString(getColumnIndex(CityTable.Columns.LAT));
-        String LON = getString(getColumnIndex(CityTable.Columns.LON));
-        String PROV = getString(getColumnIndex(CityTable.Columns.PROV));
+        String id = getString(getColumnIndex(CityTable.Columns.ID));
+        String cityEn = getString(getColumnIndex(CityTable.Columns.CITY_EN));
+        String cityZh = getString(getColumnIndex(CityTable.Columns.CITY_ZH));
+        String countryCode = getString(getColumnIndex(CityTable.Columns.COUNTRY_CODE));
+        String countryEn = getString(getColumnIndex(CityTable.Columns.COUNTRY_EN));
+        String countryZh = getString(getColumnIndex(CityTable.Columns.COUNTRY_ZH));
+        String provinceEn = getString(getColumnIndex(CityTable.Columns.PROVINCE_EN));
+        String provinceZh = getString(getColumnIndex(CityTable.Columns.PROVINCE_ZH));
+        String leaderEn = getString(getColumnIndex(CityTable.Columns.LEADER_EN));
+        String leaderZh = getString(getColumnIndex(CityTable.Columns.LEADER_ZH));
+        String lat = getString(getColumnIndex(CityTable.Columns.LAT));
+        String lon = getString(getColumnIndex(CityTable.Columns.LON));
 
-        City city = new City(CITY, CNTY, ID, LAT, LON, PROV);
-        //city.setId(ID);
-        //city.setCity(CITY);
-        //city.setCnty(CNTY);
-        //city.setLat(LAT);
-        //city.setLon(LON);
-        //city.setProv(PROV);
-
-        return city;
+        return new City(id, cityEn, cityZh,
+                countryCode, countryEn, countryZh,
+                provinceEn, provinceZh,
+                leaderEn, leaderZh,
+                lat, lon);
     }
 
     public DailyForecast getDailyForecast(){

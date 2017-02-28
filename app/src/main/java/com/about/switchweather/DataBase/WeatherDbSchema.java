@@ -239,11 +239,17 @@ public class WeatherDbSchema {
 
         public static final class Columns{
             public static final String ID = "id";
-            public static final String CITY = "city";
-            public static final String CNTY = "cnty";
+            public static final String CITY_EN = "city_en";
+            public static final String CITY_ZH = "city_zh";
+            public static final String COUNTRY_CODE = "country_code";
+            public static final String COUNTRY_EN = "country_en";
+            public static final String COUNTRY_ZH = "country_zh";
+            public static final String PROVINCE_EN = "province_en";
+            public static final String PROVINCE_ZH = "province_zh";
+            public static final String LEADER_EN = "leader_en";
+            public static final String LEADER_ZH = "leader_zh";
             public static final String LAT = "lat";
             public static final String LON = "lon";
-            public static final String PROV = "prov";
         }
     }
 

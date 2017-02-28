@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+
 import com.about.switchweather.Model.City;
 import com.about.switchweather.Model.Condition;
 import com.about.switchweather.R;
@@ -26,11 +27,13 @@ public class MainActivity extends SingleFragmentActivity implements MainEmptyFra
     private static final String EXTRA_WEATHER_CITY_NAME = "MainActivity.Weather_City_id";
     private static boolean fragmentHasBeenRunning = false;
     private String TAG = "MainActivity";
+    private MainEmptyFragment mFragment;
 
     @Override
     public Fragment createFragment() {
         String cityName = getIntent().getStringExtra(EXTRA_WEATHER_CITY_NAME);
-        return MainEmptyFragment.newInstance(cityName);
+        mFragment = MainEmptyFragment.newInstance(cityName);
+        return mFragment;
     }
 
     public static Intent newIntent(Context context, @Nullable String cityName) {
@@ -39,6 +42,12 @@ public class MainActivity extends SingleFragmentActivity implements MainEmptyFra
             intent.putExtra(EXTRA_WEATHER_CITY_NAME, cityName);
         }
         return intent;
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        intent.getStringExtra(EXTRA_WEATHER_CITY_NAME);
     }
 
     @Override
@@ -93,7 +102,7 @@ public class MainActivity extends SingleFragmentActivity implements MainEmptyFra
         protected void onPreExecute() {
             super.onPreExecute();
             progressDialog = new ProgressDialog(mContext);
-            progressDialog.setTitle("Loading Data");
+            progressDialog.setTitle(getResources().getString(R.string.loading_data));
             progressDialog.setCancelable(false);
             progressDialog.setIndeterminate(false);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -125,6 +134,7 @@ public class MainActivity extends SingleFragmentActivity implements MainEmptyFra
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             progressDialog.cancel();
+            mFragment.showSnackBarAlert(getResources().getString(R.string.loading_success), false);
         }
     }
 

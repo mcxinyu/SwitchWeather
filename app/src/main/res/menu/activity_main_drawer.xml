@@ -6,6 +6,7 @@
         <menu>
             <item
                     android:id="@+id/edit_city_list"
+                    android:icon="@drawable/edit_city"
                     android:title="@string/edit_text"/>
             <group android:id="@+id/menu_group_city_list"
                    android:checkableBehavior="single">

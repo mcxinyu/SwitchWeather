@@ -20,6 +20,7 @@ import android.preference.SwitchPreference;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
+
 import com.about.switchweather.Model.WeatherInfo;
 import com.about.switchweather.R;
 import com.about.switchweather.Service.UpdateWeatherService;
@@ -40,7 +41,7 @@ import java.util.ArrayList;
 public class SettingFragment extends PreferenceFragment implements LocationProvider.Callbacks , SharedPreferences.OnSharedPreferenceChangeListener {
     private String TAG;
     private SwitchPreference settingLocationCity;
-    private ListPreference settingCFCity;
+    private ListPreference settingTemperatureUnit;
     private SwitchPreference settingAutoUpdate;
     private SwitchPreference settingNotificationWidget;
     private SwitchPreference settingPoorAir;
@@ -64,14 +65,15 @@ public class SettingFragment extends PreferenceFragment implements LocationProvi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.settings_general);
-        mLocationProvider = new LocationProvider(this, MyApplication.getContext());
+        mLocationProvider = new LocationProvider(MyApplication.getContext());
+        mLocationProvider.setCallbacks(this);
 
         initPreferences();
     }
 
     private void initPreferences() {
         settingLocationCity = (SwitchPreference) findPreference(QueryPreferences.SETTING_LOCATION_CITY);
-        settingCFCity = (ListPreference) findPreference(QueryPreferences.SETTING_C_F_CITY);
+        settingTemperatureUnit = (ListPreference) findPreference(QueryPreferences.SETTING_TEMPERATURE_UNIT);
         settingAutoUpdate = (SwitchPreference) findPreference(QueryPreferences.SETTING_AUTO_UPDATE_TEXT);
         settingNotificationWidget = (SwitchPreference) findPreference(QueryPreferences.SETTING_NOTIFICATION_WIDGET);
         settingPoorAir = (SwitchPreference) findPreference(QueryPreferences.SETTING_POOR_AIR_TEXT);
@@ -95,10 +97,10 @@ public class SettingFragment extends PreferenceFragment implements LocationProvi
     }
 
     private void initPreferenceSummary() {
-        if (settingCFCity.getValue().equals("C")) {
-            settingCFCity.setSummary(getResources().getString(R.string.celsius));
-        } else if (settingCFCity.getValue().equals("F")){
-            settingCFCity.setSummary(getResources().getString(R.string.fahrenheit));
+        if (settingTemperatureUnit.getValue().equals("F")) {
+            settingTemperatureUnit.setSummary(getResources().getString(R.string.fahrenheit));
+        } else {
+            settingTemperatureUnit.setSummary(getResources().getString(R.string.celsius));
         }
 
         if (settingLocationCity.isChecked()){
@@ -131,6 +133,7 @@ public class SettingFragment extends PreferenceFragment implements LocationProvi
 
     @Override
     public void onDestroy() {
+        mLocationProvider.unSetCallbacks();
         mLocationProvider.destroy();
         super.onDestroy();
     }
@@ -142,15 +145,17 @@ public class SettingFragment extends PreferenceFragment implements LocationProvi
                 if (settingLocationCity.isChecked()) {
                     getPermissions();
                     mLocationProvider.start();
+                    settingNotificationWidget.setEnabled(true);
                 } else {
                     settingLocationCity.setSummary("");
+                    settingNotificationWidget.setEnabled(false);
                 }
                 break;
-            case QueryPreferences.SETTING_C_F_CITY:
-                if (settingCFCity.getValue().equals("C")) {
-                    settingCFCity.setSummary(getResources().getString(R.string.celsius));
-                }else if (settingCFCity.getValue().equals("F")){
-                    settingCFCity.setSummary(getResources().getString(R.string.fahrenheit));
+            case QueryPreferences.SETTING_TEMPERATURE_UNIT:
+                if (settingTemperatureUnit.getValue().equals("C")) {
+                    settingTemperatureUnit.setSummary(getResources().getString(R.string.celsius));
+                }else if (settingTemperatureUnit.getValue().equals("F")){
+                    settingTemperatureUnit.setSummary(getResources().getString(R.string.fahrenheit));
                 }
                 Toast.makeText(MyApplication.getContext(), R.string.next_take_effect, Toast.LENGTH_SHORT).show();
                 break;
@@ -175,22 +180,31 @@ public class SettingFragment extends PreferenceFragment implements LocationProvi
     }
 
     private void setNotificationSunset(boolean checked) {
+        // TODO: 2017/2/27 设置日出提醒
     }
 
     private void setNotificationSunrise(boolean checked) {
+        // TODO: 2017/2/27 设置日落提醒
     }
 
     private void setNotificationPoorAir(boolean show) {
+        // TODO: 2017/2/27 设置空气质量提醒
         NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
         if (show){
         } else {
         }
     }
 
-    private void setNotificationWidget(boolean show) {
+    private void setNotificationWidget(boolean isChecked) {
+        String locationCityName = QueryPreferences.getStoreLocationCityName(MyApplication.getContext());
+        if (isChecked && ("".equals(locationCityName) || null == locationCityName)){
+            settingNotificationWidget.setChecked(false);
+            Toast.makeText(getActivity(), "获取不到定位的城市", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        // TODO: 2017/2/27 只提供定位的城市通知栏？
         NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-        if (show) {
-            String locationCityName = QueryPreferences.getStoreLocationCityName(MyApplication.getContext());
+        if (isChecked) {
             WeatherInfo weatherInfo = WeatherLab.get(MyApplication.getContext()).getWeatherInfoWithCityName(locationCityName);
             Resources resources = getResources();
 
@@ -200,7 +214,7 @@ public class SettingFragment extends PreferenceFragment implements LocationProvi
             String tmpNow;
             String tmpMin;
             String tmpMax;
-            if (settingCFCity.getValue().equals("F")){
+            if (settingTemperatureUnit.getValue().equals("F")){
                 tmpNow = WeatherUtil.convertCelsius2Fahrenheit(weatherInfo.getNowTmp()) + "°";
                 tmpMin = WeatherUtil.convertCelsius2Fahrenheit(weatherInfo.getDfTmpMin()) + "°";
                 tmpMax = WeatherUtil.convertCelsius2Fahrenheit(weatherInfo.getDfTmpMax()) + "°";
@@ -211,15 +225,14 @@ public class SettingFragment extends PreferenceFragment implements LocationProvi
             }
 
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle()
-                    .setSummaryText(weatherInfo.getBasicCity())
-                    .setBigContentTitle(weatherInfo.getNowCondTxt() + " " + tmpNow)
+                    .setBigContentTitle(weatherInfo.getBasicCity() + " " + weatherInfo.getNowCondTxt() + " " + tmpNow)
                     .addLine(tmpMin + "~" + tmpMax);
 
             Notification notification = new NotificationCompat.Builder(MyApplication.getContext())
                     .setTicker(weatherInfo.getBasicCity() + " " + weatherInfo.getNowCondTxt())
                     .setLargeIcon(BitmapFactory.decodeResource(resources, WeatherUtil.convertIconToRes(weatherInfo.getNowCondCode())))
                     .setSmallIcon(WeatherUtil.convertIconToRes(weatherInfo.getNowCondCode()))
-                    .setContentTitle(weatherInfo.getBasicCity() + weatherInfo.getNowCondTxt() + " " + tmpNow)
+                    .setContentTitle(weatherInfo.getBasicCity() + " " + weatherInfo.getNowCondTxt() + " " + tmpNow)
                     .setContentText(tmpMin + "~" + tmpMax)
                     .setContentIntent(pendingIntent)
                     .setStyle(inboxStyle)
@@ -297,5 +310,23 @@ public class SettingFragment extends PreferenceFragment implements LocationProvi
     @Override
     public void onLocationComplete(boolean isSuccess, String currentCityName) {
         settingLocationCity.setSummary(currentCityName);
+    }
+
+    @Override
+    public void onLocationCriteriaException(String description) {
+        settingLocationCity.setChecked(false);
+        settingLocationCity.setSummary(description);
+    }
+
+    @Override
+    public void onLocationNetWorkException(String description) {
+        settingLocationCity.setChecked(false);
+        settingLocationCity.setSummary(description);
+    }
+
+    @Override
+    public void onLocationError(String description) {
+        settingLocationCity.setChecked(false);
+        settingLocationCity.setSummary(description);
     }
 }

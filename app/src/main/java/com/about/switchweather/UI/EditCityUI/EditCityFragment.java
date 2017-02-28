@@ -40,22 +40,11 @@ public class EditCityFragment extends Fragment implements LocationProvider.Callb
     private EditCityAdapter mEditCityAdapter;
     private LocationProvider mLocationProvider;
 
-    @Override
-    public void onLocationCityChange(boolean isLocationCityChange, String oldCity, String newCity) {
-        mCallbacks.onLocationCityChange(isLocationCityChange, oldCity, newCity);
-        mTextView.setText(newCity);
-    }
-
-    @Override
-    public void onLocationComplete(boolean isSuccess, String currentCityName) {
-        mTextView.setText(currentCityName);
-    }
-
     public interface Callbacks{
+
         void onLocationButtonChange(boolean isChecked);
         void onLocationCityChange(boolean isLocationCityChange, String oldCity, String newCity);
     }
-
     public static EditCityFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -78,7 +67,8 @@ public class EditCityFragment extends Fragment implements LocationProvider.Callb
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mLocationProvider = new LocationProvider(this, MyApplication.getContext());
+        mLocationProvider = new LocationProvider(MyApplication.getContext());
+        mLocationProvider.setCallbacks(this);
     }
 
     @Nullable
@@ -92,6 +82,7 @@ public class EditCityFragment extends Fragment implements LocationProvider.Callb
 
     @Override
     public void onDestroy() {
+        mLocationProvider.unSetCallbacks();
         mLocationProvider.destroy();
         super.onDestroy();
     }
@@ -219,5 +210,34 @@ public class EditCityFragment extends Fragment implements LocationProvider.Callb
                 mTextView.setText("");
             }
         }
+    }
+
+    @Override
+    public void onLocationCityChange(boolean isLocationCityChange, String oldCity, String newCity) {
+        mCallbacks.onLocationCityChange(isLocationCityChange, oldCity, newCity);
+        mTextView.setText(newCity);
+    }
+
+    @Override
+    public void onLocationComplete(boolean isSuccess, String currentCityName) {
+        mTextView.setText(currentCityName);
+    }
+
+    @Override
+    public void onLocationCriteriaException(String description) {
+        mLocationToggleButton.setChecked(false);
+        mTextView.setText(description);
+    }
+
+    @Override
+    public void onLocationNetWorkException(String description) {
+        mLocationToggleButton.setChecked(false);
+        mTextView.setText(description);
+    }
+
+    @Override
+    public void onLocationError(String description) {
+        mLocationToggleButton.setChecked(false);
+        mTextView.setText(description);
     }
 }

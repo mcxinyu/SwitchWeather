@@ -1,11 +1,17 @@
 package com.about.switchweather.Util;
 
 import android.net.Uri;
+import android.util.Log;
+
 import com.about.switchweather.Model.City;
 import com.about.switchweather.Model.Condition;
-import com.about.switchweather.Model.WeatherBean;
+import com.about.switchweather.Model.WeatherModel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -20,31 +26,40 @@ import java.util.List;
 public class HeWeatherFetch {
     private static final String TAG = "HeWeatherFetch";
     private static final String API_KEY = "33fdb5ca3d254333a617911e122f65ac";
-    private static final Uri ENDPOINT = Uri.parse("https://api.heweather.com/x3/");
+    // private static final Uri ENDPOINT = Uri.parse("https://api.heweather.com/x3/");
+    // private static final Uri ENDPOINT = Uri.parse("https://free-api.heweather.com/v5/");
 
-    private enum WEATHER_PORT {CONDITION, WEATHER, CITYLIST};
 
-    private String buildUrl(WEATHER_PORT port, String query){
-        Uri.Builder builder = null;
+
+    private enum WEATHER_PORT {CONDITION, WEATHER, CITYLIST;};
+
+    private String buildUrl(WEATHER_PORT port, String cityName){
+        // Uri.Builder builder = null;
         // condition 天气代码接口（allcond、代码）
         // weather 天气接口
         // citylist （国内城市：allchina（先支持国内）、 热门城市：hotworld、 全部城市：allworld（以后支持，需要升级数据库？））
         // attractions 景点接口 （要钱，弃用）
 
         if (port.equals(WEATHER_PORT.CONDITION)){
-            builder = ENDPOINT.buildUpon()
-                    .appendPath("condition")
-                    .appendQueryParameter("search", query);
+            // Uri ENDPOINT = Uri.parse("http://files.heweather.com/condition-code.txt");
+            // builder = ENDPOINT.buildUpon()
+                    //         .appendPath("condition")
+            //         .appendQueryParameter("search", query);
+            return "http://files.heweather.com/condition-code.txt";
         } else if (port.equals(WEATHER_PORT.WEATHER)){
-            builder = ENDPOINT.buildUpon()
-                    .appendPath("weather")
-                    .appendQueryParameter("city", query);
+            Uri ENDPOINT = Uri.parse("https://free-api.heweather.com/v5/");
+            return ENDPOINT.buildUpon().appendPath("weather")
+                    .appendQueryParameter("city", cityName)
+                    .appendQueryParameter("key", API_KEY).build().toString();
         } else if (port.equals(WEATHER_PORT.CITYLIST)){
-            builder = ENDPOINT.buildUpon()
-                    .appendPath("citylist")
-                    .appendQueryParameter("search", query);
+            // Uri ENDPOINT = Uri.parse("http://files.heweather.com/china-city-list.json");
+            // builder = ENDPOINT.buildUpon()
+            //         .appendPath("citylist")
+            //         .appendQueryParameter("search", query);
+            return "http://files.heweather.com/china-city-list.json";
         }
-        return builder.appendQueryParameter("key", API_KEY).build().toString();
+        // return builder.appendQueryParameter("key", API_KEY).build().toString();
+        return null;
     }
 
     public byte[] getUrlBytes(String urlString) throws IOException {
@@ -79,7 +94,7 @@ public class HeWeatherFetch {
         return new String(getUrlBytes(urlString));
     }
 
-    public WeatherBean fetchWeatherBean(String cityName){
+    public WeatherModel fetchWeatherBean(String cityName){
         String url = buildUrl(WEATHER_PORT.WEATHER, cityName);
         return downloadWeather(url);
     }
@@ -94,25 +109,27 @@ public class HeWeatherFetch {
         return downloadCityList(url);
     }
 
-    private WeatherBean downloadWeather(String url) {
-        WeatherBean weatherBean = null;
+    private WeatherModel downloadWeather(String url) {
+        WeatherModel weatherModel = null;
         try {
             String result = getUrlString(url);
-            //String result = weatherInfoExample;
-            //Log.i(TAG, "downloadWeather: Weather info : " + result);
+            Log.i(TAG, "downloadWeather: Weather info : " + result);
 
-            String jsonBody = dealHeWeatherJson(result);
+            // String jsonBody = getJsonBody(result);
 
-            if ("not found".equals(jsonBody)){
+            // if ("not found".equals(jsonBody)){
+            //     return null;
+            // }
+            if (!result.contains("\"status\":\"ok\"")){
                 return null;
             }
             Gson gson = new Gson();
-            weatherBean = gson.fromJson(jsonBody, WeatherBean.class);
+            weatherModel = gson.fromJson(result, WeatherModel.class);
             LogUtils.i(TAG, "downloadWeather: STATUS OK");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return weatherBean;
+        return weatherModel;
     }
 
     private List<Condition> downloadConditionList(String url) {
@@ -121,7 +138,8 @@ public class HeWeatherFetch {
             String result = getUrlString(url);
             //Log.i(TAG, "downloadConditionList: " + result);
 
-            String jsonBody = dealHeWeatherJson(result);
+            result = dealV5Condition(result).toString();
+            String jsonBody = getJsonBody(result);
             if ("not found".equals(jsonBody)){
                 return null;
             }
@@ -135,13 +153,54 @@ public class HeWeatherFetch {
         return conditionBeanList;
     }
 
+    /**
+     * v5 版本的处理方法
+     * @param text
+     * @return
+     */
+    private JSONObject dealV5Condition(String text) {
+        JSONObject root = new JSONObject();
+        if (text == null || text.equals("")){
+            try {
+                root.put("status", "failed");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return root;
+        }
+
+        try {
+            String[] lines = text.split("\n");
+            JSONArray array = new JSONArray();
+
+            for (String line : lines) {
+                if (line.contains("http")){
+                    String[] entries = line.split("\t");
+                    JSONObject lineObject = new JSONObject();
+                    if (entries.length == 4){
+                        lineObject.put("code", entries[0])
+                                .put("txt", entries[1])
+                                .put("txt_en", entries[2])
+                                .put("icon", entries[3]);
+                    }
+                    array.put(lineObject);
+                }
+            }
+            root.put("cond_info", array);
+            root.put("status", "ok");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return root;
+    }
+
     private List<City> downloadCityList(String url) {
         List<City> cityListList = null;
         try {
             String result = getUrlString(url);
-            //Log.i(TAG, "downloadCityList: " + result);
 
-            String jsonBody = dealHeWeatherJson(result);
+            result = dealV5CityList(result);
+            String jsonBody = getJsonBody(result);
             if ("not found".equals(jsonBody)){
                 return null;
             }
@@ -155,11 +214,21 @@ public class HeWeatherFetch {
         return cityListList;
     }
 
-    private String dealHeWeatherJson(String result) {
-        if (result.contains("\"status\":\"ok\"")) {
+    private String dealV5CityList(String result) {
+        if (result == null || result.equals("")){
+            return null;
+        }
+
+        result = result + "\"status\":\"ok\"";
+
+        return result;
+    }
+
+    private String getJsonBody(String result) {
+        if (result != null && result.contains("\"status\":\"ok\"")) {
             result = result.substring(result.indexOf("[") + 1, result.lastIndexOf("]"));
         } else {
-            LogUtils.e(TAG, "dealHeWeatherJson: not found he weather info : with " + result);
+            LogUtils.e(TAG, "getJsonBody: not found he weather info : with " + result);
             return "not found";
         }
         return result;

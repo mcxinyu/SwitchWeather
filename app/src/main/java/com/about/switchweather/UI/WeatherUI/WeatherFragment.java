@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.about.switchweather.Model.DailyForecast;
-import com.about.switchweather.Model.WeatherBean;
+import com.about.switchweather.Model.WeatherModel;
 import com.about.switchweather.Model.WeatherInfo;
 import com.about.switchweather.R;
 import com.about.switchweather.UI.MyApplication;
@@ -31,9 +32,10 @@ public class WeatherFragment extends Fragment {
     private static final String ARG_WEATHER_CITY_ID = "WeatherFragment";
     private static final String ARG_WEATHER_UPDATED = "Weather_updated";
 
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private TextView mCityNameTextView;
     private TextView mTemperatureTextView;
-    private TextView mUpdateTimeTextView;
+    // private TextView mUpdateTimeTextView;
     private TextView mMaxTemperatureTextView;
     private TextView mMinTemperatureTextView;
     private TextView mWeatherDescribeTextView;
@@ -64,7 +66,7 @@ public class WeatherFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        isFahrenheit = QueryPreferences.getSettingCFCity(MyApplication.getContext()).equals("F");
+        isFahrenheit = QueryPreferences.getSettingTemperatureUnit(MyApplication.getContext()).equals("F");
         String cityId = (String) getArguments().getSerializable(ARG_WEATHER_CITY_ID);
         weatherUpdated = getArguments().getBoolean(ARG_WEATHER_UPDATED);
         mWeatherInfo = WeatherLab.get(getActivity()).getWeatherInfoWithCityId(cityId);
@@ -79,7 +81,7 @@ public class WeatherFragment extends Fragment {
 
         mCityNameTextView = (TextView) view.findViewById(R.id.city_name_text_view);
         mTemperatureTextView = (TextView) view.findViewById(R.id.temperature_text_view);
-        mUpdateTimeTextView = (TextView) view.findViewById(R.id.update_time_text_view);
+        // mUpdateTimeTextView = (TextView) view.findViewById(R.id.update_time_text_view);
         mMaxTemperatureTextView = (TextView) view.findViewById(R.id.max_temperature_text_view);
         mMinTemperatureTextView = (TextView) view.findViewById(R.id.min_temperature_text_view);
         mWeatherDescribeTextView = (TextView) view.findViewById(R.id.weather_describe_text_view);
@@ -96,13 +98,22 @@ public class WeatherFragment extends Fragment {
             updateWeatherUI();
         }
 
-        mUpdateTimeTextView.setOnClickListener(new View.OnClickListener() {
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onClick(View v) {
-                mUpdateTimeTextView.setText(getResources().getString(R.string.update_in_progress));
-                new UpdateWeather(mWeatherInfo.getBasicCity()).execute();
+            public void onRefresh() {
+                new UpdateWeatherTask(mWeatherInfo.getBasicCity()).execute();
             }
         });
+        mSwipeRefreshLayout.setDistanceToTriggerSync(300);
+
+        // mUpdateTimeTextView.setOnClickListener(new View.OnClickListener() {
+        //     @Override
+        //     public void onClick(View v) {
+        //         mUpdateTimeTextView.setText(getResources().getString(R.string.update_in_progress));
+        //         new UpdateWeatherTask(mWeatherInfo.getBasicCity()).execute();
+        //     }
+        // });
 
         return view;
     }
@@ -136,7 +147,7 @@ public class WeatherFragment extends Fragment {
             mMaxTemperatureTextView.setText(mWeatherInfo.getDfTmpMax() + "°");
             mMinTemperatureTextView.setText(mWeatherInfo.getDfTmpMin() + "°");
         }
-        mUpdateTimeTextView.setText(TimeUtil.getDIYTime(MyApplication.getContext(), mWeatherInfo.getBasicUpdateLoc(), new SimpleDateFormat("yyyy-MM-dd HH:mm")) + getResources().getString(R.string.update_text));
+        // mUpdateTimeTextView.setText(TimeUtil.getDIYTime(MyApplication.getContext(), mWeatherInfo.getBasicUpdateLoc(), new SimpleDateFormat("yyyy-MM-dd HH:mm")) + getResources().getString(R.string.update_text));
         mWeatherDescribeTextView.setText(mWeatherInfo.getNowCondTxt());
         mWeatherIconImageView.setImageDrawable(getResources().getDrawable(WeatherUtil.convertIconToRes(mWeatherInfo.getNowCondCode())));
 
@@ -198,32 +209,35 @@ public class WeatherFragment extends Fragment {
         }
     }
 
-    private class UpdateWeather extends AsyncTask<Void, Void, WeatherBean>{
+    private class UpdateWeatherTask extends AsyncTask<Void, Void, WeatherModel>{
         String mCityName;
 
-        public UpdateWeather(String cityName) {
+        public UpdateWeatherTask(String cityName) {
             this.mCityName = cityName;
         }
 
         @Override
-        protected WeatherBean doInBackground(Void... params) {
+        protected WeatherModel doInBackground(Void... params) {
             return new HeWeatherFetch().fetchWeatherBean(mCityName);
         }
 
         @Override
-        protected void onPostExecute(WeatherBean weatherBean) {
+        protected void onPostExecute(WeatherModel weatherModel) {
             if (!WeatherUtil.isNetworkAvailableAndConnected()){
                 showSnackbarAlert(getResources().getString(R.string.network_is_not_available));
                 return;
             }
-            if (weatherBean == null){
+            if (weatherModel == null){
                 showSnackbarAlert(getResources().getString(R.string.update_failed));
                 return;
             }
-            WeatherLab.get(getActivity()).updateWeatherInfo(weatherBean);
-            WeatherLab.get(getActivity()).updateDailyForecastList(weatherBean);
+            WeatherLab.get(getActivity()).updateWeatherInfo(weatherModel);
+            WeatherLab.get(getActivity()).updateDailyForecastList(weatherModel);
             isUpdate = true;
             weatherUpdated = true;
+            if (mSwipeRefreshLayout.isRefreshing()){
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
             updateWeatherUI();
         }
     }
@@ -244,12 +258,12 @@ public class WeatherFragment extends Fragment {
         return false;
     }
 
-    private void showSnackbarAlert(String text) {
+    public void showSnackbarAlert(String text) {
         Snackbar snackbar = Snackbar.make(mWeatherView, text, Snackbar.LENGTH_INDEFINITE)
                 .setAction(getResources().getString(R.string.retry_to_connect), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new UpdateWeather(mWeatherInfo.getBasicCity()).execute();
+                        new UpdateWeatherTask(mWeatherInfo.getBasicCity()).execute();
                     }
                 }).setActionTextColor(getResources().getColor(R.color.colorWhite));
         ColoredSnackbar.alert(snackbar).show();

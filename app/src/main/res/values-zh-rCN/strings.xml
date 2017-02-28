@@ -48,11 +48,14 @@
     <string name="sunrise_notification_text">日出推送</string>
     <string name="sunset_notification_text">日落推送</string>
     <string name="poor_air_text">空气质量恶化推送</string>
-    <string name="c_f_city">温度单位</string>
+    <string name="temperature_unit">温度单位</string>
     <string name="celsius">摄氏度 °C</string>
     <string name="fahrenheit">华氏度 °F</string>
     <string name="notification_widget">通知中心挂件</string>
     <string name="other_setting">其他</string>
     <string name="about_text">关于</string>
     <string name="next_take_effect">重启后生效</string>
+    <string name="loading_data">加载数据中</string>
+    <string name="loading_success">数据加载完成</string>
+    <string name="notification_widget_summary">定位到的城市</string>
 </resources>
