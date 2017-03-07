@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools">
     <data class="SlidingButtonBinding">
         <variable
                 name="weatherInfo"
-                type="com.about.switchweather.Model.WeatherInfo"/>
+                type="com.about.switchweather.model.WeatherInfo"/>
     </data>
 
     <com.about.switchweather.UI.SlidingButtonView
@@ -30,14 +30,42 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                 <TextView
-                        android:id="@+id/item_text_view"
+                        android:id="@+id/item_text_view_city_name"
                         android:gravity="center_vertical"
                         android:text="@{weatherInfo.basicCity}"
                         android:textSize="24sp"
                         android:textColor="@color/colorText"
                         android:layout_marginLeft="16dp"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"/>
+                <TextView
+                    android:id="@+id/item_text_view_cond"
+                    android:layout_toRightOf="@id/item_text_view_city_name"
+                    android:gravity="center_vertical"
+                    android:text="@{weatherInfo.nowCondTxt}"
+                    android:textSize="16sp"
+                    android:textColor="@color/colorShadow3"
+                    android:layout_marginLeft="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"/>
+                <TextView
+                    android:id="@+id/item_text_view_tmp"
+                    android:layout_toRightOf="@id/item_text_view_cond"
+                    android:gravity="center_vertical"
+                    android:text="@{weatherInfo.nowTmp}"
+                    android:textSize="16sp"
+                    android:textColor="@color/colorShadow3"
+                    android:layout_marginLeft="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"/>
+                <TextView
+                    android:layout_toRightOf="@id/item_text_view_tmp"
+                    android:gravity="center_vertical"
+                    android:text="@string/celsius_sign"
+                    android:textSize="16sp"
+                    android:textColor="@color/colorShadow3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"/>
             </RelativeLayout>
         </RelativeLayout>
     </com.about.switchweather.UI.SlidingButtonView>

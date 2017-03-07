@@ -1,4 +1,4 @@
-package com.about.switchweather.Model;
+package com.about.switchweather.model;
 
 /**
  * Created by 跃峰 on 2016/8/23.

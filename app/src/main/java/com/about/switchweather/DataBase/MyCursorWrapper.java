@@ -1,17 +1,17 @@
-package com.about.switchweather.DataBase;
+package com.about.switchweather.database;
 
 import android.database.Cursor;
 
-import com.about.switchweather.DataBase.WeatherDbSchema.CityTable;
-import com.about.switchweather.DataBase.WeatherDbSchema.ConditionTable;
-import com.about.switchweather.DataBase.WeatherDbSchema.DailyForecastTable;
-import com.about.switchweather.Model.City;
-import com.about.switchweather.Model.Condition;
-import com.about.switchweather.Model.DailyForecast;
-import com.about.switchweather.Model.HourlyForecast;
-import com.about.switchweather.Model.WeatherInfo;
+import com.about.switchweather.database.WeatherDbSchema.CityTable;
+import com.about.switchweather.database.WeatherDbSchema.ConditionTable;
+import com.about.switchweather.database.WeatherDbSchema.DailyForecastTable;
+import com.about.switchweather.model.City;
+import com.about.switchweather.model.Condition;
+import com.about.switchweather.model.DailyForecast;
+import com.about.switchweather.model.HourlyForecast;
+import com.about.switchweather.model.WeatherInfo;
 
-import static com.about.switchweather.DataBase.WeatherDbSchema.ConditionTable.Columns.ICON;
+import static com.about.switchweather.database.WeatherDbSchema.ConditionTable.Columns.ICON;
 
 /**
  * Created by 跃峰 on 2016/8/22.

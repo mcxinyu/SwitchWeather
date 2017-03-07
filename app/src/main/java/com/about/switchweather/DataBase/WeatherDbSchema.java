@@ -1,4 +1,4 @@
-package com.about.switchweather.DataBase;
+package com.about.switchweather.database;
 
 /**
  * Created by 跃峰 on 2016/8/21.

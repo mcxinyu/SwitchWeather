@@ -1,4 +1,4 @@
-package com.about.switchweather.Model;
+package com.about.switchweather.model;
 
 import com.google.gson.annotations.SerializedName;
 

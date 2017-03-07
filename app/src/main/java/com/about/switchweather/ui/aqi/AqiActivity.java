@@ -1,4 +1,4 @@
-package com.about.switchweather.UI.AqiUI;
+package com.about.switchweather.ui.aqi;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,9 +8,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 
 import com.about.switchweather.R;
-import com.about.switchweather.UI.SingleFragmentActivity;
+import com.about.switchweather.ui.SingleFragmentActivity;
 
-import static com.about.switchweather.UI.AqiUI.AqiFragment.CITY_NAME;
+import static com.about.switchweather.ui.aqi.AqiFragment.CITY_NAME;
 
 public class AqiActivity extends SingleFragmentActivity {
     private String cityName;

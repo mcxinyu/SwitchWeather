@@ -1,13 +1,13 @@
-package com.about.switchweather.DataBase;
+package com.about.switchweather.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import com.about.switchweather.DataBase.WeatherDbSchema.CityTable;
-import com.about.switchweather.DataBase.WeatherDbSchema.ConditionTable;
-import com.about.switchweather.DataBase.WeatherDbSchema.DailyForecastTable;
-import com.about.switchweather.DataBase.WeatherDbSchema.HourlyForecastTable;
-import com.about.switchweather.DataBase.WeatherDbSchema.WeatherInfoTable;
+import com.about.switchweather.database.WeatherDbSchema.CityTable;
+import com.about.switchweather.database.WeatherDbSchema.ConditionTable;
+import com.about.switchweather.database.WeatherDbSchema.DailyForecastTable;
+import com.about.switchweather.database.WeatherDbSchema.HourlyForecastTable;
+import com.about.switchweather.database.WeatherDbSchema.WeatherInfoTable;
 
 /**
  * Created by 跃峰 on 2016/8/21.

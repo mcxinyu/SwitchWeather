@@ -1,4 +1,4 @@
-package com.about.switchweather.UI.AqiUI;
+package com.about.switchweather.ui.aqi;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,8 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.about.switchweather.DataBase.WeatherLab;
-import com.about.switchweather.Model.WeatherInfo;
+import com.about.switchweather.database.WeatherLab;
+import com.about.switchweather.model.WeatherInfo;
 import com.about.switchweather.R;
 
 /**
