@@ -2,6 +2,7 @@ package com.about.switchweather.UI.WeatherUI;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -15,7 +16,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.about.switchweather.DataBase.WeatherLab;
 import com.about.switchweather.Model.WeatherInfo;
 import com.about.switchweather.R;
 import com.about.switchweather.UI.EditCityUI.EditCityActivity;
@@ -25,15 +27,14 @@ import com.about.switchweather.UI.SearchCityUI.SearchCityActivity;
 import com.about.switchweather.UI.SettingUI.SettingActivity;
 import com.about.switchweather.UI.SingleFragmentActivity;
 import com.about.switchweather.Util.QueryPreferences;
-import com.about.switchweather.Util.WeatherLab;
-import com.jaeger.library.StatusBarUtil;
 
 import java.util.List;
+
 
 /**
  * Created by 跃峰 on 2016/8/28.
  */
-public class WeatherActivity extends SingleFragmentActivity {
+public class WeatherActivity extends SingleFragmentActivity implements WeatherPagerFragment.Callbacks{
     private static final String EXTRA_WEATHER_CITY_ID = "WeatherActivity.Weather_City_id";
     private static final String EXTRA_WEATHER_INFO_UPDATED = "WeatherActivity.Weather_Info_Updated";
     private static final String TAG = WeatherActivity.class.getSimpleName();
@@ -47,6 +48,7 @@ public class WeatherActivity extends SingleFragmentActivity {
     private NavigationView mNavigationView;
 
     private String mCityId;
+    private String mCityName;
     private ActionBar mActionBar;
 
     private WeatherPagerFragment weatherPagerFragment;
@@ -60,12 +62,13 @@ public class WeatherActivity extends SingleFragmentActivity {
 
     @Override
     protected int getLayoutResId() {
-        return R.layout.activity_weather;
+        return R.layout.app_bar_content_container;
     }
 
     @Override
     public Fragment createFragment() {
         mCityId = getIntent().getStringExtra(EXTRA_WEATHER_CITY_ID);
+        mCityName = WeatherLab.get(this).getCity(mCityId).getCityZh();
         mWeatherInfoIsUpdated = getIntent().getBooleanExtra(EXTRA_WEATHER_INFO_UPDATED, false);
         weatherPagerFragment = WeatherPagerFragment.newInstance(mCityId, mWeatherInfoIsUpdated);
         return weatherPagerFragment;
@@ -77,28 +80,15 @@ public class WeatherActivity extends SingleFragmentActivity {
 
         checkDataValidity();
         initToolbar();
-        initDrawer();
+        // initDrawer();
+        weatherPagerFragment.setCallbacks(this);
     }
 
     @Override
     protected void setStatusBar() {
-        StatusBarUtil.setTranslucentForDrawerLayout(WeatherActivity.this, (DrawerLayout) findViewById(R.id.drawer_layout));
+        // StatusBarUtil.setTranslucentForDrawerLayout(WeatherActivity.this, (DrawerLayout) findViewById(R.id.drawer_layout));
+        // StatusBarUtil.setTranslucentForCoordinatorLayout(WeatherActivity.this, 0);
     }
-
-    /**
-     * 由于 WeatherActivity 设置为 SingleTask，当再次调用 WeatherActivity 的时候会调用该方法。
-     * 此时应该查看城市列表是否更新了，时候应该跳转到制定的城市去。
-     * @param intent
-     */
-    // @Override
-    // protected void onNewIntent(Intent intent) {
-    //     super.onNewIntent(intent);
-    //     checkDataValidity();
-    //     updateNavCityList();
-    //     mCityId = intent.getStringExtra(EXTRA_WEATHER_CITY_ID);
-    //     mWeatherInfoIsUpdated = getIntent().getBooleanExtra(EXTRA_WEATHER_INFO_UPDATED, false);
-    //     weatherPagerFragment.onCurrentPagerItemChange(mCityId, mWeatherInfoIsUpdated);
-    // }
 
     private void checkDataValidity() {
         mWeatherInfoList = WeatherLab.get(MyApplication.getContext()).getWeatherInfoList();
@@ -111,24 +101,29 @@ public class WeatherActivity extends SingleFragmentActivity {
 
     @Override
     public void onBackPressed() {
-        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
-            mDrawer.closeDrawer(GravityCompat.START);
-        } else {
+        // if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+        //     mDrawer.closeDrawer(GravityCompat.START);
+        // } else {
             exitApp();
             super.onBackPressed();
-        }
+        // }
     }
 
     private void initToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         if (mToolbar != null) {
-            mToolbar.setTitle("");
+            mToolbar.setTitle(mCityName);
+            // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            //     mToolbar.setTitleTextColor(getColor(R.color.colorMain));
+            // }
         }
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
         // 给左上角图标的左边加上一个返回的图标
-        mActionBar.setDisplayHomeAsUpEnabled(true);
-        mActionBar.setHomeButtonEnabled(true);
+        // if (mActionBar != null) {
+            // mActionBar.setDisplayHomeAsUpEnabled(true);
+            // mActionBar.setHomeButtonEnabled(true);
+        // }
     }
 
     private void initDrawer() {
@@ -146,19 +141,23 @@ public class WeatherActivity extends SingleFragmentActivity {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
                 switch (item.getItemId()){
-                    case R.id.edit_city_list:
+                    case R.id.menu_edit_city:
                         // 编辑城市的入口
                         Intent editCityIntent = EditCityActivity.newIntent(WeatherActivity.this);
                         startActivityForResult(editCityIntent, REQUEST_CODE_START_EDIT_CITY);
                         break;
-                    case R.id.nav_settings:
+                    case R.id.menu_settings:
                         // 设置项的入口
                         Intent settingIntent = SettingActivity.newIntent(WeatherActivity.this);
                         startActivity(settingIntent);
                         break;
-                    case R.id.nav_feedback:
+                    case R.id.menu_feedback:
                         // 反馈项的入口
-                        Toast.makeText(MyApplication.getContext(), "反馈", Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(MyApplication.getContext(), "反馈", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(Intent.ACTION_SEND);
+                        intent.setType("text/plain");
+                        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{getString(R.string.email_address)});
+                        startActivity(intent);
                         break;
                 }
                 // 点击 item 后关闭 DrawerLayout
@@ -191,10 +190,14 @@ public class WeatherActivity extends SingleFragmentActivity {
 
         for (int i = 0; i < mWeatherInfoList.size(); i++) {
             final int position = i;
-            mNavigationView.getMenu().add(R.id.menu_group_city_list, R.id.menu_group_city_list + i + 123, i+100, mWeatherInfoList.get(i).getBasicCity()).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            mNavigationView.getMenu().add(R.id.menu_group_city_list,
+                    R.id.menu_group_city_list + i + 123,
+                    i+100,
+                    mWeatherInfoList.get(i).getBasicCity()).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     weatherPagerFragment.onCurrentPagerItemChange(mWeatherInfoList.get(position).getBasicCityId(), mWeatherInfoIsUpdated);
+                    mToolbar.setTitle(mWeatherInfoList.get(position).getBasicCity());
                     return false;
                 }
             });
@@ -203,17 +206,38 @@ public class WeatherActivity extends SingleFragmentActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_list_weather_activity, menu);
+        getMenuInflater().inflate(R.menu.menu_list_more, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.add_menu_item:
+            case R.id.menu_add:
                 // 添加城市的入口
-                Intent intent = SearchCityActivity.newIntent(this);
-                startActivity(intent);
+                Intent addCityIntent = SearchCityActivity.newIntent(this);
+                startActivity(addCityIntent);
+                break;
+            case R.id.menu_edit_city:
+                // 编辑城市的入口
+                Intent editCityIntent = EditCityActivity.newIntent(WeatherActivity.this);
+                startActivityForResult(editCityIntent, REQUEST_CODE_START_EDIT_CITY);
+                break;
+            case R.id.menu_settings:
+                // 设置项的入口
+                Intent settingIntent = SettingActivity.newIntent(WeatherActivity.this);
+                startActivity(settingIntent);
+                break;
+            case R.id.menu_feedback:
+                // 反馈项的入口
+                Intent feedbackIntent = new Intent(Intent.ACTION_SENDTO);
+                String uriText = "mailto:mcxinyu@gmail.com" +
+                        "?subject=" + getString(R.string.email_subject) +
+                        "&body=";
+                uriText = uriText.replace(" ", "%20");
+                Uri uri = Uri.parse(uriText);
+                feedbackIntent.setData(uri);
+                startActivity(feedbackIntent);
                 break;
             default:
                 break;
@@ -276,5 +300,10 @@ public class WeatherActivity extends SingleFragmentActivity {
                 }
                 break;
         }
+    }
+
+    @Override
+    public void onPageSelected(String city) {
+        mToolbar.setTitle(city);
     }
 }

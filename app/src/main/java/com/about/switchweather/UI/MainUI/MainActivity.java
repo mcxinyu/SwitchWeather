@@ -18,7 +18,7 @@ import com.about.switchweather.UI.SingleFragmentActivity;
 import com.about.switchweather.UI.WeatherUI.WeatherActivity;
 import com.about.switchweather.Util.HeWeatherFetch;
 import com.about.switchweather.Util.LogUtils;
-import com.about.switchweather.Util.WeatherLab;
+import com.about.switchweather.DataBase.WeatherLab;
 import com.jaeger.library.StatusBarUtil;
 
 import java.util.List;
@@ -45,6 +45,12 @@ public class MainActivity extends SingleFragmentActivity implements MainEmptyFra
     }
 
     @Override
+    protected int getLayoutResId() {
+        // 使用无 DrawerLayout、无 Toolbar 的布局
+        return R.layout.activity_main;
+    }
+
+    @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         intent.getStringExtra(EXTRA_WEATHER_CITY_NAME);
@@ -58,14 +64,14 @@ public class MainActivity extends SingleFragmentActivity implements MainEmptyFra
         fragmentHasBeenRunning = false;
 
         // 如果数据库中没有数据就在网络获取，是不是应该改成对比结果后更新呢？（例如在第一次获取数据的时候被用户取消了）
-        if (WeatherLab.get(this).getCityList().size() == 0 || WeatherLab.get(this).getConditionBeanList().size() == 0){
-            new FetchCondition(this).execute();
+        if (WeatherLab.get(this).getCityList().size() == 0 || WeatherLab.get(this).getConditionList().size() == 0){
+            new FetchBasedDataTask(this).execute();
         }
 
-        initBackground();
+        initBackgroundService();
     }
 
-    private void initBackground() {
+    private void initBackgroundService() {
         // 开启每天凌晨 1 点更新一次天气
         if (!MyApplication.isServiceRunning(UpdateWeatherService.class)) {
             UpdateWeatherService.setServiceDailyAlarm(MyApplication.getContext(), true);
@@ -74,13 +80,13 @@ public class MainActivity extends SingleFragmentActivity implements MainEmptyFra
 
     @Override
     protected void setStatusBar() {
-        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorWhite), 50);
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorWhite), 0);
     }
 
     @Override
     public void onFetchWeatherComplete(String cityId, boolean updated) {
         if (!fragmentHasBeenRunning) {
-            if (WeatherLab.get(MyApplication.getContext()).getWeatherInfoWithCityId(cityId) == null) {
+            if (WeatherLab.get(MyApplication.getContext()).getWeatherInfo(cityId) == null) {
                 // 如果数据库中没有数据， return
                 return;
             }
@@ -90,11 +96,14 @@ public class MainActivity extends SingleFragmentActivity implements MainEmptyFra
         }
     }
 
-    private class FetchCondition extends AsyncTask<Void, Integer, Void> {
+    /**
+     * 获取城市列表／天气信息列表
+     */
+    private class FetchBasedDataTask extends AsyncTask<Void, Integer, Void> {
         private Context mContext;
         private ProgressDialog progressDialog;
 
-        public FetchCondition(Context context) {
+        public FetchBasedDataTask(Context context) {
             mContext = context;
         }
 
@@ -142,7 +151,7 @@ public class MainActivity extends SingleFragmentActivity implements MainEmptyFra
         if (conditions == null){
             return;
         }
-        WeatherLab.get(this).addConditionBean(conditions);
+        WeatherLab.get(this).addConditionList(conditions);
         LogUtils.i(TAG, "storeCondition: OK");
     }
 

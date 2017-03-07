@@ -19,6 +19,7 @@ public class QueryPreferences {
     public static final String SETTING_SUNRISE_NOTIFICATION_TEXT = "setting_sunrise_notification_text";
     public static final String SETTING_SUNSET_NOTIFICATION_TEXT = "setting_sunset_notification_text";
     public static final String SETTING_ABOUT = "setting_about";
+    public static final String SETTING_FEEDBACK = "setting_feedback";
 
     public static boolean getStoreLocationButtonState(Context context){
         return PreferenceManager.getDefaultSharedPreferences(context)

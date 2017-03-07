@@ -4,7 +4,6 @@
     <string name="temp_temperature">26°</string>
     <string name="more_day">多天天气</string>
     <string name="weather_describe">多云</string>
-    <string name="gap">|</string>
     <string name="min_temperature">20°</string>
     <string name="max_temperature">28°</string>
     <string name="today">今天 · </string>
@@ -28,7 +27,7 @@
     <string name="minutes_text"> 分钟前</string>
     <string name="update_in_progress">正在更新</string>
     <string name="setting_text">设置</string>
-    <string name="edit_text">编辑地点</string>
+    <string name="edit_text">编辑城市</string>
     <string name="search_view_hint_text">输入城市名</string>
     <string name="comma">，</string>
     <string name="feedback_text">一切反馈</string>
@@ -50,7 +49,9 @@
     <string name="poor_air_text">空气质量恶化推送</string>
     <string name="temperature_unit">温度单位</string>
     <string name="celsius">摄氏度 °C</string>
+    <string name="celsius_sign">°C</string>
     <string name="fahrenheit">华氏度 °F</string>
+    <string name="fahrenheit_sign">°F</string>
     <string name="notification_widget">通知中心挂件</string>
     <string name="other_setting">其他</string>
     <string name="about_text">关于</string>
@@ -58,4 +59,8 @@
     <string name="loading_data">加载数据中</string>
     <string name="loading_success">数据加载完成</string>
     <string name="notification_widget_summary">定位到的城市</string>
+    <string name="wind_class_text">级</string>
+    <string name="percent_sign">%</string>
+    <string name="pressure_sign">hpa</string>
+    <string name="temp_temperature_degree">°</string>
 </resources>

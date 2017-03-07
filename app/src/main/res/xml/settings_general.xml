@@ -45,6 +45,10 @@
                 android:title="@string/about_text"
                 android:key="setting_about">
         </PreferenceScreen>
+        <PreferenceScreen
+            android:title="@string/feedback_text"
+            android:key="setting_feedback">
+        </PreferenceScreen>
         <Preference android:summary="没有工作室 No own a house"/>
     </PreferenceCategory>
 

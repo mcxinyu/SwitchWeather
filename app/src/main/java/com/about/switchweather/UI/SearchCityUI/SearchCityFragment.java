@@ -15,7 +15,7 @@ import com.about.switchweather.Model.City;
 import com.about.switchweather.UI.MyApplication;
 import com.about.switchweather.R;
 import com.about.switchweather.Util.SortedListAdapter;
-import com.about.switchweather.Util.WeatherLab;
+import com.about.switchweather.DataBase.WeatherLab;
 import com.about.switchweather.databinding.SearchCityBinding;
 
 import java.util.ArrayList;
@@ -111,7 +111,7 @@ public class SearchCityFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            // 选择城市后直接调用 MainActivity 可以执行加载天气信息并保存。是不是可以改成直接使用 MainEmptyFragment 呢？麻烦！
+            // 选择城市后直接调用 MainActivity 可以执行加载天气信息并保存。
             Intent intent = MainActivity.newIntent(getActivity(), mBinding.getCity().getCityZh());
             startActivity(intent);
             getActivity().finish();

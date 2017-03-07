@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,7 @@ import android.view.ViewGroup;
 import com.about.switchweather.Model.WeatherInfo;
 import com.about.switchweather.R;
 import com.about.switchweather.UI.MyApplication;
-import com.about.switchweather.Util.WeatherLab;
+import com.about.switchweather.DataBase.WeatherLab;
 import com.jaeger.library.StatusBarUtil;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class WeatherPagerFragment extends Fragment {
     private FragmentManager fragmentManager;
     private String mCityId;
     private boolean mWeatherUpdated;
+    private Callbacks mCallbacks;
 
     public static WeatherPagerFragment newInstance(String cityId, boolean updated) {
 
@@ -58,7 +60,7 @@ public class WeatherPagerFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_view_pager, container, false);
+        View view = inflater.inflate(R.layout.fragment_weather_view_pager, container, false);
 
         mViewPager = (WeatherViewPaper) view.findViewById(R.id.weather_view_pager_container);
         fragmentManager = getActivity().getSupportFragmentManager();
@@ -71,8 +73,32 @@ public class WeatherPagerFragment extends Fragment {
                 break;
             }
         }
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mCallbacks.onPageSelected(mWeatherInfoList.get(position).getBasicCity());
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         return view;
+    }
+
+    public interface Callbacks{
+        void onPageSelected(String city);
+    }
+
+    public void setCallbacks(Callbacks callbacks){
+        mCallbacks = callbacks;
     }
 
     @Override

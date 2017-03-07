@@ -18,8 +18,8 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+
 import com.about.switchweather.R;
-import com.about.switchweather.UI.MyApplication;
 import com.about.switchweather.UI.SearchCityUI.SearchCityActivity;
 import com.about.switchweather.Util.BaiduLocationService.LocationProvider;
 import com.about.switchweather.Util.QueryPreferences;
@@ -67,7 +67,7 @@ public class EditCityFragment extends Fragment implements LocationProvider.Callb
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mLocationProvider = new LocationProvider(MyApplication.getContext());
+        mLocationProvider = new LocationProvider(getActivity());
         mLocationProvider.setCallbacks(this);
     }
 
@@ -99,7 +99,7 @@ public class EditCityFragment extends Fragment implements LocationProvider.Callb
         mTextView = (TextView) view.findViewById(R.id.current_city_text_view);
         mAddCityImageButton = (ImageButton) view.findViewById(R.id.add_city_image_button);
 
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(MyApplication.getContext()));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         mEditCityAdapter = new EditCityAdapter(getActivity());
@@ -108,14 +108,14 @@ public class EditCityFragment extends Fragment implements LocationProvider.Callb
         mAddCityImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = SearchCityActivity.newIntent(MyApplication.getContext());
+                Intent intent = SearchCityActivity.newIntent(getActivity());
                 startActivity(intent);
             }
         });
 
-        mLocationToggleButton.setChecked(QueryPreferences.getStoreLocationButtonState(MyApplication.getContext()));
+        mLocationToggleButton.setChecked(QueryPreferences.getStoreLocationButtonState(getActivity()));
         if (mLocationToggleButton.isChecked()) {
-            mTextView.setText(QueryPreferences.getStoreLocationCityName(MyApplication.getContext()));
+            mTextView.setText(QueryPreferences.getStoreLocationCityName(getActivity()));
             getPermissions();
         } else {
             mTextView.setText("");
@@ -124,14 +124,14 @@ public class EditCityFragment extends Fragment implements LocationProvider.Callb
         mLocationToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                QueryPreferences.setStoreLocationButtonState(MyApplication.getContext(), isChecked);
+                QueryPreferences.setStoreLocationButtonState(getActivity(), isChecked);
                 if (isChecked){
                     getPermissions();
                     mLocationProvider.start();
-                    //mTextView.setText(mLocationProvider.getLocationCity());
                 } else {
                     mLocationProvider.stop();
                     mTextView.setText("");
+                    QueryPreferences.setStoreLocationCityName(getActivity(), "");
                 }
                 mCallbacks.onLocationButtonChange(isChecked);
             }

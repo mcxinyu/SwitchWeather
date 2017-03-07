@@ -1,7 +1,7 @@
 package com.about.switchweather.UI.MainUI;
 
 import android.Manifest;
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
@@ -13,14 +13,23 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
-import com.about.switchweather.Model.WeatherModel;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.ToggleButton;
+
+import com.about.switchweather.DataBase.WeatherLab;
 import com.about.switchweather.Model.WeatherInfo;
+import com.about.switchweather.Model.WeatherModel;
 import com.about.switchweather.R;
 import com.about.switchweather.UI.MyApplication;
 import com.about.switchweather.UI.SearchCityUI.SearchCityActivity;
 import com.about.switchweather.Util.BaiduLocationService.LocationProvider;
-import com.about.switchweather.Util.*;
+import com.about.switchweather.Util.ColoredSnackbar;
+import com.about.switchweather.Util.HeWeatherFetch;
+import com.about.switchweather.Util.QueryPreferences;
+import com.about.switchweather.Util.WeatherUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,27 +57,22 @@ public class MainEmptyFragment extends Fragment implements LocationProvider.Call
         void onFetchWeatherComplete(String cityId, boolean updated);
     }
 
-    /**
-     * 由于该回调函数在 API>23 已被弃用，所以加上 SuppressWarnings("deprecation") 注解
-     * @param activity
-     */
-    @SuppressWarnings("deprecation")
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mCallbacks = (Callbacks) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException("Hosting Activity must implement Interface");
-        }
-    }
-
     public static MainEmptyFragment newInstance(@Nullable String cityName){ //可以空是因为可能是程序打开而不是增加城市后被调用
         Bundle args = new Bundle();
         args.putSerializable(ARG_WEATHER_CITY_NAME, cityName);
         MainEmptyFragment fragment = new MainEmptyFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mCallbacks = (Callbacks) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Hosting Activity must implement Interface");
+        }
     }
 
     @Override
@@ -191,21 +195,13 @@ public class MainEmptyFragment extends Fragment implements LocationProvider.Call
         @Override
         protected WeatherModel doInBackground(Void... params) {
             WeatherModel weatherModel = new HeWeatherFetch().fetchWeatherBean(mCityName);
-            storeData(weatherModel);
+            storeWeatherData(weatherModel);
             return weatherModel;
         }
 
-        private void storeData(WeatherModel weatherModel) {
+        private void storeWeatherData(WeatherModel weatherModel) {
             if (weatherModel != null){
-                if (WeatherLab.get(MyApplication.getContext()).getWeatherInfoWithCityName(mCityName) == null) {
-                    //有网、成功、无存储即增加
-                    WeatherLab.get(MyApplication.getContext()).addWeatherBean(weatherModel);
-                    WeatherLab.get(MyApplication.getContext()).addDailyForecastList(weatherModel);
-                } else {
-                    //有网、成功、有存储即更新
-                    WeatherLab.get(MyApplication.getContext()).updateWeatherInfo(weatherModel);
-                    WeatherLab.get(MyApplication.getContext()).updateDailyForecastList(weatherModel);
-                }
+                WeatherLab.get(MyApplication.getContext()).addWeatherInfo(weatherModel);
             }
         }
 
@@ -227,7 +223,9 @@ public class MainEmptyFragment extends Fragment implements LocationProvider.Call
                 return;
             }
             //如果 activity 不在了怎么办？会出错！
-            mCallbacks.onFetchWeatherComplete(weatherModel.getHeWeather5().get(0).getBasic().getId(), true);
+            if (mCallbacks != null) {
+                mCallbacks.onFetchWeatherComplete(weatherModel.getHeWeather5().get(0).getBasic().getId(), true);
+            }
         }
     }
 

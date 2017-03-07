@@ -33,7 +33,7 @@
                         android:id="@+id/item_text_view"
                         android:gravity="center_vertical"
                         android:text="@{weatherInfo.basicCity}"
-                        android:textSize="30sp"
+                        android:textSize="24sp"
                         android:textColor="@color/colorText"
                         android:layout_marginLeft="16dp"
                         android:layout_width="match_parent"

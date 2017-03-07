@@ -2,51 +2,23 @@ package com.about.switchweather.Model;
 
 
 import com.about.switchweather.Util.SortedListAdapter;
-import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by 跃峰 on 2016/8/24.
  * GSON 格式
  */
 public class City implements SortedListAdapter.ViewModel{
-    /**
-     * id : CN101010100
-     * cityEn : beijing
-     * cityZh : 北京
-     * countryCode : CN
-     * countryEn : China
-     * countryZh : 中国
-     * provinceEn : beijing
-     * provinceZh : 北京
-     * leaderEn : beijing
-     * leaderZh : 北京
-     * lat : 39.904
-     * lon : 116.391
-     */
-
-    @SerializedName("id")
     private String id;
-    @SerializedName("cityEn")
     private String cityEn;
-    @SerializedName("cityZh")
     private String cityZh;
-    @SerializedName("countryCode")
     private String countryCode;
-    @SerializedName("countryEn")
     private String countryEn;
-    @SerializedName("countryZh")
     private String countryZh;
-    @SerializedName("provinceEn")
     private String provinceEn;
-    @SerializedName("provinceZh")
     private String provinceZh;
-    @SerializedName("leaderEn")
     private String leaderEn;
-    @SerializedName("leaderZh")
     private String leaderZh;
-    @SerializedName("lat")
     private String lat;
-    @SerializedName("lon")
     private String lon;
 
     public String getId() {

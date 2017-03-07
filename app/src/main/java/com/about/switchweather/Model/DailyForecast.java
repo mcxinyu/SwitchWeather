@@ -6,25 +6,71 @@ package com.about.switchweather.Model;
  */
 public class DailyForecast {
     private String date;
+
     private String cityId;
     private String city;
+
     private String astroSr;
     private String astroSs;
+    private String astroMr;
+    private String astroMs;
+
     private String condCodeD;
     private String condCodeN;
     private String condTxtD;
     private String condTxtN;
+
     private String hum;
     private String pcpn;
     private String pop;
     private String pres;
+
     private String tmpMax;
     private String tmpMin;
+
+    private String uv;
     private String vis;
+
     private String windDeg;
     private String windDir;
     private String windSc;
     private String windSpd;
+
+    public DailyForecast() {
+    }
+
+    public DailyForecast(String date,
+                         String cityId, String city,
+                         String astroSr, String astroSs, String astroMr, String astroMs,
+                         String condCodeD, String condCodeN, String condTxtD, String condTxtN,
+                         String hum, String pcpn, String pop, String pres,
+                         String tmpMax, String tmpMin,
+                         String uv, String vis,
+                         String windDeg, String windDir, String windSc, String windSpd) {
+        this.date = date;
+        this.cityId = cityId;
+        this.city = city;
+        this.astroSr = astroSr;
+        this.astroSs = astroSs;
+        this.astroMr = astroMr;
+        this.astroMs = astroMs;
+        this.condCodeD = condCodeD;
+        this.condCodeN = condCodeN;
+        this.condTxtD = condTxtD;
+        this.condTxtN = condTxtN;
+        this.hum = hum;
+        this.pcpn = pcpn;
+        this.pop = pop;
+        this.pres = pres;
+        this.tmpMax = tmpMax;
+        this.tmpMin = tmpMin;
+        this.uv = uv;
+        this.vis = vis;
+        this.windDeg = windDeg;
+        this.windDir = windDir;
+        this.windSc = windSc;
+        this.windSpd = windSpd;
+    }
 
     public String getCityId() {
         return cityId;
@@ -64,6 +110,22 @@ public class DailyForecast {
 
     public void setAstroSs(String astroSs) {
         this.astroSs = astroSs;
+    }
+
+    public String getAstroMr() {
+        return astroMr;
+    }
+
+    public void setAstroMr(String astroMr) {
+        this.astroMr = astroMr;
+    }
+
+    public String getAstroMs() {
+        return astroMs;
+    }
+
+    public void setAstroMs(String astroMs) {
+        this.astroMs = astroMs;
     }
 
     public String getCondCodeD() {
@@ -144,6 +206,14 @@ public class DailyForecast {
 
     public void setTmpMin(String tmpMin) {
         this.tmpMin = tmpMin;
+    }
+
+    public String getUv() {
+        return uv;
+    }
+
+    public void setUv(String uv) {
+        this.uv = uv;
     }
 
     public String getVis() {

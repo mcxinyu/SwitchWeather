@@ -10,7 +10,7 @@ import com.about.switchweather.UI.MyApplication;
 import com.about.switchweather.UI.SlidingButtonView;
 import com.about.switchweather.UI.SlidingButtonView.OnButtonSlidingListener;
 import com.about.switchweather.Util.SlidingButtonUtils;
-import com.about.switchweather.Util.WeatherLab;
+import com.about.switchweather.DataBase.WeatherLab;
 import com.about.switchweather.databinding.SlidingButtonBinding;
 
 import java.util.ArrayList;

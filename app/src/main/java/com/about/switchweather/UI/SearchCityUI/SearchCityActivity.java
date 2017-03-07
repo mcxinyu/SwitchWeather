@@ -29,7 +29,7 @@ public class SearchCityActivity  extends SingleFragmentActivity {
 
     @Override
     protected int getLayoutResId() {
-        return R.layout.app_bar_other;
+        return R.layout.app_bar_content_container;
     }
 
     @Override
@@ -47,9 +47,9 @@ public class SearchCityActivity  extends SingleFragmentActivity {
 
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-        }
+        // if (toolbar != null) {
+            // toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+        // }
         setSupportActionBar(toolbar);
         mActionBar = getSupportActionBar();
         // 给左上角图标的左边加上一个返回的图标
@@ -62,7 +62,7 @@ public class SearchCityActivity  extends SingleFragmentActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_list_search_city_activity, menu);
-        final MenuItem searchItem = menu.findItem(R.id.add_menu_item);
+        final MenuItem searchItem = menu.findItem(R.id.menu_add);
         mSearchView = (SearchView) searchItem.getActionView();
         mSearchView.setQueryHint(getString(R.string.search_view_hint_text));
 

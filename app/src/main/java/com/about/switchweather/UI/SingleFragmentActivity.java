@@ -64,7 +64,7 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
             copyActivities = mActivities;
         }
         for (SingleFragmentActivity activity : copyActivities) {
-            //调用 finish()，会 指定 onDestroy()
+            //调用 finish()，会指定 onDestroy()
             activity.finish();
         }
     }

@@ -27,7 +27,7 @@ public class SettingActivity extends AppCompatActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.app_bar_other);
+        setContentView(R.layout.app_bar_content_container);
         StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary), 30);
 
         getFragmentManager().beginTransaction()

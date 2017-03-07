@@ -9,11 +9,18 @@
     <color name="colorMain">#373737</color>
     <color name="colorShadow">#DAE9F4</color>
     <color name="colorShadow2">#8C9FAA</color>
-    <color name="colorShadow3">#969696</color>
+    <color name="colorShadow3">#777777</color>
     <color name="colorSun">#FFD705</color>
     <color name="colorTemperature">#007AFF</color>
     <color name="colorText">#000000</color>
 
     <color name="translucent_background">#00000000</color>
     <color name="translucence_background">#60000000</color>
+
+    <color name="colorAqiExcellent">#00E400</color>
+    <color name="colorAqiGood">#FFD705</color>
+    <color name="colorAqiLightly">#FF7E00</color>
+    <color name="colorAqiModerately">#FF0000</color>
+    <color name="colorAqiHeavily">#99004C</color>
+    <color name="colorAqiSeverely">#7E0023</color>
 </resources>

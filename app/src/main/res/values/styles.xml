@@ -2,6 +2,7 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!--<style name="AppTheme" parent="android:Theme.Material">-->
         <!-- Customize your theme here. -->
         <!-- toolbar（actionbar）颜色 -->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -28,5 +29,10 @@
     <style name="Widget.Design.AppBarLayout" parent="android:Widget">
         <item name="elevation">0dp</item>
         <item name="android:background">?attr/colorPrimary</item>
+    </style>
+
+    <style name="ButtonTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorButtonNormal">#FFFFFF</item><!--正常状态下的颜色  -->
+        <item name="colorControlHighlight">#FFFFFF</item><!--覆盖色，按下的颜色  -->
     </style>
 </resources>

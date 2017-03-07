@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        style="@style/Widget.AppCompat.Button">
     <data class="SearchCityBinding">
         <variable
                 name="city"
@@ -8,9 +9,8 @@
 
     <RelativeLayout
             android:clickable="true"
-            android:focusable="true"
-            style="?android:attr/buttonStyle"
-            android:background="@color/colorPrimary"
+            android:elevation="1dp"
+            android:listSelector="?attr/selectableItemBackground"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         <LinearLayout

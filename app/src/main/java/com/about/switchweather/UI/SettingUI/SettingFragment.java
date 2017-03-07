@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -28,7 +29,7 @@ import com.about.switchweather.UI.MyApplication;
 import com.about.switchweather.UI.WeatherUI.WeatherActivity;
 import com.about.switchweather.Util.BaiduLocationService.LocationProvider;
 import com.about.switchweather.Util.QueryPreferences;
-import com.about.switchweather.Util.WeatherLab;
+import com.about.switchweather.DataBase.WeatherLab;
 import com.about.switchweather.Util.WeatherUtil;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
@@ -84,6 +85,21 @@ public class SettingFragment extends PreferenceFragment implements LocationProvi
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 new LibsBuilder().withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR).start(getActivity());
+                return false;
+            }
+        });
+
+        findPreference(QueryPreferences.SETTING_FEEDBACK).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent feedbackIntent = new Intent(Intent.ACTION_SENDTO);
+                String uriText = "mailto:mcxinyu@gmail.com" +
+                        "?subject=" + getString(R.string.email_subject) +
+                        "&body=";
+                uriText = uriText.replace(" ", "%20");
+                Uri uri = Uri.parse(uriText);
+                feedbackIntent.setData(uri);
+                startActivity(feedbackIntent);
                 return false;
             }
         });
@@ -147,7 +163,9 @@ public class SettingFragment extends PreferenceFragment implements LocationProvi
                     mLocationProvider.start();
                     settingNotificationWidget.setEnabled(true);
                 } else {
+                    QueryPreferences.setStoreLocationCityName(getActivity(), "");
                     settingLocationCity.setSummary("");
+                    settingNotificationWidget.setChecked(false);
                     settingNotificationWidget.setEnabled(false);
                 }
                 break;
@@ -196,15 +214,18 @@ public class SettingFragment extends PreferenceFragment implements LocationProvi
     }
 
     private void setNotificationWidget(boolean isChecked) {
+        NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
         String locationCityName = QueryPreferences.getStoreLocationCityName(MyApplication.getContext());
-        if (isChecked && ("".equals(locationCityName) || null == locationCityName)){
+        if (isChecked && ((null == locationCityName) || ("".equals(locationCityName)))){
             settingNotificationWidget.setChecked(false);
+            if (notificationManager != null) {
+                notificationManager.cancel(REQUEST_CODE_NOTIFICATION_WIDGET);
+            }
             Toast.makeText(getActivity(), "获取不到定位的城市", Toast.LENGTH_SHORT).show();
             return;
         }
         // TODO: 2017/2/27 只提供定位的城市通知栏？
-        NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-        if (isChecked) {
+        if (isChecked && notificationManager != null) {
             WeatherInfo weatherInfo = WeatherLab.get(MyApplication.getContext()).getWeatherInfoWithCityName(locationCityName);
             Resources resources = getResources();
 
@@ -216,12 +237,12 @@ public class SettingFragment extends PreferenceFragment implements LocationProvi
             String tmpMax;
             if (settingTemperatureUnit.getValue().equals("F")){
                 tmpNow = WeatherUtil.convertCelsius2Fahrenheit(weatherInfo.getNowTmp()) + "°";
-                tmpMin = WeatherUtil.convertCelsius2Fahrenheit(weatherInfo.getDfTmpMin()) + "°";
-                tmpMax = WeatherUtil.convertCelsius2Fahrenheit(weatherInfo.getDfTmpMax()) + "°";
+                tmpMin = WeatherUtil.convertCelsius2Fahrenheit(weatherInfo.getDailyForecastTmpMin()) + "°";
+                tmpMax = WeatherUtil.convertCelsius2Fahrenheit(weatherInfo.getDailyForecastTmpMax()) + "°";
             } else {
                 tmpNow = weatherInfo.getNowTmp() + "°";
-                tmpMin = weatherInfo.getDfTmpMin() + "°";
-                tmpMax = weatherInfo.getDfTmpMax() + "°";
+                tmpMin = weatherInfo.getDailyForecastTmpMin() + "°";
+                tmpMax = weatherInfo.getDailyForecastTmpMax() + "°";
             }
 
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle()

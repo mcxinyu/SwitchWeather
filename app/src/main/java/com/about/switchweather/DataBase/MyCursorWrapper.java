@@ -5,11 +5,13 @@ import android.database.Cursor;
 import com.about.switchweather.DataBase.WeatherDbSchema.CityTable;
 import com.about.switchweather.DataBase.WeatherDbSchema.ConditionTable;
 import com.about.switchweather.DataBase.WeatherDbSchema.DailyForecastTable;
-import com.about.switchweather.DataBase.WeatherDbSchema.WeatherInfoTable;
 import com.about.switchweather.Model.City;
 import com.about.switchweather.Model.Condition;
 import com.about.switchweather.Model.DailyForecast;
+import com.about.switchweather.Model.HourlyForecast;
 import com.about.switchweather.Model.WeatherInfo;
+
+import static com.about.switchweather.DataBase.WeatherDbSchema.ConditionTable.Columns.ICON;
 
 /**
  * Created by 跃峰 on 2016/8/22.
@@ -22,56 +24,6 @@ public class MyCursorWrapper extends android.database.CursorWrapper {
      */
     public MyCursorWrapper(Cursor cursor) {
         super(cursor);
-    }
-
-    public WeatherInfo getWeatherInfo(){
-        String ID = getString(getColumnIndex(WeatherInfoTable.Columns.Basic.ID));
-        String CITY = getString(getColumnIndex(WeatherInfoTable.Columns.Basic.CITY));
-        String LOC = getString(getColumnIndex(WeatherInfoTable.Columns.Basic.Update.LOC));
-        String STATUS = getString(getColumnIndex(WeatherInfoTable.Columns.STATUS));
-        String TMP = getString(getColumnIndex(WeatherInfoTable.Columns.Now.TMP));
-        String CODE = getString(getColumnIndex(WeatherInfoTable.Columns.Now.Cond.CODE));
-        String TXT = getString(getColumnIndex(WeatherInfoTable.Columns.Now.Cond.TXT));
-        String DATE = getString(getColumnIndex(WeatherInfoTable.Columns.DailyForecast.DATE));
-        String MAX = getString(getColumnIndex(WeatherInfoTable.Columns.DailyForecast.Tmp.MAX));
-        String MIN = getString(getColumnIndex(WeatherInfoTable.Columns.DailyForecast.Tmp.MIN));
-        String CODE_D = getString(getColumnIndex(WeatherInfoTable.Columns.DailyForecast.Cond.CODE_D));
-        String CODE_N = getString(getColumnIndex(WeatherInfoTable.Columns.DailyForecast.Cond.CODE_N));
-        String TXT_D = getString(getColumnIndex(WeatherInfoTable.Columns.DailyForecast.Cond.TXT_D));
-        String TXT_N = getString(getColumnIndex(WeatherInfoTable.Columns.DailyForecast.Cond.TXT_N));
-
-        WeatherInfo weatherInfo = new WeatherInfo();
-        weatherInfo.setBasicCityId(ID);
-        weatherInfo.setBasicCity(CITY);
-        weatherInfo.setBasicUpdateLoc(LOC);
-        weatherInfo.setStatus(STATUS);
-        weatherInfo.setNowTmp(TMP);
-        weatherInfo.setNowCondCode(CODE);
-        weatherInfo.setNowCondTxt(TXT);
-        weatherInfo.setDfDate(DATE);
-        weatherInfo.setDfTmpMax(MAX);
-        weatherInfo.setDfTmpMin(MIN);
-        weatherInfo.setDfCondCodeD(CODE_D);
-        weatherInfo.setDfCondCodeN(CODE_N);
-        weatherInfo.setDfCondTxtD(TXT_D);
-        weatherInfo.setDfCondTxtN(TXT_N);
-
-        return weatherInfo;
-    }
-
-    public Condition getCondition(){
-        String CODE = getString(getColumnIndex(ConditionTable.Columns.CODE));
-        String TEXT = getString(getColumnIndex(ConditionTable.Columns.TEXT));
-        String TEXT_EN = getString(getColumnIndex(ConditionTable.Columns.TEXT_EN));
-        String ICON = getString(getColumnIndex(ConditionTable.Columns.ICON));
-
-        Condition conditionBean = new Condition();
-        conditionBean.setCode(CODE);
-        conditionBean.setTxt(TEXT);
-        conditionBean.setTxtEn(TEXT_EN);
-        conditionBean.setIcon(ICON);
-
-        return conditionBean;
     }
 
     public City getCity(){
@@ -95,50 +47,144 @@ public class MyCursorWrapper extends android.database.CursorWrapper {
                 lat, lon);
     }
 
+    public Condition getCondition(){
+        String code = getString(getColumnIndex(ConditionTable.Columns.CODE));
+        String text = getString(getColumnIndex(ConditionTable.Columns.TEXT));
+        String text_en = getString(getColumnIndex(ConditionTable.Columns.TEXT_EN));
+        String icon = getString(getColumnIndex(ICON));
+
+        return new Condition(code, text, text_en, icon);
+    }
+
     public DailyForecast getDailyForecast(){
-        String DATE = getString(getColumnIndex(DailyForecastTable.Columns.DATE));
-        String CITY_ID = getString(getColumnIndex(DailyForecastTable.Columns.CITY_ID));
-        String CITY = getString(getColumnIndex(DailyForecastTable.Columns.CITY));
-        String ASTRO_SR = getString(getColumnIndex(DailyForecastTable.Columns.ASTRO_SR));
-        String ASTRO_SS = getString(getColumnIndex(DailyForecastTable.Columns.ASTRO_SS));
-        String COND_CODE_D = getString(getColumnIndex(DailyForecastTable.Columns.COND_CODE_D));
-        String COND_CODE_N = getString(getColumnIndex(DailyForecastTable.Columns.COND_CODE_N));
-        String COND_TXT_D = getString(getColumnIndex(DailyForecastTable.Columns.COND_TXT_D));
-        String COND_TXT_N = getString(getColumnIndex(DailyForecastTable.Columns.COND_TXT_N));
-        String HUM = getString(getColumnIndex(DailyForecastTable.Columns.HUM));
-        String PCPN = getString(getColumnIndex(DailyForecastTable.Columns.PCPN));
-        String POP = getString(getColumnIndex(DailyForecastTable.Columns.POP));
-        String PRES = getString(getColumnIndex(DailyForecastTable.Columns.PRES));
-        String TMP_MAX = getString(getColumnIndex(DailyForecastTable.Columns.TMP_MAX));
-        String TMP_MIN = getString(getColumnIndex(DailyForecastTable.Columns.TMP_MIN));
-        String VIS = getString(getColumnIndex(DailyForecastTable.Columns.VIS));
-        String WIND_DEG = getString(getColumnIndex(DailyForecastTable.Columns.WIND_DEG));
-        String WIND_DIR = getString(getColumnIndex(DailyForecastTable.Columns.WIND_DIR));
-        String WIND_SC = getString(getColumnIndex(DailyForecastTable.Columns.WIND_SC));
-        String WIND_SPD = getString(getColumnIndex(DailyForecastTable.Columns.WIND_SPD));
+        String date = getString(getColumnIndex(DailyForecastTable.Columns.DATE));
+        String cityId = getString(getColumnIndex(DailyForecastTable.Columns.CITY_ID));
+        String city = getString(getColumnIndex(DailyForecastTable.Columns.CITY));
+        String astroSr = getString(getColumnIndex(DailyForecastTable.Columns.Astro.SR));
+        String astroSs = getString(getColumnIndex(DailyForecastTable.Columns.Astro.SS));
+        String astroMr = getString(getColumnIndex(DailyForecastTable.Columns.Astro.MR));
+        String astroMs = getString(getColumnIndex(DailyForecastTable.Columns.Astro.MS));
+        String condCodeD = getString(getColumnIndex(DailyForecastTable.Columns.Cond.CODE_D));
+        String condCodeN = getString(getColumnIndex(DailyForecastTable.Columns.Cond.CODE_N));
+        String condTxtD = getString(getColumnIndex(DailyForecastTable.Columns.Cond.TXT_D));
+        String condTxtN = getString(getColumnIndex(DailyForecastTable.Columns.Cond.TXT_N));
+        String hum = getString(getColumnIndex(DailyForecastTable.Columns.HUM));
+        String pcpn = getString(getColumnIndex(DailyForecastTable.Columns.PCPN));
+        String pop = getString(getColumnIndex(DailyForecastTable.Columns.POP));
+        String pres = getString(getColumnIndex(DailyForecastTable.Columns.PRES));
+        String tmpMax = getString(getColumnIndex(DailyForecastTable.Columns.Tmp.MAX));
+        String tmpMin = getString(getColumnIndex(DailyForecastTable.Columns.Tmp.MIN));
+        String uv = getString(getColumnIndex(DailyForecastTable.Columns.UV));
+        String vis = getString(getColumnIndex(DailyForecastTable.Columns.VIS));
+        String windDeg = getString(getColumnIndex(DailyForecastTable.Columns.Wind.DEG));
+        String windDir = getString(getColumnIndex(DailyForecastTable.Columns.Wind.DIR));
+        String windSc = getString(getColumnIndex(DailyForecastTable.Columns.Wind.SC));
+        String windSpd = getString(getColumnIndex(DailyForecastTable.Columns.Wind.SPD));
 
-        DailyForecast dailyForecast = new DailyForecast();
-        dailyForecast.setDate(DATE);
-        dailyForecast.setCityId(CITY_ID);
-        dailyForecast.setCity(CITY);
-        dailyForecast.setAstroSr(ASTRO_SR);
-        dailyForecast.setAstroSs(ASTRO_SS);
-        dailyForecast.setCondCodeD(COND_CODE_D);
-        dailyForecast.setCondCodeN(COND_CODE_N);
-        dailyForecast.setCondTxtD(COND_TXT_D);
-        dailyForecast.setCondTxtN(COND_TXT_N);
-        dailyForecast.setHum(HUM);
-        dailyForecast.setPcpn(PCPN);
-        dailyForecast.setPop(POP);
-        dailyForecast.setPres(PRES);
-        dailyForecast.setTmpMax(TMP_MAX);
-        dailyForecast.setTmpMin(TMP_MIN);
-        dailyForecast.setVis(VIS);
-        dailyForecast.setWindDeg(WIND_DEG);
-        dailyForecast.setWindDir(WIND_DIR);
-        dailyForecast.setWindSc(WIND_SC);
-        dailyForecast.setWindSpd(WIND_SPD);
+        return new DailyForecast(date,
+                cityId, city,
+                astroSr, astroSs, astroMr, astroMs,
+                condCodeD, condCodeN, condTxtD, condTxtN,
+                hum, pcpn, pop, pres,
+                tmpMax, tmpMin,
+                uv, vis,
+                windDeg, windDir, windSc, windSpd);
+    }
 
-        return dailyForecast;
+    public HourlyForecast getHourlyForecast(){
+        String date = getString(getColumnIndex(WeatherDbSchema.HourlyForecastTable.Columns.DATE));
+        String cityId = getString(getColumnIndex(WeatherDbSchema.HourlyForecastTable.Columns.CITY_ID));
+        String city = getString(getColumnIndex(WeatherDbSchema.HourlyForecastTable.Columns.CITY));
+        String condCode = getString(getColumnIndex(WeatherDbSchema.HourlyForecastTable.Columns.Cond.CODE));
+        String condTxt = getString(getColumnIndex(WeatherDbSchema.HourlyForecastTable.Columns.Cond.TXT));
+        String hum = getString(getColumnIndex(WeatherDbSchema.HourlyForecastTable.Columns.HUM));
+        String pop = getString(getColumnIndex(WeatherDbSchema.HourlyForecastTable.Columns.POP));
+        String pres = getString(getColumnIndex(WeatherDbSchema.HourlyForecastTable.Columns.PRES));
+        String tmp = getString(getColumnIndex(WeatherDbSchema.HourlyForecastTable.Columns.TMP));
+        String windDeg = getString(getColumnIndex(WeatherDbSchema.HourlyForecastTable.Columns.Wind.DEG));
+        String windDir = getString(getColumnIndex(WeatherDbSchema.HourlyForecastTable.Columns.Wind.DIR));
+        String windSc = getString(getColumnIndex(WeatherDbSchema.HourlyForecastTable.Columns.Wind.SC));
+        String windSpd = getString(getColumnIndex(WeatherDbSchema.HourlyForecastTable.Columns.Wind.SPD));
+
+        return new HourlyForecast(date,
+                cityId, city,
+                condCode, condTxt,
+                hum, pop, pres, tmp,
+                windDeg, windDir, windSc, windSpd);
+    }
+
+    public WeatherInfo getWeatherInfo(){
+        String status = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.status));
+        String basicCity = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Basic.CITY));
+        String basicCityId = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Basic.ID));
+        String basicUpdateLoc = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Basic.Update.LOC));
+        String basicUpdateUtc = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Basic.Update.UTC));
+        String nowCondCode = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Now.Cond.CODE));
+        String nowCondTxt = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Now.Cond.TXT));
+        String nowFl = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Now.FL));
+        String nowHum = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Now.HUM));
+        String nowPcpn = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Now.PCPN));
+        String nowPres = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Now.PRES));
+        String nowTmp = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Now.TMP));
+        String nowVis = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Now.VIS));
+        String nowWindDeg = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Now.Wind.DEG));
+        String nowWindDir = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Now.Wind.DIR));
+        String nowWindSc = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Now.Wind.SC));
+        String nowWindSpd = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Now.Wind.SPD));
+        String dailyForecastDate = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.DailyForecast.DATE));
+        String dailyForecastUv = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.DailyForecast.UV));
+        String dailyForecastCondCodeD = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.DailyForecast.Cond.CODE_D));
+        String dailyForecastCondCodeN = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.DailyForecast.Cond.CODE_N));
+        String dailyForecastCondTxtD = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.DailyForecast.Cond.TXT_D));
+        String dailyForecastCondTxtN = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.DailyForecast.Cond.TXT_N));
+        String dailyForecastTmpMax = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.DailyForecast.Tmp.MAX));
+        String dailyForecastTmpMin = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.DailyForecast.Tmp.MIN));
+        String dailyForecastAstroSr = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.DailyForecast.Astro.SR));
+        String dailyForecastAstroSs = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.DailyForecast.Astro.SS));
+        String aqi = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Aqi.AQI));
+        String aqiCo = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Aqi.CO));
+        String aqiNo2 = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Aqi.NO2));
+        String aqiO3 = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Aqi.O3));
+        String aqiPm10 = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Aqi.PM10));
+        String aqiPm25 = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Aqi.PM25));
+        String aqiQlty = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Aqi.QLTY));
+        String aqiSo2 = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Aqi.SO2));
+        String suggestionAirBrf = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Suggestion.Air.BRF));
+        String suggestionAirTxt = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Suggestion.Air.TXT));
+        String suggestionComfBrf = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Suggestion.Comf.BRF));
+        String suggestionComfTxt = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Suggestion.Comf.TXT));
+        String suggestionCwBrf = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Suggestion.Cw.BRF));
+        String suggestionCwTxt = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Suggestion.Cw.TXT));
+        String suggestionDrsgBrf = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Suggestion.Drsg.BRF));
+        String suggestionDrsgTxt = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Suggestion.Drsg.TXT));
+        String suggestionFluBrf = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Suggestion.Flu.BRF));
+        String suggestionFluTxt = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Suggestion.Flu.TXT));
+        String suggestionSportBrf = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Suggestion.Sport.BRF));
+        String suggestionSportTxt = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Suggestion.Sport.TXT));
+        String suggestionTravBrf = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Suggestion.Trav.BRF));
+        String suggestionTravTxt = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Suggestion.Trav.TXT));
+        String suggestionUvBrf = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Suggestion.Uv.BRF));
+        String suggestionUvTxt = getString(getColumnIndex(WeatherDbSchema.WeatherInfoTable.Columns.Suggestion.Uv.TXT));
+
+        return new WeatherInfo(status,
+                basicCity, basicCityId, basicUpdateLoc, basicUpdateUtc,
+                nowCondCode, nowCondTxt,
+                nowFl, nowHum, nowPcpn, nowPres, nowTmp, nowVis,
+                nowWindDeg, nowWindDir, nowWindSc, nowWindSpd,
+                dailyForecastDate, dailyForecastUv,
+                dailyForecastCondCodeD, dailyForecastCondCodeN,
+                dailyForecastCondTxtD, dailyForecastCondTxtN,
+                dailyForecastTmpMax, dailyForecastTmpMin,
+                dailyForecastAstroSr, dailyForecastAstroSs,
+                aqi, aqiCo, aqiNo2, aqiO3,
+                aqiPm10, aqiPm25, aqiQlty, aqiSo2,
+                suggestionAirBrf, suggestionAirTxt,
+                suggestionComfBrf, suggestionComfTxt,
+                suggestionCwBrf, suggestionCwTxt,
+                suggestionDrsgBrf, suggestionDrsgTxt,
+                suggestionFluBrf, suggestionFluTxt,
+                suggestionSportBrf, suggestionSportTxt,
+                suggestionTravBrf, suggestionTravTxt,
+                suggestionUvBrf, suggestionUvTxt);
     }
 }

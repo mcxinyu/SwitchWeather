@@ -6,6 +6,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
+
+import com.about.switchweather.DataBase.WeatherLab;
 import com.about.switchweather.Model.WeatherModel;
 import com.about.switchweather.Model.WeatherInfo;
 import com.about.switchweather.Util.*;
@@ -35,29 +37,32 @@ public class UpdateWeatherService extends IntentService {
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (isOn){
-            long triggerTime = SystemClock.elapsedRealtime(); // 开机之后到现在的运行时间(包括睡眠时间)
-            long systemTime = System.currentTimeMillis();
-
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(System.currentTimeMillis());   //设置当前时间
             calendar.setTimeZone(TimeZone.getDefault());    // 这里时区需要设置一下，不然会有时差
-            calendar.set(Calendar.HOUR_OF_DAY, 1);  //时
+            calendar.set(Calendar.HOUR_OF_DAY, 1);  //时，夜晚更新。
             calendar.set(Calendar.MINUTE, 20);  //分
             calendar.set(Calendar.SECOND, 0);   //秒
             calendar.set(Calendar.MILLISECOND, 0);  //毫秒
             // 选择的定时时间
-            long selectTime = calendar.getTimeInMillis();
+            long selectTimeMillis = calendar.getTimeInMillis();
+
+            long triggerTime = SystemClock.elapsedRealtime(); // 开机之后到现在的运行时间(包括睡眠时间)
+            long currentTimeMillis = System.currentTimeMillis();
+
             // 如果当前时间大于设置的时间，那么就从第二天的设定时间开始
-            if(systemTime > selectTime) {
+            if(currentTimeMillis > selectTimeMillis) {
                 calendar.add(Calendar.DAY_OF_MONTH, 1);
-                selectTime = calendar.getTimeInMillis();
+                selectTimeMillis = calendar.getTimeInMillis();
             }
+
             // 计算现在时间到设定时间的时间差
-            long time = selectTime - systemTime;
+            long time = selectTimeMillis - currentTimeMillis;
             triggerTime += time;
 
             // 定闹钟
-            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime, AlarmManager.INTERVAL_DAY, pendingIntent);
+            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    triggerTime, AlarmManager.INTERVAL_DAY, pendingIntent);
         } else {
             alarmManager.cancel(pendingIntent);
             pendingIntent.cancel();
@@ -70,9 +75,6 @@ public class UpdateWeatherService extends IntentService {
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (isOn){
-            long triggerTime = SystemClock.elapsedRealtime(); // 开机之后到现在的运行时间(包括睡眠时间)
-            long systemTime = System.currentTimeMillis();
-
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(System.currentTimeMillis());   //设置当前时间
             calendar.setTimeZone(TimeZone.getDefault());    // 这里时区需要设置一下，不然会有时差
@@ -81,18 +83,24 @@ public class UpdateWeatherService extends IntentService {
             calendar.set(Calendar.SECOND, 0);   //秒
             calendar.set(Calendar.MILLISECOND, 0);  //毫秒
             // 选择的定时时间
-            long selectTime = calendar.getTimeInMillis();
+            long selectTimeMillis = calendar.getTimeInMillis();
+
+            long triggerTime = SystemClock.elapsedRealtime(); // 开机之后到现在的运行时间(包括睡眠时间)
+            long currentTimeMillis = System.currentTimeMillis();
+
             // 如果当前时间大于设置的时间，那么就在加 6 小时，直到设置时间在未来 6 小时内
-            while (systemTime > selectTime){
+            while (currentTimeMillis > selectTimeMillis){
                 calendar.add(Calendar.HOUR_OF_DAY, 6);
-                selectTime = calendar.getTimeInMillis();
+                selectTimeMillis = calendar.getTimeInMillis();
             }
+
             // 计算现在时间到设定时间的时间差
-            long time = selectTime - systemTime;
+            long time = selectTimeMillis - currentTimeMillis;
             triggerTime += time;
 
             // 定闹钟
-            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime, AlarmManager.INTERVAL_HOUR * 6, pendingIntent);
+            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    triggerTime, AlarmManager.INTERVAL_HOUR * 6, pendingIntent);
         } else {
             alarmManager.cancel(pendingIntent);
             pendingIntent.cancel();
@@ -113,34 +121,27 @@ public class UpdateWeatherService extends IntentService {
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
         int second = calendar.get(Calendar.SECOND);
-        QueryPreferences.setStoreUpdateTime(this, year + "/" + month + "/" + date + " " + hour + ":" + minute + ":" + second);
+        // QueryPreferences.setStoreUpdateTime(this, year + "/" + month + "/" + date + " " + hour + ":" + minute + ":" + second);
 
         if (!WeatherUtil.isNetworkAvailableAndConnected()){
-            QueryPreferences.setStoreNetworkState(this, "网络不可用");
+            // QueryPreferences.setStoreNetworkState(this, "网络不可用");
             LogUtils.i(TAG, "onHandleIntent: Network Communication Exception!");
             return;
         }
-        QueryPreferences.setStoreNetworkState(this, "网络正常");
+        // QueryPreferences.setStoreNetworkState(this, "网络正常");
         List<WeatherInfo> weatherInfoList = WeatherLab.get(this).getWeatherInfoList();
         if (weatherInfoList.size() == 0){
             return;
         }
         for (int i = 0; i < weatherInfoList.size(); i++) {
+            // 更新所有选中的城市天气
             storeData(new HeWeatherFetch().fetchWeatherBean(weatherInfoList.get(i).getBasicCity()));
         }
     }
 
     private void storeData(WeatherModel weatherModel) {
         if (weatherModel != null){
-            if (WeatherLab.get(this).getWeatherInfoWithCityName(weatherModel.getHeWeather5().get(0).getBasic().getCity()) == null) {
-                //成功、无存储即增加
-                WeatherLab.get(this).addWeatherBean(weatherModel);
-                WeatherLab.get(this).addDailyForecastList(weatherModel);
-            } else {
-                //成功、有存储即更新
-                WeatherLab.get(this).updateWeatherInfo(weatherModel);
-                WeatherLab.get(this).updateDailyForecastList(weatherModel);
-            }
+            WeatherLab.get(this).addWeatherInfo(weatherModel);
         }
     }
 }

@@ -34,7 +34,7 @@ public class EditCityActivity extends SingleFragmentActivity implements EditCity
 
     @Override
     protected int getLayoutResId() {
-        return R.layout.app_bar_other;
+        return R.layout.app_bar_content_container;
     }
 
     @Override
