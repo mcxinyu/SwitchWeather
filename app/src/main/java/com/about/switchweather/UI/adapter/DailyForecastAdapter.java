@@ -1,4 +1,4 @@
-package com.about.switchweather.UI.adapter;
+package com.about.switchweather.ui.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,11 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.about.switchweather.Model.DailyForecast;
+import com.about.switchweather.model.DailyForecast;
 import com.about.switchweather.R;
-import com.about.switchweather.UI.MyApplication;
-import com.about.switchweather.Util.TimeUtil;
-import com.about.switchweather.Util.WeatherUtil;
+import com.about.switchweather.ui.MyApplication;
+import com.about.switchweather.util.TimeUtil;
+import com.about.switchweather.util.WeatherUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.List;

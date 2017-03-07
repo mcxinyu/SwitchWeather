@@ -1,4 +1,4 @@
-package com.about.switchweather.Service;
+package com.about.switchweather.service;
 
 import android.app.AlarmManager;
 import android.app.IntentService;
@@ -7,10 +7,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
 
-import com.about.switchweather.DataBase.WeatherLab;
-import com.about.switchweather.Model.WeatherModel;
-import com.about.switchweather.Model.WeatherInfo;
-import com.about.switchweather.Util.*;
+import com.about.switchweather.database.WeatherLab;
+import com.about.switchweather.model.WeatherModel;
+import com.about.switchweather.model.WeatherInfo;
+import com.about.switchweather.util.*;
 
 import java.util.Calendar;
 import java.util.List;

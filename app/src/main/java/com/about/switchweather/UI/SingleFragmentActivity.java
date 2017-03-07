@@ -1,4 +1,4 @@
-package com.about.switchweather.UI;
+package com.about.switchweather.ui;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;

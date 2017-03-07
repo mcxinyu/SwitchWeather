@@ -1,4 +1,4 @@
-package com.about.switchweather.UI;
+package com.about.switchweather.ui;
 
 import android.app.ActivityManager;
 import android.app.Application;

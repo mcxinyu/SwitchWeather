@@ -1,10 +1,10 @@
-package com.about.switchweather.Util;
+package com.about.switchweather.util;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
-import com.about.switchweather.Model.WeatherInfo;
+import com.about.switchweather.model.WeatherInfo;
 import com.about.switchweather.R;
-import com.about.switchweather.UI.MyApplication;
+import com.about.switchweather.ui.MyApplication;
 
 import java.util.ArrayList;
 import java.util.List;

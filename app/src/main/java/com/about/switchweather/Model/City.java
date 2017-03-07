@@ -1,7 +1,7 @@
-package com.about.switchweather.Model;
+package com.about.switchweather.model;
 
 
-import com.about.switchweather.Util.SortedListAdapter;
+import com.about.switchweather.util.SortedListAdapter;
 
 /**
  * Created by 跃峰 on 2016/8/24.

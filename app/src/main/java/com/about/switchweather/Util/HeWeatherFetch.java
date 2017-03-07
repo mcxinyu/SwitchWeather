@@ -1,11 +1,11 @@
-package com.about.switchweather.Util;
+package com.about.switchweather.util;
 
 import android.net.Uri;
 import android.util.Log;
 
-import com.about.switchweather.Model.City;
-import com.about.switchweather.Model.Condition;
-import com.about.switchweather.Model.WeatherModel;
+import com.about.switchweather.model.City;
+import com.about.switchweather.model.Condition;
+import com.about.switchweather.model.WeatherModel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

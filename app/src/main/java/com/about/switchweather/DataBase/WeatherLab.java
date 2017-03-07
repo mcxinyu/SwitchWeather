@@ -1,25 +1,25 @@
-package com.about.switchweather.DataBase;
+package com.about.switchweather.database;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.about.switchweather.DataBase.WeatherDbSchema.CityTable;
-import com.about.switchweather.DataBase.WeatherDbSchema.ConditionTable;
-import com.about.switchweather.DataBase.WeatherDbSchema.DailyForecastTable;
-import com.about.switchweather.DataBase.WeatherDbSchema.HourlyForecastTable;
-import com.about.switchweather.DataBase.WeatherDbSchema.WeatherInfoTable;
-import com.about.switchweather.Model.City;
-import com.about.switchweather.Model.Condition;
-import com.about.switchweather.Model.DailyForecast;
-import com.about.switchweather.Model.HourlyForecast;
-import com.about.switchweather.Model.WeatherInfo;
-import com.about.switchweather.Model.WeatherModel;
-import com.about.switchweather.Model.WeatherModel.HeWeather5Bean;
-import com.about.switchweather.Model.WeatherModel.HeWeather5Bean.DailyForecastBean;
-import com.about.switchweather.Model.WeatherModel.HeWeather5Bean.HourlyForecastBean;
-import com.about.switchweather.Util.WeatherUtil;
+import com.about.switchweather.database.WeatherDbSchema.CityTable;
+import com.about.switchweather.database.WeatherDbSchema.ConditionTable;
+import com.about.switchweather.database.WeatherDbSchema.DailyForecastTable;
+import com.about.switchweather.database.WeatherDbSchema.HourlyForecastTable;
+import com.about.switchweather.database.WeatherDbSchema.WeatherInfoTable;
+import com.about.switchweather.model.City;
+import com.about.switchweather.model.Condition;
+import com.about.switchweather.model.DailyForecast;
+import com.about.switchweather.model.HourlyForecast;
+import com.about.switchweather.model.WeatherInfo;
+import com.about.switchweather.model.WeatherModel;
+import com.about.switchweather.model.WeatherModel.HeWeather5Bean;
+import com.about.switchweather.model.WeatherModel.HeWeather5Bean.DailyForecastBean;
+import com.about.switchweather.model.WeatherModel.HeWeather5Bean.HourlyForecastBean;
+import com.about.switchweather.util.WeatherUtil;
 
 import java.util.ArrayList;
 import java.util.List;

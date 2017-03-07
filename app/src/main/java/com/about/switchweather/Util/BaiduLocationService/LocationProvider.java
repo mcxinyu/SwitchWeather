@@ -1,8 +1,8 @@
-package com.about.switchweather.Util.BaiduLocationService;
+package com.about.switchweather.util.baidulocationservice;
 
 import android.content.Context;
 
-import com.about.switchweather.Util.QueryPreferences;
+import com.about.switchweather.util.QueryPreferences;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 

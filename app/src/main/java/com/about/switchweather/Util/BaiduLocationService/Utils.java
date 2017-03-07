@@ -1,4 +1,4 @@
-package com.about.switchweather.Util.BaiduLocationService;
+package com.about.switchweather.util.baidulocationservice;
 
 public class Utils {
 	public final static String CoorType_GCJ02 = "gcj02";

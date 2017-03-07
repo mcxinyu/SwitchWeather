@@ -1,4 +1,4 @@
-package com.about.switchweather.UI;
+package com.about.switchweather.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;

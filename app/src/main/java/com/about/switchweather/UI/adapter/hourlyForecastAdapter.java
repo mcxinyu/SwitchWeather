@@ -1,4 +1,4 @@
-package com.about.switchweather.UI.adapter;
+package com.about.switchweather.ui.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.about.switchweather.Model.HourlyForecast;
+import com.about.switchweather.model.HourlyForecast;
 import com.about.switchweather.R;
-import com.about.switchweather.Util.WeatherUtil;
+import com.about.switchweather.util.WeatherUtil;
 
 import java.util.List;
 

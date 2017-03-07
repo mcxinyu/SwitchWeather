@@ -1,4 +1,4 @@
-package com.about.switchweather.Util;
+package com.about.switchweather.util;
 
 import android.content.Context;
 import android.support.v7.util.SortedList;
