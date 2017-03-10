@@ -6,6 +6,12 @@
                 android:title="@string/location_city"
                 android:key="setting_location_city"
                 android:defaultValue="true"/>
+        <SwitchPreference
+            android:title="@string/notification_widget"
+            android:dependency="setting_location_city"
+            android:key="setting_notification_widget"
+            android:summary="@string/notification_widget_summary"
+            android:defaultValue="false"/>
         <ListPreference
                 android:title="@string/temperature_unit"
                 android:key="setting_temperature_unit"
@@ -21,11 +27,6 @@
                 android:key="setting_auto_update_text"
                 android:defaultValue="false"
                 android:summary="@string/auto_update_summary_text"/>
-        <SwitchPreference
-                android:title="@string/notification_widget"
-                android:key="setting_notification_widget"
-                android:summary="@string/notification_widget_summary"
-                android:defaultValue="false"/>
         <SwitchPreference
                 android:title="@string/poor_air_text"
                 android:key="setting_poor_air_text"

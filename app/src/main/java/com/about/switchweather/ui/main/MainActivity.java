@@ -60,7 +60,7 @@ public class MainActivity extends SingleFragmentActivity implements MainEmptyFra
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // 初始化 Preference
-        PreferenceManager.setDefaultValues(this, R.xml.settings_general, false);
+        PreferenceManager.setDefaultValues(this, R.xml.fragment_settings, false);
         fragmentHasBeenRunning = false;
 
         // 如果数据库中没有数据就在网络获取，是不是应该改成对比结果后更新呢？（例如在第一次获取数据的时候被用户取消了）

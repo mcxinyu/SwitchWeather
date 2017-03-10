@@ -124,11 +124,10 @@ public class UpdateWeatherService extends IntentService {
         // QueryPreferences.setStoreUpdateTime(this, year + "/" + month + "/" + date + " " + hour + ":" + minute + ":" + second);
 
         if (!WeatherUtil.isNetworkAvailableAndConnected()){
-            // QueryPreferences.setStoreNetworkState(this, "网络不可用");
-            LogUtils.i(TAG, "onHandleIntent: Network Communication Exception!");
+            LogUtils.i(TAG, "onHandleIntent: Network Connection Exception!");
             return;
         }
-        // QueryPreferences.setStoreNetworkState(this, "网络正常");
+
         List<WeatherInfo> weatherInfoList = WeatherLab.get(this).getWeatherInfoList();
         if (weatherInfoList.size() == 0){
             return;

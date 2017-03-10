@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
@@ -65,11 +66,18 @@ public class SettingFragment extends PreferenceFragment implements LocationProvi
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.settings_general);
+        addPreferencesFromResource(R.xml.fragment_settings);
         mLocationProvider = new LocationProvider(MyApplication.getContext());
         mLocationProvider.setCallbacks(this);
 
         initPreferences();
+    }
+
+    /**
+     * 重置设置
+     */
+    public void resetPreferences(){
+        PreferenceManager.setDefaultValues(getActivity(), R.xml.fragment_settings, true);
     }
 
     private void initPreferences() {
@@ -161,12 +169,10 @@ public class SettingFragment extends PreferenceFragment implements LocationProvi
                 if (settingLocationCity.isChecked()) {
                     getPermissions();
                     mLocationProvider.start();
-                    settingNotificationWidget.setEnabled(true);
                 } else {
                     QueryPreferences.setStoreLocationCityName(getActivity(), "");
                     settingLocationCity.setSummary("");
                     settingNotificationWidget.setChecked(false);
-                    settingNotificationWidget.setEnabled(false);
                 }
                 break;
             case QueryPreferences.SETTING_TEMPERATURE_UNIT:
