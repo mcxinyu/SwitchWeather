@@ -18,36 +18,4 @@
             android:text="@string/loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-    <Button
-            android:id="@+id/add_city_button"
-            android:text="@string/add_city"
-            android:visibility="gone"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    <TextView
-            android:id="@+id/empty_text_view"
-            android:visibility="gone"
-            android:layout_above="@id/add_city_button"
-            android:layout_centerInParent="true"
-            android:text="@string/no_city_notice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    <ToggleButton
-            android:id="@+id/no_info_location_toggle_button"
-            android:layout_below="@id/add_city_button"
-            android:visibility="gone"
-            android:textOff="@string/location_city"
-            android:textOn="@string/location_city"
-            android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    <TextView
-            android:id="@+id/no_info_current_city_text_view"
-            android:layout_below="@id/no_info_location_toggle_button"
-            android:visibility="gone"
-            android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
 </RelativeLayout>

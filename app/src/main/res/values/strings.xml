@@ -132,4 +132,9 @@
     <string name="suggestion_cond">天气状况</string>
     <string name="suggestion_tmp_short">昼夜温差</string>
     <string name="suggestion_sr_ss">日出日落</string>
+    <string name="search_city_hint">城市中英文名/IP/经纬度</string>
+    <string name="cai_yun_weather"><a href='https://www.caiyunapp.com/'>彩云天气© 提供气象信息</a></string>
+    <string name="location_failed">获取当前位置失败</string>
+    <string name="get_locatoin">定位中...</string>
+    <string name="at_least_add_one_city">请至少添加一个城市</string>
 </resources>

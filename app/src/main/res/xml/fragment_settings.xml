@@ -9,7 +9,7 @@
         <SwitchPreference
             android:title="@string/notification_widget"
             android:dependency="setting_location_city"
-            android:key="setting_notification_widget"
+            android:key="setting_notification_service"
             android:summary="@string/notification_widget_summary"
             android:defaultValue="false"/>
         <ListPreference

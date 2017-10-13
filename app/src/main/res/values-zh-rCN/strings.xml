@@ -63,4 +63,5 @@
     <string name="percent_sign">%</string>
     <string name="pressure_sign">hpa</string>
     <string name="temp_temperature_degree">°</string>
+    <string name="search_city_hint">城市中英文名/IP/经纬度</string>
 </resources>

@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"/>
     <ImageView
         android:id="@+id/hourly_forecast_icon_image_view"
-        tools:src="@drawable/weather_icon_101"
+        tools:src="@drawable/weather_icon_clear_day"
         android:scaleType="centerInside"
         android:layout_width="30dp"
         android:layout_height="30dp"/>

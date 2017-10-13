@@ -6,15 +6,15 @@
               android:layout_width="match_parent"
               android:layout_height="60dp">
     <ImageView
-            android:id="@+id/sliding_site_image_view"
-            android:src="@drawable/ic_icon_location"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:layout_width="25dp"
-            android:layout_height="25dp"/>
+        android:id="@+id/sliding_site_image_view"
+        android:src="@drawable/ic_location"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"/>
     <TextView
             android:id="@+id/sliding_site_name_text_view"
             android:layout_gravity="center_vertical"

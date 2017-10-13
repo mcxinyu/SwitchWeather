@@ -14,8 +14,5 @@
           android:title="@string/setting_text"
           android:icon="@drawable/ic_menu_more_white"
           app:showAsAction="never"/>
-    <!--<item android:id="@+id/menu_feedback"-->
-          <!--android:title="@string/feedback_text"-->
-          <!--android:icon="@drawable/ic_menu_more_white"-->
-          <!--app:showAsAction="never"/>-->
+
 </menu>
