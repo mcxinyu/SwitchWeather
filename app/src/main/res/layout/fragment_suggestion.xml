@@ -8,8 +8,8 @@
 
     <RelativeLayout
         android:background="@color/colorWhite"
-        android:layout_margin="@dimen/activity_vertical_margin"
-        android:padding="@dimen/activity_vertical_margin"
+        android:layout_margin="@dimen/activity_vertical_margin_16"
+        android:padding="@dimen/activity_vertical_margin_16"
         android:elevation="1dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -36,7 +36,7 @@
             tools:text="深圳"
             android:textStyle="bold"
             android:layout_below="@id/suggestion_txt"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_horizontal_margin_16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView

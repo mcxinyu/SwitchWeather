@@ -72,7 +72,7 @@
         </activity>
         <activity
             android:name=".ui.activity.AqiActivity"
-            android:label="@string/iconfont_aqi_today"
+            android:label="@string/iconfont_visibility_today"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>

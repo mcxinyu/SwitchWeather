@@ -16,7 +16,7 @@ import io.github.mcxinyu.switchweather.database.dao.CityBeanDao;
 
 /**
  * {@inheritDoc}
- *
+ * 
  * @see org.greenrobot.greendao.AbstractDaoSession
  */
 public class DaoSession extends AbstractDaoSession {

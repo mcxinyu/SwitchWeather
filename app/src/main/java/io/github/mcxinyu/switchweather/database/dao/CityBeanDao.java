@@ -44,7 +44,7 @@ public class CityBeanDao extends AbstractDao<CityBean, String> {
      * Creates the underlying database table.
      */
     public static void createTable(Database db, boolean ifNotExists) {
-        String constraint = ifNotExists ? "IF NOT EXISTS " : "";
+        String constraint = ifNotExists ? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"CITY_BEAN\" (" + //
                 "\"CITY_ID\" TEXT PRIMARY KEY NOT NULL ," + // 0: cityId
                 "\"CITY_NAME\" TEXT," + // 1: cityName
@@ -54,9 +54,7 @@ public class CityBeanDao extends AbstractDao<CityBean, String> {
                 "\"IS_LOCATION\" INTEGER NOT NULL );"); // 5: isLocation
     }
 
-    /**
-     * Drops the underlying database table.
-     */
+    /** Drops the underlying database table. */
     public static void dropTable(Database db, boolean ifExists) {
         String sql = "DROP TABLE " + (ifExists ? "IF EXISTS " : "") + "\"CITY_BEAN\"";
         db.execSQL(sql);
@@ -66,60 +64,60 @@ public class CityBeanDao extends AbstractDao<CityBean, String> {
     protected final void bindValues(DatabaseStatement stmt, CityBean entity) {
         stmt.clearBindings();
         stmt.bindString(1, entity.getCityId());
-
+ 
         String cityName = entity.getCityName();
         if (cityName != null) {
             stmt.bindString(2, cityName);
         }
-
+ 
         String provName = entity.getProvName();
         if (provName != null) {
             stmt.bindString(3, provName);
         }
-
+ 
         String longitude = entity.getLongitude();
         if (longitude != null) {
             stmt.bindString(4, longitude);
         }
-
+ 
         String latitude = entity.getLatitude();
         if (latitude != null) {
             stmt.bindString(5, latitude);
         }
-        stmt.bindLong(6, entity.getIsLocation() ? 1L : 0L);
+        stmt.bindLong(6, entity.getIsLocation() ? 1L: 0L);
     }
 
     @Override
     protected final void bindValues(SQLiteStatement stmt, CityBean entity) {
         stmt.clearBindings();
         stmt.bindString(1, entity.getCityId());
-
+ 
         String cityName = entity.getCityName();
         if (cityName != null) {
             stmt.bindString(2, cityName);
         }
-
+ 
         String provName = entity.getProvName();
         if (provName != null) {
             stmt.bindString(3, provName);
         }
-
+ 
         String longitude = entity.getLongitude();
         if (longitude != null) {
             stmt.bindString(4, longitude);
         }
-
+ 
         String latitude = entity.getLatitude();
         if (latitude != null) {
             stmt.bindString(5, latitude);
         }
-        stmt.bindLong(6, entity.getIsLocation() ? 1L : 0L);
+        stmt.bindLong(6, entity.getIsLocation() ? 1L: 0L);
     }
 
     @Override
     public String readKey(Cursor cursor, int offset) {
         return cursor.getString(offset + 0);
-    }
+    }    
 
     @Override
     public CityBean readEntity(Cursor cursor, int offset) {
@@ -133,7 +131,7 @@ public class CityBeanDao extends AbstractDao<CityBean, String> {
         );
         return entity;
     }
-
+     
     @Override
     public void readEntity(Cursor cursor, CityBean entity, int offset) {
         entity.setCityId(cursor.getString(offset + 0));
@@ -142,13 +140,13 @@ public class CityBeanDao extends AbstractDao<CityBean, String> {
         entity.setLongitude(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setLatitude(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setIsLocation(cursor.getShort(offset + 5) != 0);
-    }
-
+     }
+    
     @Override
     protected final String updateKeyAfterInsert(CityBean entity, long rowId) {
         return entity.getCityId();
     }
-
+    
     @Override
     public String getKey(CityBean entity) {
         if (entity != null) {
@@ -167,5 +165,5 @@ public class CityBeanDao extends AbstractDao<CityBean, String> {
     protected final boolean isEntityUpdateable() {
         return true;
     }
-
+    
 }

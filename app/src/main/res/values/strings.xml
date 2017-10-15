@@ -92,13 +92,13 @@
     <string name="email_address">mcxinyu@gmail.com</string>
     <string name="email_subject">Feedback</string>
 
-    <string name="iconfont_wind">&#xe603;</string>
-    <string name="iconfont_hum_today">&#xe604;空气湿度</string>
-    <string name="iconfont_fl_today">&#xe602;体感温度</string>
-    <string name="iconfont_aqi">&#xe600;</string>
-    <string name="iconfont_aqi_today">&#xe600;空气质量</string>
-    <string name="iconfont_pres_today">&#xe605;气体气压</string>
-    <string name="iconfont_uv_today">&#xe601;紫外线</string>
+    <string name="iconfont_wind">&#xe717;</string>
+    <string name="iconfont_hum_today">&#xe60f;空气湿度</string>
+    <string name="iconfont_fl_today">&#xe604;体感温度</string>
+    <string name="iconfont_aqi">&#xe602;</string>
+    <string name="iconfont_visibility_today">&#xe733;能见度</string>
+    <string name="iconfont_pres_today">&#xe735;气体气压</string>
+    <string name="iconfont_uv_today">&#xe729;紫外线</string>
 
     <string name="aqi_title">空气质量</string>
     <string name="aqi_main_polluted">主要污染物</string>
@@ -133,8 +133,9 @@
     <string name="suggestion_tmp_short">昼夜温差</string>
     <string name="suggestion_sr_ss">日出日落</string>
     <string name="search_city_hint">城市中英文名/IP/经纬度</string>
-    <string name="cai_yun_weather"><a href='https://www.caiyunapp.com/'>彩云天气© 提供气象信息</a></string>
+    <string name="cai_yun_weather">彩云天气© 提供气象信息</string>
     <string name="location_failed">获取当前位置失败</string>
     <string name="get_locatoin">定位中...</string>
     <string name="at_least_add_one_city">请至少添加一个城市</string>
+    <string name="aqi_forecast">空气质量预报</string>
 </resources>

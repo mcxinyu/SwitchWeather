@@ -9,17 +9,31 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import io.github.mcxinyu.switchweather.R;
+import io.github.mcxinyu.switchweather.model.HeWeatherModel;
 import io.github.mcxinyu.switchweather.ui.fragment.SuggestionFragment;
+
+import static io.github.mcxinyu.switchweather.ui.fragment.SuggestionFragment.ACTION;
+import static io.github.mcxinyu.switchweather.ui.fragment.SuggestionFragment.CITY_NAME;
+import static io.github.mcxinyu.switchweather.ui.fragment.SuggestionFragment.DAILY_FORECAST_BEAN;
+import static io.github.mcxinyu.switchweather.ui.fragment.SuggestionFragment.NOW_BEAN;
+import static io.github.mcxinyu.switchweather.ui.fragment.SuggestionFragment.SUGGESTION_BEAN;
 
 
 public class SuggestionActivity extends SingleFragmentActivity {
-    private String mCityName;
     private String mAction;
 
-    public static Intent newIntent(Context context, String cityName, String action) {
+    public static Intent newIntent(Context context,
+                                   String cityName,
+                                   HeWeatherModel.HeWeather5Bean.SuggestionBean suggestionBean,
+                                   HeWeatherModel.HeWeather5Bean.NowBean nowBean,
+                                   HeWeatherModel.HeWeather5Bean.DailyForecastBean dailyForecastBean,
+                                   String action) {
 
         Intent intent = new Intent(context, SuggestionActivity.class);
-        intent.putExtra(SuggestionFragment.CITY_NAME, cityName);
+        intent.putExtra(CITY_NAME, cityName);
+        intent.putExtra(SUGGESTION_BEAN, suggestionBean);
+        intent.putExtra(NOW_BEAN, nowBean);
+        intent.putExtra(DAILY_FORECAST_BEAN, dailyForecastBean);
         intent.putExtra(SuggestionFragment.ACTION, action);
         return intent;
     }
@@ -31,9 +45,12 @@ public class SuggestionActivity extends SingleFragmentActivity {
 
     @Override
     public Fragment createFragment() {
-        mCityName = getIntent().getStringExtra(SuggestionFragment.CITY_NAME);
-        mAction = getIntent().getStringExtra(SuggestionFragment.ACTION);
-        return SuggestionFragment.newInstance(mCityName, mAction);
+        String cityName = getIntent().getStringExtra(CITY_NAME);
+        HeWeatherModel.HeWeather5Bean.SuggestionBean suggestionBean = getIntent().getParcelableExtra(SUGGESTION_BEAN);
+        HeWeatherModel.HeWeather5Bean.NowBean nowBean = getIntent().getParcelableExtra(NOW_BEAN);
+        HeWeatherModel.HeWeather5Bean.DailyForecastBean dailyForecastBean = getIntent().getParcelableExtra(DAILY_FORECAST_BEAN);
+        mAction = getIntent().getStringExtra(ACTION);
+        return SuggestionFragment.newInstance(cityName, suggestionBean, nowBean, dailyForecastBean, mAction);
     }
 
     @Override
@@ -44,8 +61,8 @@ public class SuggestionActivity extends SingleFragmentActivity {
 
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null){
-            switch (mAction){
+        if (toolbar != null) {
+            switch (mAction) {
                 case SuggestionFragment.ACTION_COMF:
                     toolbar.setTitle(getString(R.string.suggestion_comf));
                     break;

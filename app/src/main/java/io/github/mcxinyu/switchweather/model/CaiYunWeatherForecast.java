@@ -1,5 +1,8 @@
 package io.github.mcxinyu.switchweather.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -303,7 +306,7 @@ public class CaiYunWeatherForecast {
                 }
             }
 
-            public static class AqiBean {
+            public static class AqiBean implements Parcelable {
                 /**
                  * value : 205
                  * datetime : 2017-08-30 16:00
@@ -329,6 +332,35 @@ public class CaiYunWeatherForecast {
                 public void setDatetime(String datetime) {
                     this.datetime = datetime;
                 }
+
+                @Override
+                public int describeContents() {
+                    return 0;
+                }
+
+                @Override
+                public void writeToParcel(Parcel dest, int flags) {
+                    dest.writeInt(this.value);
+                    dest.writeString(this.datetime);
+                }
+
+                public AqiBean() {
+                }
+
+                protected AqiBean(Parcel in) {
+                    this.value = in.readInt();
+                    this.datetime = in.readString();
+                }
+
+                public static final Parcelable.Creator<AqiBean> CREATOR = new Parcelable.Creator<AqiBean>() {
+                    public AqiBean createFromParcel(Parcel source) {
+                        return new AqiBean(source);
+                    }
+
+                    public AqiBean[] newArray(int size) {
+                        return new AqiBean[size];
+                    }
+                };
             }
 
             public static class HumidityBean {

@@ -25,8 +25,7 @@ public interface WeatherApi {
      * @param key
      * @return
      */
-    @Deprecated
-    @GET("v5/weather")
+    @GET("https://free-api.heweather.com/v5/weather")
     Observable<HeWeatherModel> getHeWeatherInfo(@Query("city") String city, @Query("key") String key);
 
     /**

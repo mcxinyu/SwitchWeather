@@ -3,32 +3,41 @@ package io.github.mcxinyu.switchweather.ui.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.github.mcxinyu.switchweather.R;
-import io.github.mcxinyu.switchweather.database.WeatherDatabaseLab;
-import io.github.mcxinyu.switchweather.model.WeatherInfo;
+import io.github.mcxinyu.switchweather.model.CaiYunWeatherForecast.ResultBean.HourlyBean.AqiBean;
+import io.github.mcxinyu.switchweather.model.HeWeatherModel.HeWeather5Bean.AqiBean.CityBean;
+import io.github.mcxinyu.switchweather.util.WeatherUtil;
 
 /**
  * Created by huangyuefeng on 2017/3/6.
  */
-
 public class AqiFragment extends Fragment {
-    public static final String CITY_NAME = "city_name";
+    public static final String HE_WEATHER_MODEL_AQI_BEAN = "he_weather_model_aqi_bean";
+    public static final String CAI_YUN_WEATHER_AQI_FORECAST_LIST = "cai_yun_weather_aqi_forecast_list";
+
     @BindView(R.id.aqi_number_text_view)
-    TextView mAqiNumber;
+    TextView mAqiNumberTextView;
     @BindView(R.id.aqi_qlty_text_view)
-    TextView mAqiQlty;
-    @BindView(R.id.aqi_main_layout)
-    RelativeLayout mAqiMainLayout;
+    TextView mAqiQltyTextView;
+    @BindView(R.id.aqi_forecast)
+    TextView mAqiForecast;
+    @BindView(R.id.aqi_qlty_forecast_recycler)
+    RecyclerView mAqiQltyForecastRecycler;
     @BindView(R.id.aqi_main_polluted)
     TextView mAqiMainPolluted;
     @BindView(R.id.aqi_so2)
@@ -45,6 +54,8 @@ public class AqiFragment extends Fragment {
     TextView mAqiPm25;
     @BindView(R.id.aqi_qlty_grid_layout)
     GridLayout mAqiQltyGridLayout;
+    @BindView(R.id.aqi_main_layout)
+    RelativeLayout mAqiMainLayout;
     @BindView(R.id.aqi_affect)
     TextView mAqiAffect;
     @BindView(R.id.aqi_affect_text)
@@ -54,23 +65,17 @@ public class AqiFragment extends Fragment {
     @BindView(R.id.aqi_suggestion_text)
     TextView mAqiSuggestionText;
     @BindView(R.id.activity_aqi)
-    RelativeLayout mActivityAqi;
-    Unbinder unbinder;
+    LinearLayout mActivityAqi;
+    private Unbinder unbinder;
 
-    private String aqi;
-    private String aqiQlty;
-    private String aqiSo2;
-    private String aqiO3;
-    private String aqiCo;
-    private String aqiNo2;
-    private String aqiPm10;
-    private String aqiPm25;
+    private CityBean mAqiBean;
+    private ArrayList<AqiBean> mAqiBeanList;
 
-    public static AqiFragment newInstance(String cityName) {
+    public static AqiFragment newInstance(CityBean aqiBean, ArrayList<AqiBean> aqiBeanList) {
 
         Bundle args = new Bundle();
-        args.putString(CITY_NAME, cityName);
-
+        args.putParcelable(HE_WEATHER_MODEL_AQI_BEAN, aqiBean);
+        args.putParcelableArrayList(CAI_YUN_WEATHER_AQI_FORECAST_LIST, aqiBeanList);
         AqiFragment fragment = new AqiFragment();
         fragment.setArguments(args);
         return fragment;
@@ -79,17 +84,8 @@ public class AqiFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String cityName = getArguments().getString(CITY_NAME);
-        WeatherInfo weatherInfo = WeatherDatabaseLab.get(getActivity()).getWeatherInfoWithCityName(cityName);
-
-        aqi = weatherInfo.getAqi();
-        aqiQlty = weatherInfo.getAqiQlty();
-        aqiSo2 = weatherInfo.getAqiSo2();
-        aqiO3 = weatherInfo.getAqiO3();
-        aqiCo = weatherInfo.getAqiCo();
-        aqiNo2 = weatherInfo.getAqiNo2();
-        aqiPm10 = weatherInfo.getAqiPm10();
-        aqiPm25 = weatherInfo.getAqiPm25();
+        mAqiBean = getArguments().getParcelable(HE_WEATHER_MODEL_AQI_BEAN);
+        mAqiBeanList = getArguments().getParcelableArrayList(CAI_YUN_WEATHER_AQI_FORECAST_LIST);
     }
 
     @Nullable
@@ -103,57 +99,102 @@ public class AqiFragment extends Fragment {
     }
 
     private void initView() {
-        mAqiNumber.setText(aqi);
-        mAqiQlty.setText(aqiQlty);
-        mAqiSo2.setText(aqiSo2);
-        mAqiO3.setText(aqiO3);
-        mAqiCo.setText(aqiCo);
-        mAqiNo2.setText(aqiNo2);
-        mAqiPm10.setText(aqiPm10);
-        mAqiPm25.setText(aqiPm25);
+        String aqi = mAqiBeanList.get(0).getValue() + "";
+        String aqiQlty = WeatherUtil.convertAqiToQuality(mAqiBeanList.get(0).getValue());
+        mAqiNumberTextView.setText(aqi);
+        mAqiQltyTextView.setText(aqiQlty);
 
         switch (aqiQlty) {
             case "优":
-                mAqiQlty.setBackgroundColor(getResources().getColor(R.color.colorAqiExcellent));
-                mAqiAffect.setText(getString(R.string.aqi_affect_excellent));
-                mAqiSuggestion.setText(getString(R.string.aqi_suggestion_excellent));
+                mAqiQltyTextView.setBackgroundColor(getResources().getColor(R.color.colorAqiExcellent));
+                mAqiAffectText.setText(getString(R.string.aqi_affect_excellent));
+                mAqiSuggestionText.setText(getString(R.string.aqi_suggestion_excellent));
                 break;
             case "良":
-                mAqiQlty.setBackgroundColor(getResources().getColor(R.color.colorAqiGood));
-                mAqiAffect.setText(getString(R.string.aqi_affect_good));
-                mAqiSuggestion.setText(getString(R.string.aqi_suggestion_good));
+                mAqiQltyTextView.setBackgroundColor(getResources().getColor(R.color.colorAqiGood));
+                mAqiAffectText.setText(getString(R.string.aqi_affect_good));
+                mAqiSuggestionText.setText(getString(R.string.aqi_suggestion_good));
                 break;
             case "轻度污染":
-                mAqiQlty.setBackgroundColor(getResources().getColor(R.color.colorAqiLightly));
-                mAqiAffect.setText(getString(R.string.aqi_affect_lightly));
-                mAqiSuggestion.setText(getString(R.string.aqi_suggestion_lightly));
+                mAqiQltyTextView.setBackgroundColor(getResources().getColor(R.color.colorAqiLightly));
+                mAqiAffectText.setText(getString(R.string.aqi_affect_lightly));
+                mAqiSuggestionText.setText(getString(R.string.aqi_suggestion_lightly));
                 break;
             case "中度污染":
-                mAqiQlty.setBackgroundColor(getResources().getColor(R.color.colorAqiModerately));
-                mAqiAffect.setText(getString(R.string.aqi_affect_moderately));
-                mAqiSuggestion.setText(getString(R.string.aqi_suggestion_moderately));
+                mAqiQltyTextView.setBackgroundColor(getResources().getColor(R.color.colorAqiModerately));
+                mAqiAffectText.setText(getString(R.string.aqi_affect_moderately));
+                mAqiSuggestionText.setText(getString(R.string.aqi_suggestion_moderately));
                 break;
             case "重度污染":
-                mAqiQlty.setBackgroundColor(getResources().getColor(R.color.colorAqiHeavily));
-                mAqiAffect.setText(getString(R.string.aqi_affect_heavily));
-                mAqiSuggestion.setText(getString(R.string.aqi_suggestion_heavily));
+                mAqiQltyTextView.setBackgroundColor(getResources().getColor(R.color.colorAqiHeavily));
+                mAqiAffectText.setText(getString(R.string.aqi_affect_heavily));
+                mAqiSuggestionText.setText(getString(R.string.aqi_suggestion_heavily));
                 break;
             case "严重污染":
-                mAqiQlty.setBackgroundColor(getResources().getColor(R.color.colorAqiSeverely));
-                mAqiAffect.setText(getString(R.string.aqi_affect_severely));
-                mAqiSuggestion.setText(getString(R.string.aqi_suggestion_severely));
+                mAqiQltyTextView.setBackgroundColor(getResources().getColor(R.color.colorAqiSeverely));
+                mAqiAffectText.setText(getString(R.string.aqi_affect_severely));
+                mAqiSuggestionText.setText(getString(R.string.aqi_suggestion_severely));
                 break;
             default:
-                mAqiQlty.setBackgroundColor(getResources().getColor(R.color.colorAqiExcellent));
-                mAqiAffect.setText("");
-                mAqiSuggestion.setText("");
+                mAqiQltyTextView.setBackgroundColor(getResources().getColor(R.color.colorAqiExcellent));
+                mAqiAffectText.setText("N/A");
+                mAqiSuggestionText.setText("N/A");
                 break;
         }
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        mAqiQltyForecastRecycler.setLayoutManager(linearLayoutManager);
+        mAqiQltyForecastRecycler.setAdapter(new AqiHourlyAdapter());
+
+        mAqiSo2.setText(mAqiBean.getSo2());
+        mAqiO3.setText(mAqiBean.getO3());
+        mAqiCo.setText(mAqiBean.getCo());
+        mAqiNo2.setText(mAqiBean.getNo2());
+        mAqiPm10.setText(mAqiBean.getPm10());
+        mAqiPm25.setText(mAqiBean.getPm25());
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    class AqiHourlyAdapter extends RecyclerView.Adapter<AqiHourlyAdapter.AqiHourlyHolder> {
+
+        @Override
+        public AqiHourlyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new AqiHourlyHolder(LayoutInflater.from(getContext()).inflate(R.layout.item_aqi_hourly_forecast, parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(AqiHourlyHolder holder, int position) {
+            holder.bindView(mAqiBeanList.get(position));
+        }
+
+        @Override
+        public int getItemCount() {
+            return mAqiBeanList.size();
+        }
+
+        class AqiHourlyHolder extends RecyclerView.ViewHolder {
+            @BindView(R.id.hourly_text_view)
+            TextView mHourlyTextView;
+            @BindView(R.id.aqi_text_view)
+            TextView mAqiTextView;
+            @BindView(R.id.aqi_qlty_text_view)
+            TextView mAqiQltyTextView;
+
+            AqiHourlyHolder(View itemView) {
+                super(itemView);
+                ButterKnife.bind(this, itemView);
+            }
+
+            void bindView(AqiBean aqiBean) {
+                mHourlyTextView.setText(aqiBean.getDatetime().split(" ")[1]);
+                mAqiTextView.setText(aqiBean.getValue() + "");
+                mAqiQltyTextView.setText(WeatherUtil.convertAqiToQuality(aqiBean.getValue()));
+            }
+        }
     }
 }

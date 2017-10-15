@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="60dp"
+              android:layout_height="match_parent"
+              android:background="?attr/selectableItemBackground"
+              android:clickable="true"
+              android:gravity="center_horizontal|center_vertical"
+              android:orientation="vertical"
+              android:padding="5dp">
+
+    <TextView
+        android:id="@+id/hourly_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        tools:text="8:24"/>
+
+    <TextView
+        android:id="@+id/aqi_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        tools:text="21"/>
+
+    <TextView
+        android:id="@+id/aqi_qlty_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        tools:text="优"/>
+</LinearLayout>

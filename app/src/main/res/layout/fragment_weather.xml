@@ -78,7 +78,7 @@
                     android:layout_height="wrap_content"
                     android:layout_above="@id/temperature_text_view"
                     android:layout_centerInParent="true"
-                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin_16"
                     android:textColor="@color/colorMain"
                     android:textSize="24sp"
                     tools:text="@string/weather_describe"/>
@@ -101,36 +101,53 @@
                 android:background="@color/colorWhite"/>
 
             <GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_gravity="center"
                 android:layout_marginTop="10dp"
-                android:background="@color/colorWhite"
                 android:columnCount="3"
+                android:rowCount="2"
                 android:orientation="horizontal"
-                android:rowCount="1">
-
+                android:background="@color/colorWhite"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="160dp">
                 <LinearLayout
                     android:layout_columnWeight="1"
                     android:layout_rowWeight="1"
                     android:gravity="center"
                     android:orientation="vertical">
-
                     <TextView
                         android:id="@+id/today_forecast_wind"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colorShadow3"
+                        tools:text="西北风"
                         android:textSize="12sp"
-                        tools:text="西北风"/>
-
+                        android:textColor="@color/colorShadow3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
                     <TextView
                         android:id="@+id/today_forecast_wind_detail"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        tools:text="1级"
                         android:textSize="14sp"
-                        tools:text="1级"/>
+                        android:layout_marginTop="4dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_columnWeight="1"
+                    android:layout_rowWeight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/today_forecast_humidity"
+                        android:text="@string/iconfont_hum_today"
+                        android:textSize="12sp"
+                        android:textColor="@color/colorShadow3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:id="@+id/today_forecast_humidity_detail"
+                        tools:text="65%"
+                        android:textSize="14sp"
+                        android:layout_marginTop="4dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -140,20 +157,64 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/today_forecast_humidity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/iconfont_hum_today"
+                        android:id="@+id/today_forecast_fl"
+                        android:text="@string/iconfont_fl_today"
+                        android:textSize="12sp"
                         android:textColor="@color/colorShadow3"
-                        android:textSize="12sp"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
 
                     <TextView
-                        android:id="@+id/today_forecast_humidity_detail"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:id="@+id/today_forecast_fl_detail"
+                        tools:text="20°C"
                         android:textSize="14sp"
-                        tools:text="65%"/>
+                        android:layout_marginTop="4dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_columnWeight="1"
+                    android:layout_rowWeight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/today_forecast_visibility"
+                        android:text="@string/iconfont_visibility_today"
+                        android:textSize="12sp"
+                        android:textColor="@color/colorShadow3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/today_forecast_visibility_detail"
+                        tools:text="10 km"
+                        android:textSize="14sp"
+                        android:layout_marginTop="4dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_columnWeight="1"
+                    android:layout_rowWeight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/today_forecast_pressure"
+                        android:text="@string/iconfont_pres_today"
+                        android:textSize="12sp"
+                        android:textColor="@color/colorShadow3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/today_forecast_pressure_detail"
+                        tools:text="1020hpa"
+                        android:textSize="14sp"
+                        android:layout_marginTop="4dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -164,286 +225,285 @@
 
                     <TextView
                         android:id="@+id/today_forecast_uv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:text="@string/iconfont_uv_today"
+                        android:textSize="12sp"
                         android:textColor="@color/colorShadow3"
-                        android:textSize="12sp"/>
-
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
                     <TextView
                         android:id="@+id/today_forecast_uv_detail"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        tools:text="4"
                         android:textSize="14sp"
-                        tools:text="4"/>
+                        android:layout_marginTop="4dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
                 </LinearLayout>
             </GridLayout>
 
-            <!--<GridLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="280dp"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:layout_margin="8dp"-->
-            <!--android:background="@color/colorShadow"-->
-            <!--android:columnCount="3"-->
-            <!--android:orientation="horizontal"-->
-            <!--android:rowCount="2">-->
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="280dp"
+                android:layout_gravity="center"
+                android:layout_margin="8dp"
+                android:background="@color/colorShadow"
+                android:columnCount="3"
+                android:orientation="horizontal"
+                android:rowCount="2">
 
-            <!--<LinearLayout-->
-            <!--style="@style/Widget.AppCompat.Button.Borderless"-->
-            <!--android:layout_columnWeight="1"-->
-            <!--android:layout_margin="1dp"-->
-            <!--android:layout_rowWeight="1"-->
-            <!--android:background="@color/colorWhite">-->
+                <LinearLayout
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="1dp"
+                    android:layout_rowWeight="1"
+                    android:background="@color/colorWhite">
 
-            <!--<LinearLayout-->
-            <!--android:id="@+id/suggestion_comf_layout"-->
-            <!--style="@style/Widget.AppCompat.Button.Borderless"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_margin="1dp"-->
-            <!--android:background="?attr/selectableItemBackground"-->
-            <!--android:clickable="true"-->
-            <!--android:focusable="true"-->
-            <!--android:gravity="center"-->
-            <!--android:orientation="vertical">-->
+                    <LinearLayout
+                        android:id="@+id/suggestion_comf_layout"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="1dp"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-            <!--<ImageView-->
-            <!--android:layout_width="40dp"-->
-            <!--android:layout_height="40dp"-->
-            <!--android:src="@drawable/comf"/>-->
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/comf"/>
 
-            <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="8dp"-->
-            <!--android:text="@string/suggestion_comf"-->
-            <!--android:textColor="@color/colorShadow3"-->
-            <!--android:textSize="13sp"/>-->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/suggestion_comf"
+                            android:textColor="@color/colorShadow3"
+                            android:textSize="13sp"/>
 
-            <!--<TextView-->
-            <!--android:id="@+id/suggestion_comf"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="4dp"-->
-            <!--android:textSize="16sp"-->
-            <!--tools:text="较不舒适"/>-->
-            <!--</LinearLayout>-->
-            <!--</LinearLayout>-->
+                        <TextView
+                            android:id="@+id/suggestion_comf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:textSize="16sp"
+                            tools:text="较不舒适"/>
+                    </LinearLayout>
+                </LinearLayout>
 
-            <!--<LinearLayout-->
-            <!--style="@style/Widget.AppCompat.Button.Borderless"-->
-            <!--android:layout_columnWeight="1"-->
-            <!--android:layout_margin="1dp"-->
-            <!--android:layout_rowWeight="1"-->
-            <!--android:background="@color/colorWhite">-->
+                <LinearLayout
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="1dp"
+                    android:layout_rowWeight="1"
+                    android:background="@color/colorWhite">
 
-            <!--<LinearLayout-->
-            <!--android:id="@+id/suggestion_flu_layout"-->
-            <!--style="@style/Widget.AppCompat.Button.Borderless"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_margin="1dp"-->
-            <!--android:background="?attr/selectableItemBackground"-->
-            <!--android:clickable="true"-->
-            <!--android:focusable="true"-->
-            <!--android:gravity="center"-->
-            <!--android:orientation="vertical">-->
+                    <LinearLayout
+                        android:id="@+id/suggestion_flu_layout"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="1dp"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-            <!--<ImageView-->
-            <!--android:layout_width="40dp"-->
-            <!--android:layout_height="40dp"-->
-            <!--android:src="@drawable/flu"/>-->
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/flu"/>
 
-            <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="8dp"-->
-            <!--android:text="@string/suggestion_flu"-->
-            <!--android:textColor="@color/colorShadow3"-->
-            <!--android:textSize="13sp"/>-->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/suggestion_flu"
+                            android:textColor="@color/colorShadow3"
+                            android:textSize="13sp"/>
 
-            <!--<TextView-->
-            <!--android:id="@+id/suggestion_flu"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="4dp"-->
-            <!--android:textSize="16sp"-->
-            <!--tools:text="少发"/>-->
-            <!--</LinearLayout>-->
-            <!--</LinearLayout>-->
+                        <TextView
+                            android:id="@+id/suggestion_flu"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:textSize="16sp"
+                            tools:text="少发"/>
+                    </LinearLayout>
+                </LinearLayout>
 
-            <!--<LinearLayout-->
-            <!--style="@style/Widget.AppCompat.Button.Borderless"-->
-            <!--android:layout_columnWeight="1"-->
-            <!--android:layout_margin="1dp"-->
-            <!--android:layout_rowWeight="1"-->
-            <!--android:background="@color/colorWhite">-->
+                <LinearLayout
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="1dp"
+                    android:layout_rowWeight="1"
+                    android:background="@color/colorWhite">
 
-            <!--<LinearLayout-->
-            <!--android:id="@+id/suggestion_drsg_layout"-->
-            <!--style="@style/Widget.AppCompat.Button.Borderless"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_margin="1dp"-->
-            <!--android:background="?attr/selectableItemBackground"-->
-            <!--android:clickable="true"-->
-            <!--android:focusable="true"-->
-            <!--android:gravity="center"-->
-            <!--android:orientation="vertical">-->
+                    <LinearLayout
+                        android:id="@+id/suggestion_drsg_layout"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="1dp"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-            <!--<ImageView-->
-            <!--android:layout_width="40dp"-->
-            <!--android:layout_height="40dp"-->
-            <!--android:src="@drawable/drsg"/>-->
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/drsg"/>
 
-            <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="8dp"-->
-            <!--android:text="@string/suggestion_drsg"-->
-            <!--android:textColor="@color/colorShadow3"-->
-            <!--android:textSize="13sp"/>-->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/suggestion_drsg"
+                            android:textColor="@color/colorShadow3"
+                            android:textSize="13sp"/>
 
-            <!--<TextView-->
-            <!--android:id="@+id/suggestion_drsg"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="4dp"-->
-            <!--android:textSize="16sp"-->
-            <!--tools:text="炎热"/>-->
-            <!--</LinearLayout>-->
-            <!--</LinearLayout>-->
+                        <TextView
+                            android:id="@+id/suggestion_drsg"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:textSize="16sp"
+                            tools:text="炎热"/>
+                    </LinearLayout>
+                </LinearLayout>
 
-            <!--<LinearLayout-->
-            <!--style="@style/Widget.AppCompat.Button.Borderless"-->
-            <!--android:layout_columnWeight="1"-->
-            <!--android:layout_margin="1dp"-->
-            <!--android:layout_rowWeight="1"-->
-            <!--android:background="@color/colorWhite">-->
+                <LinearLayout
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="1dp"
+                    android:layout_rowWeight="1"
+                    android:background="@color/colorWhite">
 
-            <!--<LinearLayout-->
-            <!--android:id="@+id/suggestion_cw_layout"-->
-            <!--style="@style/Widget.AppCompat.Button.Borderless"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_margin="1dp"-->
-            <!--android:background="?attr/selectableItemBackground"-->
-            <!--android:clickable="true"-->
-            <!--android:focusable="true"-->
-            <!--android:gravity="center"-->
-            <!--android:orientation="vertical">-->
+                    <LinearLayout
+                        android:id="@+id/suggestion_cw_layout"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="1dp"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-            <!--<ImageView-->
-            <!--android:layout_width="40dp"-->
-            <!--android:layout_height="40dp"-->
-            <!--android:src="@drawable/cw"/>-->
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/cw"/>
 
-            <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="8dp"-->
-            <!--android:text="@string/suggestion_cw"-->
-            <!--android:textColor="@color/colorShadow3"-->
-            <!--android:textSize="13sp"/>-->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/suggestion_cw"
+                            android:textColor="@color/colorShadow3"
+                            android:textSize="13sp"/>
 
-            <!--<TextView-->
-            <!--android:id="@+id/suggestion_cw"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="4dp"-->
-            <!--android:textSize="16sp"-->
-            <!--tools:text="较适宜"/>-->
-            <!--</LinearLayout>-->
-            <!--</LinearLayout>-->
+                        <TextView
+                            android:id="@+id/suggestion_cw"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:textSize="16sp"
+                            tools:text="较适宜"/>
+                    </LinearLayout>
+                </LinearLayout>
 
-            <!--<LinearLayout-->
-            <!--style="@style/Widget.AppCompat.Button.Borderless"-->
-            <!--android:layout_columnWeight="1"-->
-            <!--android:layout_margin="1dp"-->
-            <!--android:layout_rowWeight="1"-->
-            <!--android:background="@color/colorWhite"-->
-            <!--android:clickable="true">-->
+                <LinearLayout
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="1dp"
+                    android:layout_rowWeight="1"
+                    android:background="@color/colorWhite"
+                    android:clickable="true">
 
-            <!--<LinearLayout-->
-            <!--android:id="@+id/suggestion_sport_layout"-->
-            <!--style="@style/Widget.AppCompat.Button.Borderless"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_margin="1dp"-->
-            <!--android:background="?attr/selectableItemBackground"-->
-            <!--android:clickable="true"-->
-            <!--android:focusable="true"-->
-            <!--android:gravity="center"-->
-            <!--android:orientation="vertical">-->
+                    <LinearLayout
+                        android:id="@+id/suggestion_sport_layout"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="1dp"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-            <!--<ImageView-->
-            <!--android:layout_width="40dp"-->
-            <!--android:layout_height="40dp"-->
-            <!--android:src="@drawable/sport"/>-->
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/sport"/>
 
-            <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="8dp"-->
-            <!--android:text="@string/suggestion_sport"-->
-            <!--android:textColor="@color/colorShadow3"-->
-            <!--android:textSize="13sp"/>-->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/suggestion_sport"
+                            android:textColor="@color/colorShadow3"
+                            android:textSize="13sp"/>
 
-            <!--<TextView-->
-            <!--android:id="@+id/suggestion_sport"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="4dp"-->
-            <!--android:textSize="16sp"-->
-            <!--tools:text="较适宜"/>-->
-            <!--</LinearLayout>-->
-            <!--</LinearLayout>-->
+                        <TextView
+                            android:id="@+id/suggestion_sport"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:textSize="16sp"
+                            tools:text="较适宜"/>
+                    </LinearLayout>
+                </LinearLayout>
 
-            <!--<LinearLayout-->
-            <!--style="@style/Widget.AppCompat.Button.Borderless"-->
-            <!--android:layout_columnWeight="1"-->
-            <!--android:layout_margin="1dp"-->
-            <!--android:layout_rowWeight="1"-->
-            <!--android:background="@color/colorWhite"-->
-            <!--android:clickable="true">-->
+                <LinearLayout
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="1dp"
+                    android:layout_rowWeight="1"
+                    android:background="@color/colorWhite"
+                    android:clickable="true">
 
-            <!--<LinearLayout-->
-            <!--android:id="@+id/suggestion_uv_layout"-->
-            <!--style="@style/Widget.AppCompat.Button.Borderless"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_margin="1dp"-->
-            <!--android:background="?attr/selectableItemBackground"-->
-            <!--android:clickable="true"-->
-            <!--android:focusable="true"-->
-            <!--android:gravity="center"-->
-            <!--android:orientation="vertical">-->
+                    <LinearLayout
+                        android:id="@+id/suggestion_uv_layout"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="1dp"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-            <!--<ImageView-->
-            <!--android:layout_width="40dp"-->
-            <!--android:layout_height="40dp"-->
-            <!--android:src="@drawable/uv"/>-->
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/uv"/>
 
-            <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="8dp"-->
-            <!--android:text="@string/suggestion_uv"-->
-            <!--android:textColor="@color/colorShadow3"-->
-            <!--android:textSize="13sp"/>-->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/suggestion_uv"
+                            android:textColor="@color/colorShadow3"
+                            android:textSize="13sp"/>
 
-            <!--<TextView-->
-            <!--android:id="@+id/suggestion_uv"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="4dp"-->
-            <!--android:textSize="16sp"-->
-            <!--tools:text="中等"/>-->
-            <!--</LinearLayout>-->
-            <!--</LinearLayout>-->
-            <!--</GridLayout>-->
+                        <TextView
+                            android:id="@+id/suggestion_uv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:textSize="16sp"
+                            tools:text="中等"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </GridLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -455,7 +515,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:autoLink="all"
                     android:text="@string/cai_yun_weather"
                     android:textColor="@color/colorShadow3"
                     android:textSize="@dimen/textSizeSmall_openSource"/>
